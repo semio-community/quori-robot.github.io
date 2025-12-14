@@ -89,7 +89,7 @@ export default function AboutPage() {
         subtitle="Advancing human-centered robotics through community collaboration"
       >
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-accent-one/10 to-accent-two/10 rounded-lg p-8 border border-accent-one/20 mb-8">
+          <div className="bg-linear-to-r from-accent-one/10 to-accent-two/10 rounded-lg p-8 border border-accent-one/20 mb-8">
             <p className="text-lg leading-relaxed text-center">
               Semio Community is a{" "}
               <span className="font-semibold">
@@ -115,7 +115,7 @@ export default function AboutPage() {
         subtitle="Building the future of human-centered robotics and AI together"
       >
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-accent-one/10 to-accent-two/10 rounded-lg p-8 border border-accent-one/20 mb-8">
+          <div className="bg-linear-to-r from-accent-one/10 to-accent-two/10 rounded-lg p-8 border border-accent-one/20 mb-8">
             <p className="text-lg leading-relaxed text-center mb-6">
               Semio Community actively encourages multidisciplinary
               collaboration among academia, industry, and the public sector to
@@ -154,7 +154,7 @@ export default function AboutPage() {
               >
                 <Icon
                   name={item.icon}
-                  className="w-10 h-10 text-accent-two flex-shrink-0"
+                  className="w-10 h-10 text-accent-two shrink-0"
                 />
                 <div>
                   <h3 className="font-semibold mb-2">{item.title}</h3>
@@ -205,7 +205,7 @@ export default function AboutPage() {
         subtitle="Get in touch with Semio Community"
       >
         <div className="max-w-4xl mx-auto">
-          <div className="p-6 bg-gradient-to-r from-accent-one/10 to-accent-two/10 rounded-lg border border-accent-one/20 text-center">
+          <div className="p-6 bg-linear-to-r from-accent-one/10 to-accent-two/10 rounded-lg border border-accent-one/20 text-center">
             <Icon
               name="solar:user-circle-line-duotone"
               className="w-20 h-20 mx-auto mb-4 text-accent-two"
@@ -236,7 +236,7 @@ export default function AboutPage() {
                   <div className="flex items-start gap-3">
                     <Icon
                       name="solar:letter-line-duotone"
-                      className="w-5 h-5 text-accent-two flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 text-accent-two shrink-0 mt-0.5"
                     />
                     <div>
                       <p className="font-medium mb-1">Email</p>
@@ -251,7 +251,7 @@ export default function AboutPage() {
                   <div className="flex items-start gap-3">
                     <Icon
                       name="solar:map-point-line-duotone"
-                      className="w-5 h-5 text-accent-two flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 text-accent-two shrink-0 mt-0.5"
                     />
                     <div>
                       <p className="font-medium mb-1">Legal Status</p>
