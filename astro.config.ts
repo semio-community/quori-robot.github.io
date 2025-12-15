@@ -118,9 +118,11 @@ export default defineConfig({
   // https://docs.astro.build/en/guides/prefetch/
   prefetch: true,
   // ! Please remember to replace the following site property with your own domain
-  site: "https://semio.community/",
-  // Add dynamic base path for PR previews
-  base: process.env.PR_PREVIEW_PATH || "/",
+  //   When moving to the custom domain (quori.org), set site to "https://quori.org" and base to "/".
+  site: "https://semio.community/quori-robot.github.io",
+  // Use repo base path for GitHub Pages; override via PR_PREVIEW_PATH when needed
+  //   For quori.org deployments, use base: process.env.PR_PREVIEW_PATH || "/"
+  base: process.env.PR_PREVIEW_PATH || "/quori-robot.github.io/",
   vite: {
     build: {
       sourcemap: true, // Source maps generation
