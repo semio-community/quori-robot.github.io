@@ -93,7 +93,11 @@ const orgContributors = await Promise.all(
     />
   </head>
   <body class="relative min-h-screen w-full bg-surface">
-    <SiteShell noPaddingTop showBackground containerClassName="max-w-5xl">
+    <SiteShell
+      noPaddingTop
+      showBackground={false}
+      containerClassName="max-w-5xl"
+    >
       <SoftwareDetail
         data={data}
         organizationContributors={orgContributors}
