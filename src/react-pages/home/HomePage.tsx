@@ -1,11 +1,10 @@
 import React from "react";
 import HeroSection from "@/react-pages/home/sections/HeroSection";
-import MissionSection from "@/react-pages/home/sections/MissionSection";
-import ProgramsSection from "@/react-pages/home/sections/ProgramsSection";
-import PartnersSection from "@/react-pages/home/sections/PartnersSection";
+import VisionSection from "@/react-pages/home/sections/VisionSection";
+import StrategySection from "@/react-pages/home/sections/StrategySection";
+import ProductSection from "@/react-pages/home/sections/ProductSection";
+import ValuesSection from "@/react-pages/home/sections/ValuesSection";
 import ConnectSection from "@/react-pages/home/sections/ConnectSection";
-import { CallToActionButton } from "@/components/ui/CallToActionButton";
-import { url } from "@/utils/url";
 
 export interface HomePageProps {
   projectCount: number;
@@ -35,53 +34,11 @@ export default function HomePage({
         />
       </div>
 
-      <MissionSection />
+      <VisionSection />
+      <StrategySection />
+      <ProductSection />
+      <ValuesSection />
 
-      <ProgramsSection
-        items={[
-          {
-            title: "Hardware",
-            description: "Community-driven robotics hardware platforms",
-            links: [
-              { label: "Projects", href: "/projects#hardware" },
-              { label: "Services", href: "/services#hardware" },
-            ],
-          },
-          {
-            title: "Software",
-            description: "Open-source AI software tools and frameworks",
-            links: [
-              { label: "Projects", href: "/projects#software" },
-              { label: "Services", href: "/services#software" },
-            ],
-          },
-          {
-            title: "Research",
-            description: "Reproducible scientific research and studies",
-            links: [
-              { label: "Projects", href: url("/projects#research") },
-              { label: "Services", href: url("/services#research") },
-            ],
-          },
-        ]}
-      >
-        <p className="text-center text-color-600 dark:text-color-400 mb-4">
-          Gather with the community at our events, which explore on a broad
-          range of topics, including, but not limited to, human-centered robot
-          hardware, software, and research that, with reasonable effort, can be
-          incorporated into the design, development, or deployment of an HRI
-          system.
-        </p>
-        <CallToActionButton
-          href={url("/events")}
-          size="large"
-          variant="default"
-        >
-          Upcoming Events
-        </CallToActionButton>
-      </ProgramsSection>
-
-      <PartnersSection />
       <ConnectSection />
     </div>
   );
