@@ -122,7 +122,7 @@ export default defineConfig({
   site: "https://semio.community/quori-robot.github.io",
   // Use repo base path for GitHub Pages; override via PR_PREVIEW_PATH when needed
   //   For quori.org deployments, use base: process.env.PR_PREVIEW_PATH || "/"
-  base: process.env.PR_PREVIEW_PATH || "/quori-robot.github.io/",
+  base: process.env.PR_PREVIEW_PATH || "/",
   vite: {
     build: {
       sourcemap: true, // Source maps generation

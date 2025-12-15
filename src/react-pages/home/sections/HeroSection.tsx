@@ -57,7 +57,7 @@ export default function HeroSection({
       img="/quori-v2-banner.png"
       imgAlt="Quori V2 hardware banner"
       imgClassName="dark:brightness-50"
-      imgObjectPosition="90% 50%"
+      imgObjectPosition="90% 10%"
       description={
         <>
           A low-cost,{" "}
