@@ -40,13 +40,13 @@ export default function HeroSection({
   const titleNode = (
     <>
       <span className="text-accent-three font-semibold uppercase tracking-wide">
-        Reproducible
+        Community
       </span>{" "}
       <span className="text-accent-one font-semibold uppercase tracking-wide">
-        Robot
+        Research
       </span>{" "}
       <span className="text-accent-two font-semibold uppercase tracking-wide">
-        Science
+        Platform
       </span>
     </>
   );
@@ -54,45 +54,41 @@ export default function HeroSection({
   return (
     <HeroHeader
       title={titleNode}
+      img="/quori-v2-banner.png"
+      imgAlt="Quori V2 hardware banner"
+      imgClassName="dark:brightness-50"
+      imgObjectPosition="90% 50%"
       description={
         <>
-          A nonprofit supporting the{" "}
+          A low-cost,{" "}
           <span className="font-medium text-foreground">
-            science and systems
-          </span>{" "}
-          of <br className="hidden md:flex" />
+            community-informed
+          </span>
+          , modular, open-source <br className="hidden md:flex" />
+          <span className="font-medium text-foreground">social robot</span>{" "}
+          platform for the{" "}
           <span className="font-medium text-foreground">
-            human-centered robotics
-          </span>{" "}
-          and{" "}
-          <span className="font-medium text-foreground">
-            artificial intelligence
+            human-robot interaction research community
           </span>
         </>
       }
       headingTag={HeadingTag}
-      actions={[
-        {
-          label: "Active Projects",
-          href: "/projects",
-          variant: "primary",
-          indicatorText: projectCount ? projectCount.toString() : undefined,
-        },
-        {
-          label: "Available Services",
-          href: "/services",
-          variant: "secondary",
-          indicatorText: servicesCount ? servicesCount.toString() : undefined,
-        },
-        {
-          label: "Upcoming Events",
-          href: "/events",
-          variant: "tertiary",
-          indicatorText: upcomingEventCount
-            ? upcomingEventCount.toString()
-            : undefined,
-        },
-      ]}
+      // actions={[
+      //   {
+      //     label: "Active Projects",
+      //     href: "/projects",
+      //     variant: "primary",
+      //     indicatorText: projectCount ? projectCount.toString() : undefined,
+      //   },
+      //   {
+      //     label: "Upcoming Events",
+      //     href: "/events",
+      //     variant: "tertiary",
+      //     indicatorText: upcomingEventCount
+      //       ? upcomingEventCount.toString()
+      //       : undefined,
+      //   },
+      // ]}
     />
   );
 }

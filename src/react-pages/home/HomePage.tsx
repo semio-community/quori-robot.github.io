@@ -19,7 +19,7 @@ export default function HomePage({
   return (
     <div className="space-y-12">
       <div
-        className="relative pt-16 md:pt-20 lg:pt-4 mb-8 sm:mb-12"
+        className="relative mb-8 sm:mb-12"
         style={{
           width: "100vw",
           position: "relative",
