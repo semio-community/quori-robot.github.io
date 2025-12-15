@@ -24,6 +24,7 @@ export type HeroAction = {
  * - actions: array of CTA definitions (label, href, optional variant + indicator text).
  * - icon: optional React node rendered above the title (e.g., hero glyph or emoji).
  * - fullBleed / fullBleedClassName: enable and customize the 100vw offset wrapper for edge-to-edge heroes.
+ * - img / imgAlt / imgObjectPosition: optional hero image rendered with object-cover and configurable focal point.
  */
 export interface HeroHeaderProps {
   title: React.ReactNode;
@@ -33,6 +34,10 @@ export interface HeroHeaderProps {
   icon?: React.ReactNode;
   fullBleed?: boolean;
   fullBleedClassName?: string;
+  img?: string;
+  imgAlt?: string;
+  imgClassName?: string;
+  imgObjectPosition?: React.CSSProperties["objectPosition"];
 }
 
 const FULL_BLEED_STYLE: React.CSSProperties = {
@@ -59,15 +64,32 @@ export default function HeroHeader({
   headingTag: HeadingTag = "h1",
   actions,
   icon,
+  img,
+  imgAlt,
+  imgClassName,
+  imgObjectPosition,
   fullBleed = false,
   fullBleedClassName = "relative pt-16 md:pt-20 lg:pt-4 mb-8 sm:mb-12",
 }: HeroHeaderProps) {
   const heroBody = (
     <div className="hero-container min-h-[380px] sm:min-h-[420px] md:min-h-[480px] w-full bg-transparent flex items-center justify-center relative overflow-hidden py-16 sm:py-20 md:py-24 pt-24 sm:pt-28 md:pt-32">
-      <div className="glyph-wrapper absolute inset-0 w-full h-full">
-        <GlyphField {...DEFAULT_GLYPH_PROPS} />
-      </div>
-
+      {img ? (
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <img
+            src={img}
+            alt={imgAlt || ""}
+            className={clsx(
+              "h-full w-full object-cover object-center",
+              imgClassName,
+            )}
+            style={
+              imgObjectPosition
+                ? { objectPosition: imgObjectPosition }
+                : undefined
+            }
+          />
+        </div>
+      ) : null}
       <div className="relative px-4 sm:px-6 md:px-8 max-w-5xl mx-auto w-full pointer-events-none space-y-6 text-center">
         {icon ? (
           <div className="flex justify-center text-accent-base/80">{icon}</div>
