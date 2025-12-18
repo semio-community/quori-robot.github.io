@@ -1,4 +1,5 @@
 import {
+  CpuBolt,
   TestTube,
   UserHandUp,
   Calendar,
@@ -11,6 +12,7 @@ import type { ComponentType, SVGProps } from "react";
 export type NavigationIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 const baseRouteIconMap: Record<string, NavigationIcon> = {
+  features: CpuBolt,
   projects: TestTube,
   services: UserHandUp,
   events: Calendar,

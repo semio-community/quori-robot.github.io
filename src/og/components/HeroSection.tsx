@@ -7,7 +7,6 @@ import {
   PAGE_BACKGROUND,
 } from "../constants";
 import type { OgImageAsset } from "../types";
-import { GlyphPatternBackground } from "../glyphBackground";
 
 type HeroSectionProps = {
   heroImage?: OgImageAsset;
@@ -28,7 +27,7 @@ const renderBadgeCircle = ({
   size: number;
   mode?: "cover" | "contain";
 }) => {
-  const safeInitial = fallbackInitial?.slice(0, 2).toUpperCase() || "SC";
+  const safeInitial = fallbackInitial?.slice(0, 2).toUpperCase() || "Q";
   const hasImage = Boolean(imageSrc);
   return (
     <div
@@ -81,8 +80,7 @@ export const HeroSection = ({
   const hasHeroImage = Boolean(heroImage?.src);
   const hasLogo = Boolean(logoImage?.src);
   const showOverlayLogo = Boolean(hasHeroImage && hasLogo);
-  const showStandaloneBadge = !hasHeroImage && !hasLogo && Boolean(badgeIcon);
-  const showGlyphBackground = !hasHeroImage;
+  const showBadgeIcon = !hasLogo && Boolean(badgeIcon);
   const baseStyle = hasHeroImage
     ? { backgroundColor: "transparent" }
     : {
@@ -103,7 +101,6 @@ export const HeroSection = ({
         ...baseStyle,
       }}
     >
-      {showGlyphBackground ? <GlyphPatternBackground /> : null}
       {hasHeroImage ? (
         <div
           style={{
@@ -148,7 +145,7 @@ export const HeroSection = ({
         </div>
       ) : null}
 
-      {showStandaloneBadge && badgeIcon ? (
+      {showBadgeIcon && badgeIcon ? (
         <div
           style={{
             position: "absolute",
@@ -160,7 +157,7 @@ export const HeroSection = ({
         />
       ) : null}
 
-      {showStandaloneBadge ? (
+      {showBadgeIcon ? (
         <div
           style={{
             position: "absolute",

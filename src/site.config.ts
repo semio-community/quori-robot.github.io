@@ -13,8 +13,7 @@ export const siteConfig: SiteConfig = {
     },
   },
   // Used as the default description meta property and webmanifest description
-  description:
-    "Semio Community is a 501(c)(3) nonprofit organization facilitating community-driven robotics hardware, software, and research to foster repeatable, reproducible, and replicable science and reusable systems within human-robot interaction (HRI).",
+  description: "A Community-Driven Modular Research Platform.",
   // HTML lang property, found in src/layouts/SiteShell.astro (html lang attr) & astro.config.ts L:48
   lang: "en-US",
   // Meta property, found in src/components/BaseHead.astro L:42
@@ -36,13 +35,13 @@ export const menuLinks: {
     inHeader: false,
   },
   {
-    path: "/projects/",
-    title: "Projects",
+    path: "/features/",
+    title: "Features",
     inHeader: true,
   },
   {
-    path: "/services/",
-    title: "Services",
+    path: "/projects/",
+    title: "Projects",
     inHeader: true,
   },
   {

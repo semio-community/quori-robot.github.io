@@ -2,6 +2,7 @@ import React from "react";
 import Section from "@/components/sections/Section";
 import HeroHeader from "@/components/hero/HeroHeader";
 import { Icon } from "@/components/ui/Icon";
+import ConnectSection from "@/react-pages/home/sections/ConnectSection";
 import { HardwareCard } from "@/components/cards/HardwareCard";
 import { SoftwareCard } from "@/components/cards/SoftwareCard";
 import { ResearchCard } from "@/components/cards/ResearchCard";
@@ -86,6 +87,8 @@ export default function ProjectsPage({
         emptyMessage="Research publications coming soon! Check back later for updates."
         renderCard={(st) => <ResearchCard researchId={st.id} data={st.data} />}
       />
+
+      <ConnectSection />
     </div>
   );
 }

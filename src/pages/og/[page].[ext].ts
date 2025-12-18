@@ -3,6 +3,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { renderOgImage } from "@/og/renderer";
 import type { OgImageProps } from "@/og/types";
+import { siteConfig } from "@/site.config";
 import {
   mainRouteIconMap,
   type NavigationIcon,
@@ -10,34 +11,43 @@ import {
 
 const STATIC_PAGES: Record<string, OgImageProps> = {
   home: {
-    title: "Semio Community",
-    description: "Reproducible Robot Science",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+  features: {
+    title: "Features",
+    description:
+      "Explore the modular design, configuration builder, and evolution of the Quori social robot platform.",
   },
   projects: {
     title: "Projects",
-    description: "Explore active Semio projects across robotics and HRI.",
+    description:
+      "Explore community-driven robotics hardware platforms, open-source software tools, and reproducible research contributions advancing human-robot interaction",
   },
   services: {
     title: "Services",
-    description: "Manufacturing, software, and research support for robotics.",
+    description:
+      "Comprehensive support services for robotics hardware development, software engineering, and research programs in human-robot interaction",
   },
   events: {
     title: "Events",
     description:
-      "Join us at conferences, workshops, and training focused on HRI & AI.",
+      "Conferences, workshops, and training events for the human-robot interaction community",
   },
   contributors: {
     title: "Contributors",
     description:
-      "Researchers, partners, and sponsors supporting community robotics.",
+      "People and organizations advancing human-centered robotics and AI together",
   },
   "get-involved": {
     title: "Get Involved",
-    description: "Volunteer, donate, or collaborate on open robotics.",
+    description:
+      "Join the Semio Community - donate, volunteer, and help advance human-centered robotics and AI",
   },
   about: {
     title: "About",
-    description: "A nonprofit advancing reproducible human-centered robotics.",
+    description:
+      "Learn about Semio Community's mission to advance human-centered robotics through open science and collaboration",
   },
 };
 
@@ -69,91 +79,21 @@ function getBadgeIcon(page: string): React.ReactNode {
       {
         width: BADGE_ICON_SIZE,
         height: BADGE_ICON_SIZE,
-        viewBox: "0 0 412 412",
+        viewBox: "0 0 24 24",
         xmlns: "http://www.w3.org/2000/svg",
-        style: { display: "block" },
+        style: { display: "block", color: BADGE_ICON_COLOR },
       },
       React.createElement(
         "g",
-        { transform: "translate(604.607 194.034)" },
-        React.createElement(
-          "g",
-          { transform: "translate(-331.8 16.33)" },
-          React.createElement("path", {
-            d: "M0 83.231L-63.499 46.568-123.354 81.126V52.887L-31.75 0 31.749 36.66 63.501 18.331 87.955 32.449 0 83.231Z",
-            fill: "#FFC400",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "translate(-486.902 10.015)" },
-          React.createElement("path", {
-            d: "M0 4.208L63.499-32.453V-101.562L87.928-87.463 88.043 18.277 24.454 54.99V91.651L0 105.77V4.208Z",
-            fill: "#2AA499",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "translate(-335.448 -6.213)" },
-          React.createElement("path", {
-            d: "M0-71.217V2.106L59.854 36.662 35.396 50.781-56.157-2.078-56.237-75.449-87.955-93.755V-121.998L0-71.217Z",
-            fill: "#EF6129",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "translate(-300.051 -128.214)" },
-          React.createElement("path", {
-            d: "M0 136.12L-28.103 119.895V50.784L59.858 0 59.94 101.514 0 136.12Z",
-            fill: "#EC4D01",
-          }),
-        ),
-        React.createElement(
-          "g",
-          {
-            transform:
-              "matrix(-.866025 .500001 .500001 .866025 -407.972 -90.55)",
-          },
-          React.createElement("path", {
-            d: "M-164.126 43.978H-62.564L-11.784-43.978H-113.346L-164.126 43.978Z",
-            fill: "#FF7A2C",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "translate(-430.697 -26.65)" },
-          React.createElement("path", {
-            d: "M0-32.449V0L-59.853 34.556-147.808-16.224-59.853-67.005 0-32.449Z",
-            fill: "#48E2CE",
-          }),
-        ),
-        React.createElement(
-          "g",
-          {
-            transform:
-              "matrix(.866025 .500001 .500001 -.866025 -538.174 -48.341)",
-          },
-          React.createElement("path", {
-            d: "M-32.194-32.194H69.368L120.149-120.149H18.587L-32.194-32.194Z",
-            fill: "#50C4B6",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "translate(-423.403 191.213)" },
-          React.createElement("path", {
-            d: "M0-103.668L28.104-119.893 87.955-85.336V16.225L0-34.556V-103.668Z",
-            fill: "#FF9E00",
-          }),
-        ),
-        React.createElement(
-          "g",
-          { transform: "matrix(0 -1 -1 0 -207.96 175.287)" },
-          React.createElement("path", {
-            d: "M-32.151 120.195H69.411L120.195 32.233H18.681L-32.151 120.195Z",
-            fill: "#F78600",
-          }),
-        ),
+        { transform: "rotate(135 12 12)" },
+        React.createElement("path", {
+          d: "M8.7919 5.14712C9.17345 4.98591 9.35208 4.54591 9.19087 4.16435C9.02966 3.7828 8.58966 3.60417 8.2081 3.76538C4.70832 5.24406 2.25 8.70925 2.25 12.7503C2.25 18.1351 6.61522 22.5003 12 22.5003C17.3848 22.5003 21.75 18.1351 21.75 12.7503C21.75 8.70925 19.2917 5.24406 15.7919 3.76538C15.4103 3.60417 14.9703 3.7828 14.8091 4.16435C14.6479 4.54591 14.8265 4.98591 15.2081 5.14712C18.1722 6.39947 20.25 9.33312 20.25 12.7503C20.25 17.3067 16.5563 21.0003 12 21.0003C7.44365 21.0003 3.75 17.3067 3.75 12.7503C3.75 9.33312 5.82779 6.39947 8.7919 5.14712Z",
+          fill: "currentColor",
+        }),
+        React.createElement("path", {
+          d: "M12.75 2.75C12.75 2.33579 12.4142 2 12 2C11.5858 2 11.25 2.33579 11.25 2.75V6.75C11.25 7.16421 11.5858 7.5 12 7.5C12.4142 7.5 12.75 7.16421 12.75 6.75V2.75Z",
+          fill: "currentColor",
+        }),
       ),
     );
   }

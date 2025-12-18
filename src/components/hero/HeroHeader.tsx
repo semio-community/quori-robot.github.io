@@ -12,6 +12,8 @@ export type HeroAction = {
   rel?: string;
 };
 
+export type HeroHeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
 /**
  * HeroHeader
  *
@@ -29,7 +31,7 @@ export type HeroAction = {
 export interface HeroHeaderProps {
   title: React.ReactNode;
   description?: React.ReactNode;
-  headingTag?: React.ElementType;
+  headingTag?: HeroHeadingTag;
   actions?: HeroAction[];
   icon?: React.ReactNode;
   fullBleed?: boolean;

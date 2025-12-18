@@ -1,5 +1,5 @@
 import React from "react";
-import HeroHeader from "@/components/hero/HeroHeader";
+import HeroHeader, { type HeroHeadingTag } from "@/components/hero/HeroHeader";
 
 export interface HeroSectionProps {
   /**
@@ -17,7 +17,7 @@ export interface HeroSectionProps {
   /**
    * If provided, overrides the default heading level (h1).
    */
-  as?: React.ElementType;
+  as?: HeroHeadingTag;
 }
 
 /**

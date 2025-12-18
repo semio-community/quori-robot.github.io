@@ -12,10 +12,8 @@ const { articleDate, description, ogImage, title } = Astro.props;
 const titleSeparator = "•";
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(
-  ogImage ? ogImage : "/social-card.png",
-  Astro.url,
-).href;
+const socialImageURL = new URL(ogImage ? ogImage : "/og/home.png", Astro.url)
+  .href;
 ---
 
 <meta charset="utf-8" />
@@ -23,7 +21,7 @@ const socialImageURL = new URL(
 <title>{siteTitle}</title>
 
 {/* Icons */}
-<link href={url("/brand-circle.svg")} rel="icon" type="image/svg+xml" />
+<link href={url("/brand.svg")} rel="icon" type="image/svg+xml" />
 {
   import.meta.env.PROD && (
     <>

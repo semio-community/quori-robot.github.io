@@ -1,0 +1,30 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import SiteShell from "@/layouts/SiteShell.astro";
+import FeaturesPage from "@/react-pages/features/FeaturesPage";
+
+const meta = {
+  title: "Features",
+  description:
+    "Explore the modular design, configuration builder, and evolution of the Quori social robot platform.",
+};
+const ogImage = "/og/features.png";
+---
+
+<html
+  class="overflow-x-hidden grid scroll-pt-[72px] scroll-smooth font-sans text-text text-xl md:text-base antialiased"
+  lang="en"
+>
+  <head>
+    <BaseHead
+      title={meta.title}
+      description={meta.description}
+      ogImage={ogImage}
+    />
+  </head>
+  <body class="relative min-h-screen w-full bg-surface">
+    <SiteShell noPaddingTop showBackground={false}>
+      <FeaturesPage client:load />
+    </SiteShell>
+  </body>
+</html>

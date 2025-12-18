@@ -51,7 +51,7 @@ export const OgCard = ({
   logoMode = "cover",
 }: OgImageProps) => {
   const fallbackInitial =
-    avatarInitial || title?.charAt(0)?.toUpperCase() || "SC";
+    avatarInitial || title?.charAt(0)?.toUpperCase() || "Q";
   const truncatedTitle = truncateText(title, 80) ?? title;
   const truncatedDescription = truncateText(description, 80);
   const showDescription =
