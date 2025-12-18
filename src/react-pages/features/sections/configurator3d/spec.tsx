@@ -57,18 +57,21 @@ export const configurator3DModules: Record<string, ModuleSpecification> = {
     name: "Arms",
     preview: <ArmsIcon />,
     model: <ArmsModel />,
+    enterFrom: [0, 3.5, -3],
   },
   base: {
     id: "base",
     name: "Mobile Base",
     preview: <BaseIcon />,
     model: <BaseModel />,
+    enterFrom: [-3, -0.75, 0],
   },
   stand: {
     id: "stand",
     name: "Stand",
     preview: <StandIcon />,
     model: <StandModel />,
+    enterFrom: [3, 0, 0],
   },
 };
 
@@ -244,11 +247,6 @@ function withStandSwap(
 ): ConfigurationSpecification | null {
   const basePos = cfg.modulePositions.base;
   if (!basePos) return null;
-  const standPos: [number, number, number] = [
-    basePos[0],
-    basePos[1] + STAND_Y_OFFSET,
-    basePos[2],
-  ];
   const id = cfg.id.startsWith("base")
     ? cfg.id.replace("base", "stand")
     : `stand-${cfg.id}`;
@@ -261,7 +259,7 @@ function withStandSwap(
     [number, number, number]
   >;
   delete modulePositions.base;
-  modulePositions.stand = standPos;
+  modulePositions.stand = [0, 0, 0];
   return { id, name, modulePositions };
 }
 
