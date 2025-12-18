@@ -42,6 +42,19 @@ export interface Configurator3DProps {
   offscreenPosition?: [number, number, number];
   className?: string;
   worldOffset?: [number, number, number];
+  /**
+   * Sync the active configuration to a URL search param and read it on mount.
+   * Useful for shareable links like `/features?config=base-torso-speaker`.
+   */
+  urlSync?: boolean;
+  /**
+   * Query param name to use when `urlSync` is enabled.
+   */
+  urlParam?: string;
+  /**
+   * History mode used when writing the URL on configuration changes.
+   */
+  urlHistoryMode?: "replace" | "push";
 }
 
 type Vec3 = [number, number, number];
@@ -397,6 +410,9 @@ export function Configurator3D({
   offscreenPosition = DEFAULT_OFFSCREEN_POSITION,
   className,
   worldOffset = [0, 0, 0],
+  urlSync = false,
+  urlParam = "config",
+  urlHistoryMode = "replace",
 }: Configurator3DProps) {
   const moduleList = useMemo(() => Object.values(modules), [modules]);
   const [hoveredModuleId, setHoveredModuleId] = useState<ModuleId | null>(null);
@@ -437,6 +453,8 @@ export function Configurator3D({
   >({});
 
   const lastDefaultConfigurationIdRef = useRef(defaultConfigurationId);
+  const hasSyncedUrlOnMountRef = useRef(false);
+  const hasReadUrlParamRef = useRef(false);
 
   const setConfigurationId = (nextId: ConfigurationId) => {
     if (!nextId || nextId === activeConfigurationId) return;
@@ -486,6 +504,21 @@ export function Configurator3D({
   };
 
   useEffect(() => {
+    if (!urlSync) return;
+    if (typeof window === "undefined") return;
+
+    if (hasReadUrlParamRef.current) return;
+    hasReadUrlParamRef.current = true;
+
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get(urlParam);
+    if (!requested) return;
+    if (!configurations[requested as ConfigurationId]) return;
+
+    setConfigurationId(requested as ConfigurationId);
+  }, [configurations, urlParam, urlSync]);
+
+  useEffect(() => {
     if (!defaultConfigurationId) return;
     const hasActive = Boolean(configurations[activeConfigurationId]);
     const defaultChanged =
@@ -495,6 +528,29 @@ export function Configurator3D({
       setConfigurationId(defaultConfigurationId);
     }
   }, [activeConfigurationId, configurations, defaultConfigurationId]);
+
+  useEffect(() => {
+    if (!urlSync) return;
+    if (typeof window === "undefined") return;
+
+    if (!hasSyncedUrlOnMountRef.current) {
+      hasSyncedUrlOnMountRef.current = true;
+      return;
+    }
+
+    if (!activeConfigurationId) return;
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.get(urlParam) === activeConfigurationId) return;
+    url.searchParams.set(urlParam, activeConfigurationId);
+
+    const next = url.toString();
+    if (urlHistoryMode === "push") {
+      window.history.pushState({}, "", next);
+    } else {
+      window.history.replaceState({}, "", next);
+    }
+  }, [activeConfigurationId, urlHistoryMode, urlParam, urlSync]);
 
   const configurationIndex = useMemo(() => {
     return configurationEntries.map(({ id, cfg }) => ({

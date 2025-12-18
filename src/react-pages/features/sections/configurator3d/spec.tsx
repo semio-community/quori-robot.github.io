@@ -25,7 +25,7 @@ const STAND_HEIGHT = 0.3;
 const STAND_Y_OFFSET = (BASE_HEIGHT - STAND_HEIGHT) / 2; // keep top surface aligned with base configs
 
 export const configurator3DInitialConfigurationId =
-  "base-torso-chest-arms-head";
+  "base-torso-chest-arms-head-speaker";
 
 export const configurator3DModules: Record<string, ModuleSpecification> = {
   speaker: {

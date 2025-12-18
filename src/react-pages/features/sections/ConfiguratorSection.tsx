@@ -21,6 +21,8 @@ export default function ConfiguratorSection() {
           configurations={configurator3DConfigurations}
           modules={configurator3DModules}
           worldOffset={[0, -0.8, 0]}
+          urlSync
+          urlParam="config"
         />
       </div>
     </Section>
