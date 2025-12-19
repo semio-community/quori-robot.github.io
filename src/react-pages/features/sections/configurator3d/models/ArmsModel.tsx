@@ -1,5 +1,4 @@
 import React from "react";
-import { useGLTF } from "@react-three/drei";
 import GLBModel from "./GLBModel";
 
 export interface ArmsModelProps extends React.ComponentProps<"group"> {
@@ -14,8 +13,4 @@ export default function ArmsModel({
   ...props
 }: ArmsModelProps) {
   return <GLBModel url={url} modelOffset={[0, 0, 0.7]} {...props} />;
-}
-
-if (typeof window !== "undefined") {
-  useGLTF.preload("/configurations/models/Arms.glb");
 }

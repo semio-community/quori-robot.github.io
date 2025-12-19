@@ -1,5 +1,4 @@
 import React from "react";
-import { useGLTF } from "@react-three/drei";
 import GLBModel from "./GLBModel";
 
 export interface SmartSpeakerModelProps extends React.ComponentProps<"group"> {
@@ -14,8 +13,4 @@ export default function SmartSpeakerModel({
   ...props
 }: SmartSpeakerModelProps) {
   return <GLBModel url={url} {...props} modelOffset={[0, 0, 0.47]} />;
-}
-
-if (typeof window !== "undefined") {
-  useGLTF.preload("/configurations/models/SmartSpeaker.glb");
 }

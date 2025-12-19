@@ -1,5 +1,4 @@
 import React from "react";
-import { useGLTF } from "@react-three/drei";
 import GLBModel from "./GLBModel";
 
 export interface ChestPlateModelProps extends React.ComponentProps<"group"> {
@@ -14,8 +13,4 @@ export default function ChestPlateModel({
   ...props
 }: ChestPlateModelProps) {
   return <GLBModel url={url} {...props} />;
-}
-
-if (typeof window !== "undefined") {
-  useGLTF.preload("/configurations/models/ChestPlate.glb");
 }

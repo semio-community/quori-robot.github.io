@@ -1,12 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useThree } from "@react-three/fiber";
 import { animate, type AnimationPlaybackControlsWithThen } from "motion";
 import type { Group, Material, Mesh } from "three";
 import type { ModuleSpecification, Vec3 } from "./types";
+
+function ModelMountEffect({
+  onMount,
+  children,
+}: {
+  onMount: () => void;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    onMount();
+  }, [onMount]);
+
+  return <>{children}</>;
+}
 
 export function AnimatedModuleGroup({
   module,
   targetPosition,
   isPresent,
+  renderModel = true,
   enterFrom,
   exitVia,
   offscreenPosition,
@@ -14,10 +30,12 @@ export function AnimatedModuleGroup({
   module: ModuleSpecification;
   targetPosition: Vec3;
   isPresent: boolean;
+  renderModel?: boolean;
   enterFrom?: Vec3;
   exitVia?: Vec3;
   offscreenPosition: Vec3;
 }) {
+  const invalidate = useThree((state) => state.invalidate);
   const groupRef = useRef<Group | null>(null);
   const initialPositionRef = useRef<Vec3>(targetPosition);
   const hasMountedRef = useRef(false);
@@ -33,35 +51,44 @@ export function AnimatedModuleGroup({
     opacity?: AnimationPlaybackControlsWithThen;
   }>({});
 
+  const ensureMaterialsInitialized = useCallback(() => {
+    const group = groupRef.current;
+    if (!group) return;
+    if (materialsRef.current.length > 0) return;
+
+    const collected = new Set<Material>();
+    group.traverse((obj) => {
+      const mesh = obj as Mesh;
+      if (!(mesh as unknown as { isMesh?: boolean }).isMesh) return;
+      const currentMaterial = mesh.material;
+      if (!currentMaterial) return;
+      if (Array.isArray(currentMaterial)) {
+        const clones = currentMaterial.map((material) => material.clone());
+        mesh.material = clones;
+        clones.forEach((material) => collected.add(material));
+      } else {
+        const clone = currentMaterial.clone();
+        mesh.material = clone;
+        collected.add(clone);
+      }
+    });
+
+    if (collected.size === 0) return;
+
+    materialsRef.current = Array.from(collected);
+    for (const material of materialsRef.current) {
+      material.transparent = true;
+      material.opacity = opacityValueRef.current;
+    }
+    invalidate();
+  }, [invalidate]);
+
   useEffect(() => {
     const group = groupRef.current;
     if (!group) return;
 
-    if (materialsRef.current.length === 0) {
-      const collected = new Set<Material>();
-      group.traverse((obj) => {
-        const mesh = obj as Mesh;
-        if (!(mesh as unknown as { isMesh?: boolean }).isMesh) return;
-        const currentMaterial = mesh.material;
-        if (!currentMaterial) return;
-        if (Array.isArray(currentMaterial)) {
-          const clones = currentMaterial.map((material) => material.clone());
-          mesh.material = clones;
-          clones.forEach((material) => collected.add(material));
-        } else {
-          const clone = currentMaterial.clone();
-          mesh.material = clone;
-          collected.add(clone);
-        }
-      });
-
-      materialsRef.current = Array.from(collected);
-      const initialOpacity = isPresent ? 1 : 0;
-      opacityValueRef.current = initialOpacity;
-      for (const material of materialsRef.current) {
-        material.transparent = true;
-        material.opacity = initialOpacity;
-      }
+    if (renderModel) {
+      ensureMaterialsInitialized();
     }
 
     const setOpacity = (value: number) => {
@@ -70,6 +97,7 @@ export function AnimatedModuleGroup({
         material.transparent = true;
         material.opacity = value;
       }
+      invalidate();
     };
 
     const prevIsPresent = prevIsPresentRef.current;
@@ -83,6 +111,7 @@ export function AnimatedModuleGroup({
     if (!hasMountedRef.current) {
       group.position.set(nextX, nextY, nextZ);
       hasMountedRef.current = true;
+      invalidate();
       return;
     }
 
@@ -90,6 +119,7 @@ export function AnimatedModuleGroup({
       const start = enterFrom ?? [nextX, nextY + 1, nextZ];
       setOpacity(0);
       group.position.set(start[0], start[1], start[2]);
+      invalidate();
     }
 
     controlsRef.current.x?.stop();
@@ -115,6 +145,7 @@ export function AnimatedModuleGroup({
       onUpdate: (latest) => {
         const currentGroup = groupRef.current;
         if (currentGroup) currentGroup.position.x = latest;
+        invalidate();
       },
     });
     controlsRef.current.y = animate(group.position.y, animationTarget[1], {
@@ -122,6 +153,7 @@ export function AnimatedModuleGroup({
       onUpdate: (latest) => {
         const currentGroup = groupRef.current;
         if (currentGroup) currentGroup.position.y = latest;
+        invalidate();
       },
     });
     controlsRef.current.z = animate(group.position.z, animationTarget[2], {
@@ -129,6 +161,7 @@ export function AnimatedModuleGroup({
       onUpdate: (latest) => {
         const currentGroup = groupRef.current;
         if (currentGroup) currentGroup.position.z = latest;
+        invalidate();
       },
     });
 
@@ -167,6 +200,7 @@ export function AnimatedModuleGroup({
             offscreenPosition[1],
             offscreenPosition[2],
           );
+          invalidate();
         })
         .catch(() => {
           // Swallow cancellation errors.
@@ -180,6 +214,7 @@ export function AnimatedModuleGroup({
       controlsRef.current.opacity?.stop();
     };
   }, [
+    renderModel,
     enterFrom?.[0],
     enterFrom?.[1],
     enterFrom?.[2],
@@ -197,7 +232,13 @@ export function AnimatedModuleGroup({
 
   return (
     <group ref={groupRef} position={initialPositionRef.current}>
-      {module.model}
+      {renderModel ? (
+        <React.Suspense fallback={null}>
+          <ModelMountEffect onMount={ensureMaterialsInitialized}>
+            {module.model}
+          </ModelMountEffect>
+        </React.Suspense>
+      ) : null}
     </group>
   );
 }

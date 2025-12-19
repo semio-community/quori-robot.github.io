@@ -1,5 +1,4 @@
 import React from "react";
-import { useGLTF } from "@react-three/drei";
 import GLBModel from "./GLBModel";
 
 export interface BaseModelProps extends React.ComponentProps<"group"> {
@@ -14,8 +13,4 @@ export default function BaseModel({
   ...props
 }: BaseModelProps) {
   return <GLBModel url={url} {...props} />;
-}
-
-if (typeof window !== "undefined") {
-  useGLTF.preload("/configurations/models/Base.glb");
 }

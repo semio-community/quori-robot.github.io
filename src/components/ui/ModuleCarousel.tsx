@@ -164,7 +164,7 @@ export function ModuleCarousel({
   const showControls = orderedConfigurationIds.length > 1;
 
   return (
-    <div className={clsx("relative w-full bg-special-lighter/60", className)}>
+    <div className={clsx("w-full bg-special-lighter/60", className)}>
       <div className={clsx("relative w-full overflow-hidden", heightClassName)}>
         <Configurator3DCanvas
           modules={modules}
@@ -183,87 +183,87 @@ export function ModuleCarousel({
             </div>
           </div>
         ) : null}
-
-        {showControls ? (
-          <div className="absolute inset-x-0 bottom-4 flex justify-center px-4">
-            <div
-              className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface/40 px-2 py-1.5 shadow-sm backdrop-blur"
-              onMouseEnter={() => setControlsHovered(true)}
-              onMouseLeave={() => setControlsHovered(false)}
-              onFocusCapture={() => setControlsHovered(true)}
-              onBlurCapture={(event) => {
-                const nextTarget = event.relatedTarget as Node | null;
-                if (nextTarget && event.currentTarget.contains(nextTarget)) {
-                  return;
-                }
-                setControlsHovered(false);
-              }}
-            >
-              <button
-                type="button"
-                onClick={goPrev}
-                aria-label="Previous configuration"
-                className={clsx(
-                  "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
-                  "text-color-600 dark:text-color-400 hover:text-foreground hover:bg-surface/60",
-                  "hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
-                  "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-                )}
-              >
-                <span className="inline-flex transition-transform duration-150 group-hover:-translate-x-0.5">
-                  {renderChevronGlyph("left")}
-                </span>
-              </button>
-
-              <div className="flex items-center">
-                {orderedConfigurationIds.map((id, index) => {
-                  const name = configurations[id]?.name ?? `Slide ${index + 1}`;
-                  const isActive = index === activeIndex;
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => goToIndex(index)}
-                      aria-label={`Show ${name}`}
-                      aria-current={isActive ? "true" : undefined}
-                      className={clsx(
-                        "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
-                        "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-                        "hover:bg-surface/60 hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
-                      )}
-                    >
-                      <span
-                        className={clsx(
-                          "h-2 w-2 rounded-full border transition-all duration-150",
-                          isActive
-                            ? "bg-accent-three border-accent-three scale-110"
-                            : "bg-transparent border-border-subtle group-hover:bg-surface/70 group-hover:border-accent-three/60 group-hover:scale-110",
-                        )}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                type="button"
-                onClick={goNext}
-                aria-label="Next configuration"
-                className={clsx(
-                  "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
-                  "text-color-600 dark:text-color-400 hover:text-foreground hover:bg-surface/60",
-                  "hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
-                  "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-                )}
-              >
-                <span className="inline-flex transition-transform duration-150 group-hover:translate-x-0.5">
-                  {renderChevronGlyph("right")}
-                </span>
-              </button>
-            </div>
-          </div>
-        ) : null}
       </div>
+
+      {showControls ? (
+        <div className="flex justify-center px-4 py-3">
+          <div
+            className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface/40 px-2 py-1.5 shadow-sm backdrop-blur"
+            onMouseEnter={() => setControlsHovered(true)}
+            onMouseLeave={() => setControlsHovered(false)}
+            onFocusCapture={() => setControlsHovered(true)}
+            onBlurCapture={(event) => {
+              const nextTarget = event.relatedTarget as Node | null;
+              if (nextTarget && event.currentTarget.contains(nextTarget)) {
+                return;
+              }
+              setControlsHovered(false);
+            }}
+          >
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous configuration"
+              className={clsx(
+                "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
+                "text-color-600 dark:text-color-400 hover:text-foreground hover:bg-surface/60",
+                "hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
+                "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+              )}
+            >
+              <span className="inline-flex transition-transform duration-150 group-hover:-translate-x-0.5">
+                {renderChevronGlyph("left")}
+              </span>
+            </button>
+
+            <div className="flex items-center">
+              {orderedConfigurationIds.map((id, index) => {
+                const name = configurations[id]?.name ?? `Slide ${index + 1}`;
+                const isActive = index === activeIndex;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => goToIndex(index)}
+                    aria-label={`Show ${name}`}
+                    aria-current={isActive ? "true" : undefined}
+                    className={clsx(
+                      "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
+                      "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+                      "hover:bg-surface/60 hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
+                    )}
+                  >
+                    <span
+                      className={clsx(
+                        "h-2 w-2 rounded-full border transition-all duration-150",
+                        isActive
+                          ? "bg-accent-three border-accent-three scale-110"
+                          : "bg-transparent border-border-subtle group-hover:bg-surface/70 group-hover:border-accent-three/60 group-hover:scale-110",
+                      )}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next configuration"
+              className={clsx(
+                "group h-8 w-8 inline-flex items-center justify-center rounded-full transition-all duration-150",
+                "text-color-600 dark:text-color-400 hover:text-foreground hover:bg-surface/60",
+                "hover:shadow-sm hover:ring-1 hover:ring-accent-three/20 active:scale-95",
+                "focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+              )}
+            >
+              <span className="inline-flex transition-transform duration-150 group-hover:translate-x-0.5">
+                {renderChevronGlyph("right")}
+              </span>
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

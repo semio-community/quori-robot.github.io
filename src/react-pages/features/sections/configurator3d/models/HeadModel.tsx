@@ -1,5 +1,4 @@
 import React from "react";
-import { useGLTF } from "@react-three/drei";
 import GLBModel from "./GLBModel";
 
 export interface HeadModelProps extends React.ComponentProps<"group"> {
@@ -14,8 +13,4 @@ export default function HeadModel({
   ...props
 }: HeadModelProps) {
   return <GLBModel url={url} modelOffset={[-0.03, 0, 0.7]} {...props} />;
-}
-
-if (typeof window !== "undefined") {
-  useGLTF.preload("/configurations/models/Head.glb");
 }
