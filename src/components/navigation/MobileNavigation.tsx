@@ -180,6 +180,9 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                 </div>
 
                 <div className="relative flex h-full flex-col">
+                  <Dialog.Title className="sr-only">
+                    Navigation menu
+                  </Dialog.Title>
                   {/* Header */}
                   <motion.div
                     className="flex items-center justify-between h-[72px] px-4 py-2 border-b border-accent-base/10"

@@ -101,16 +101,20 @@ export default function ModulesSection() {
       subtitle="Review each module and how it fits into Quori’s modular configurations."
       variant="primary"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {moduleCards.map((m) => (
+      <div className="max-w-6xl mx-auto grid grid-cols-1 gap-6">
+        {moduleCards.map((m, index) => (
           <div
             key={m.id}
             id={`module-${m.id}`}
-            className="group flex flex-col bg-special-lighter rounded-lg hover:shadow-lg transition-all hover:scale-105 h-full overflow-hidden backdrop-blur-lg"
+            className={clsx(
+              "group bg-special-lighter rounded-lg hover:shadow-lg transition-all hover:scale-105 h-full overflow-hidden backdrop-blur-lg",
+              "flex flex-col sm:flex-row sm:items-stretch",
+              index % 2 === 1 ? "sm:flex-row-reverse" : null,
+            )}
           >
             {/* Image section */}
-            <div className="mb-4">
-              <div className="aspect-square overflow-hidden bg-linear-to-br from-special-lighter to-special relative">
+            <div className="mb-4 sm:mb-0 sm:w-1/2">
+              <div className="aspect-square sm:aspect-auto sm:h-full overflow-hidden bg-linear-to-br from-special-lighter to-special relative">
                 {m.imageSrc ? (
                   <img
                     src={m.imageSrc}
@@ -133,7 +137,7 @@ export default function ModulesSection() {
             </div>
 
             {/* Content section */}
-            <div className="flex flex-col flex-1 p-6 pt-0 min-h-0">
+            <div className="flex flex-col flex-1 p-6 pt-0 sm:pt-6 min-h-0">
               <h3 className="font-semibold mb-2 text-accent-base group-hover:text-accent-two transition-colors flex items-center justify-between gap-2">
                 <span className="truncate">{m.name}</span>
                 <m.Icon

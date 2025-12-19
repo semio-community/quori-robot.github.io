@@ -12,7 +12,7 @@ export default function ConfiguratorSection() {
     <Section
       id="builder"
       title="Configurations"
-      subtitle="Preview supported module combinations with dependency-aware toggles."
+      subtitle="Preview supported module combinations by toggling different parts. Drag the robot to rotate."
       variant="secondary"
     >
       <div className="max-w-6xl mx-auto">

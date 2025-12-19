@@ -28,7 +28,7 @@ export function Configurator3DCanvas({
 }) {
   return (
     <div className="w-full h-full">
-      <Canvas shadows>
+      <Canvas shadows className="touch-none">
         <ambientLight intensity={0.5} />
         <spotLight
           position={[10, 10, 10]}

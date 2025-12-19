@@ -47,6 +47,11 @@ export type HeaderProps = {
 };
 
 const menuSections = {
+  "/features/": [
+    { title: "Builder", href: "/features/#builder" },
+    { title: "Modules", href: "/features/#modules" },
+    { title: "Comparison", href: "/features/#comparison" },
+  ],
   "/projects/": [
     { title: "Hardware Projects", href: "/projects/#hardware" },
     { title: "Software Projects", href: "/projects/#software" },
