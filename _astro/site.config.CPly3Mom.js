@@ -1,0 +1,2 @@
+const e={date:{locale:"en-US",options:{day:"numeric",month:"short",year:"numeric"}},title:"Quori"},t=[{path:"/",title:"Home",inHeader:!1},{path:"/features/",title:"Features",inHeader:!0},{path:"/projects/",title:"Projects",inHeader:!0},{path:"/events/",title:"Events",inHeader:!0},{path:"/contributors/",title:"Contributors",inHeader:!0},{path:"/get-involved/",title:"Get Involved",inHeader:!0,callToAction:!0}];export{t as m,e as s};
+//# sourceMappingURL=site.config.CPly3Mom.js.map

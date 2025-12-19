@@ -1512,3 +1512,35 @@ collections:
           label: Item
           name: item
           widget: string
+      - label: Organizations
+        name: organizations
+        widget: list
+        required: false
+        fields:
+          - label: Organization Id
+            name: organizationId
+            widget: relation
+            collection: organizations
+            value_field: id
+            display_fields:
+              - name
+              - id
+            search_fields:
+              - name
+              - id
+          - label: Role
+            name: role
+            widget: string
+            required: false
+          - label: Note
+            name: note
+            widget: string
+            required: false
+          - label: Start Date
+            name: startDate
+            widget: datetime
+            required: false
+          - label: End Date
+            name: endDate
+            widget: datetime
+            required: false
