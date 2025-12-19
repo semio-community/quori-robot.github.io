@@ -1,4 +1,5 @@
 import { type CollectionEntry, getCollection } from "astro:content";
+import { isDraftVisible } from "@/utils/drafts";
 
 type ResearchEntry = CollectionEntry<"research">;
 
@@ -55,7 +56,7 @@ function sortResearchEntries(entries: ResearchEntry[]): ResearchEntry[] {
 
 async function loadResearchEntries(): Promise<ResearchEntry[]> {
   const entries = await getCollection("research", ({ data }) =>
-    import.meta.env.PROD ? data.draft !== true : true,
+    isDraftVisible(data.draft),
   );
   return sortResearchEntries(entries);
 }
@@ -140,8 +141,8 @@ export async function getResearchByOrganization(
   const entries = await loadResearchEntries();
   const lower = organizationId.toLowerCase();
   return entries.filter((entry) =>
-    (entry.data.organizations ?? []).some((org) =>
-      org.organizationId.toLowerCase() === lower,
+    (entry.data.organizations ?? []).some(
+      (org) => org.organizationId.toLowerCase() === lower,
     ),
   );
 }
@@ -164,10 +165,10 @@ export async function getResearchByHardware(
 ): Promise<ResearchEntry[]> {
   const entries = await loadResearchEntries();
   const lower = hardwareId.toLowerCase();
-  return entries.filter((entry) =>
-    entry.data.relatedHardware?.some(
-      (hw) => hw.toLowerCase() === lower,
-    ) ?? false,
+  return entries.filter(
+    (entry) =>
+      entry.data.relatedHardware?.some((hw) => hw.toLowerCase() === lower) ??
+      false,
   );
 }
 
@@ -177,10 +178,10 @@ export async function getResearchBySoftware(
 ): Promise<ResearchEntry[]> {
   const entries = await loadResearchEntries();
   const lower = softwareId.toLowerCase();
-  return entries.filter((entry) =>
-    entry.data.relatedSoftware?.some(
-      (sw) => sw.toLowerCase() === lower,
-    ) ?? false,
+  return entries.filter(
+    (entry) =>
+      entry.data.relatedSoftware?.some((sw) => sw.toLowerCase() === lower) ??
+      false,
   );
 }
 
@@ -202,7 +203,8 @@ export async function getRecentResearch(
       return null;
     })
     .filter(
-      (value): value is { entry: ResearchEntry; time: number } => value !== null,
+      (value): value is { entry: ResearchEntry; time: number } =>
+        value !== null,
     )
     .sort((a, b) => b.time - a.time)
     .slice(0, limit)
@@ -232,7 +234,10 @@ export async function getUniqueResearchContributors(): Promise<
   Array<{ name: string; affiliation?: string; count: number }>
 > {
   const entries = await loadResearchEntries();
-  const contributorMap = new Map<string, { affiliation?: string; count: number }>();
+  const contributorMap = new Map<
+    string,
+    { affiliation?: string; count: number }
+  >();
 
   entries.forEach((entry) => {
     (entry.data.contributors ?? []).forEach((contributor) => {
@@ -259,61 +264,69 @@ export async function getUniqueResearchAuthors(): Promise<
 }
 
 /** Get study count by type */
-export async function getResearchCountByType(): Promise<Record<string, number>> {
+export async function getResearchCountByType(): Promise<
+  Record<string, number>
+> {
   const entries = await loadResearchEntries();
-  return entries.reduce((acc, entry) => {
-    acc[entry.data.type] = (acc[entry.data.type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  return entries.reduce(
+    (acc, entry) => {
+      acc[entry.data.type] = (acc[entry.data.type] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 }
 
 /** Get study count by year */
-export async function getResearchCountByYear(): Promise<Record<number, number>> {
+export async function getResearchCountByYear(): Promise<
+  Record<number, number>
+> {
   const entries = await loadResearchEntries();
-  return entries.reduce((acc, entry) => {
-    const year = getPublishYear(entry);
-    if (year !== null) {
-      acc[year] = (acc[year] || 0) + 1;
-    }
-    return acc;
-  }, {} as Record<number, number>);
+  return entries.reduce(
+    (acc, entry) => {
+      const year = getPublishYear(entry);
+      if (year !== null) {
+        acc[year] = (acc[year] || 0) + 1;
+      }
+      return acc;
+    },
+    {} as Record<number, number>,
+  );
 }
 
 /** Search research entries by query string */
-export async function searchResearch(
-  query: string,
-): Promise<ResearchEntry[]> {
+export async function searchResearch(query: string): Promise<ResearchEntry[]> {
   const entries = await loadResearchEntries();
   const lowerQuery = query.toLowerCase();
 
   return entries.filter((entry) => {
     const titleMatch = entry.data.title.toLowerCase().includes(lowerQuery);
-    const descriptionMatch = entry.data.description
-      ?.toLowerCase()
-      .includes(lowerQuery) ?? false;
+    const descriptionMatch =
+      entry.data.description?.toLowerCase().includes(lowerQuery) ?? false;
     const topicMatch = normalizeTopics(entry).some((topic) =>
       topic.toLowerCase().includes(lowerQuery),
     );
     const contributorMatch = (entry.data.contributors ?? []).some(
       (contributor) =>
         contributor.personId.toLowerCase().includes(lowerQuery) ||
-        contributor.affiliationSnapshot
-          ?.toLowerCase()
-          .includes(lowerQuery),
+        contributor.affiliationSnapshot?.toLowerCase().includes(lowerQuery),
     );
-    const organizationMatch = (entry.data.organizations ?? []).some((org) =>
-      org.organizationId.toLowerCase().includes(lowerQuery) ||
-      org.role.toLowerCase().includes(lowerQuery) ||
-      org.note?.toLowerCase().includes(lowerQuery),
+    const organizationMatch = (entry.data.organizations ?? []).some(
+      (org) =>
+        org.organizationId.toLowerCase().includes(lowerQuery) ||
+        org.role.toLowerCase().includes(lowerQuery) ||
+        org.note?.toLowerCase().includes(lowerQuery),
     );
     const venue = getLegacyField(entry, "venue");
     const venueMatch = venue ? venue.toLowerCase().includes(lowerQuery) : false;
-    const hardwareMatch = entry.data.relatedHardware?.some((hw) =>
-      hw.toLowerCase().includes(lowerQuery),
-    ) ?? false;
-    const softwareMatch = entry.data.relatedSoftware?.some((sw) =>
-      sw.toLowerCase().includes(lowerQuery),
-    ) ?? false;
+    const hardwareMatch =
+      entry.data.relatedHardware?.some((hw) =>
+        hw.toLowerCase().includes(lowerQuery),
+      ) ?? false;
+    const softwareMatch =
+      entry.data.relatedSoftware?.some((sw) =>
+        sw.toLowerCase().includes(lowerQuery),
+      ) ?? false;
 
     return (
       titleMatch ||
@@ -513,23 +526,29 @@ export async function filterResearch(criteria: {
   }
 
   if (criteria.relatedHardware && criteria.relatedHardware.length > 0) {
-    const lowerHardware = criteria.relatedHardware.map((hw) => hw.toLowerCase());
+    const lowerHardware = criteria.relatedHardware.map((hw) =>
+      hw.toLowerCase(),
+    );
     entries = entries.filter((entry) =>
-      lowerHardware.some((hardwareId) =>
-        entry.data.relatedHardware?.some(
-          (hw) => hw.toLowerCase() === hardwareId,
-        ) ?? false,
+      lowerHardware.some(
+        (hardwareId) =>
+          entry.data.relatedHardware?.some(
+            (hw) => hw.toLowerCase() === hardwareId,
+          ) ?? false,
       ),
     );
   }
 
   if (criteria.relatedSoftware && criteria.relatedSoftware.length > 0) {
-    const lowerSoftware = criteria.relatedSoftware.map((sw) => sw.toLowerCase());
+    const lowerSoftware = criteria.relatedSoftware.map((sw) =>
+      sw.toLowerCase(),
+    );
     entries = entries.filter((entry) =>
-      lowerSoftware.some((softwareId) =>
-        entry.data.relatedSoftware?.some(
-          (sw) => sw.toLowerCase() === softwareId,
-        ) ?? false,
+      lowerSoftware.some(
+        (softwareId) =>
+          entry.data.relatedSoftware?.some(
+            (sw) => sw.toLowerCase() === softwareId,
+          ) ?? false,
       ),
     );
   }
@@ -566,7 +585,12 @@ export async function getResearchStatistics(): Promise<{
 
 /** Build co-authorship network */
 export async function getResearchCoAuthorshipNetwork(): Promise<{
-  nodes: Array<{ id: string; name: string; affiliation?: string; count: number }>;
+  nodes: Array<{
+    id: string;
+    name: string;
+    affiliation?: string;
+    count: number;
+  }>;
   edges: Array<{ source: string; target: string; weight: number }>;
 }> {
   const entries = await loadResearchEntries();

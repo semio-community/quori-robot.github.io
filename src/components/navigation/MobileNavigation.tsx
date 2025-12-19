@@ -484,6 +484,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                 <CallToActionButton
                                   href={url(link.path)}
                                   size="medium"
+                                  variant="tertiary"
                                   fullWidth
                                   className="text-center"
                                 >
@@ -497,7 +498,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                       className={clsx(
                                         "flex-1 block px-4 py-3 rounded-lg transition-all duration-200",
                                         currentPath === link.path
-                                          ? "bg-accent-base/10 text-accent-two font-semibold"
+                                          ? "bg-accent-base/10 text-accent-three font-semibold"
                                           : "text-foreground hover:bg-accent-base/5 hover:text-accent-base",
                                       )}
                                     >
@@ -521,7 +522,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                             toggleSection(link.path)
                                           }
                                           className={clsx(
-                                            "inline-flex items-center justify-center h-8 w-8 rounded-lg bg-color-100 text-accent-base hover:bg-accent-base/10 transition-colors focus:outline-2 focus:outline-accent-two outline-offset-2",
+                                            "inline-flex items-center justify-center h-8 w-8 rounded-lg bg-color-100 text-accent-base hover:bg-accent-base/10 transition-colors focus:outline-2 focus:outline-accent-three outline-offset-2",
                                             openSection === link.path &&
                                               "bg-accent-base/10",
                                           )}

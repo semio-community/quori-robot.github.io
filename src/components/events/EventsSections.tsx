@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { EventCard } from "@/components/cards/EventCard";
 import Section from "@/components/sections/Section";
+import type { ImageLike } from "@/utils/images";
 
 type LinkMap = {
   website?: string;
@@ -16,7 +17,7 @@ type Location = {
   online?: boolean;
 };
 
-type ImageRef = any;
+type ImageRef = ImageLike;
 
 export type SerializedEvent = {
   id: string;
@@ -38,8 +39,8 @@ export type SerializedEvent = {
 };
 
 export interface EventsSectionsProps {
-  // Provide all events (past, current, upcoming). The component will categorize them at runtime.
-  events: SerializedEvent[];
+  // Provide all events (past, current, upcoming) as JSON string to avoid prop serialization issues.
+  eventsPayload: string;
   // Optionally control how many items are initially shown in Featured and Past sections (no "Show more" UI here).
   initialFeaturedCount?: number;
   initialPastCount?: number;
@@ -152,11 +153,15 @@ const ExpandableGrid = <T extends { id: string }>({
 };
 
 export const EventsSections: React.FC<EventsSectionsProps> = ({
-  events,
+  eventsPayload,
   initialFeaturedCount = 6,
   initialPastCount = 6,
   className,
 }) => {
+  const events = useMemo(
+    () => JSON.parse(eventsPayload) as SerializedEvent[],
+    [eventsPayload],
+  );
   const now = useMemo(() => new Date(), []);
 
   const toDate = (d?: string | Date) =>

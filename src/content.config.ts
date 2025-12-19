@@ -96,6 +96,14 @@ const contributorSchema = z.discriminatedUnion("type", [
     .merge(baseContributorSchema),
 ]);
 
+const eventOrganizationSchema = z
+  .object({
+    organizationId: organizationIdSchema,
+    role: z.string().optional(),
+    note: z.string().optional(),
+  })
+  .merge(temporalMetadataSchema);
+
 // Proposed People Collection
 const people = defineCollection({
   loader: glob({ base: "./src/content/people", pattern: "**/*.{md,mdx}" }),
@@ -392,6 +400,7 @@ const events = defineCollection({
       featured: z.boolean().default(false),
       draft: z.boolean().optional(),
       topics: z.array(z.string()),
+      organizations: z.array(eventOrganizationSchema).optional(),
     }),
 });
 

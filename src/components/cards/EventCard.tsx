@@ -1,11 +1,10 @@
 import { useMemo, type FC } from "react";
-import type { ImageMetadata } from "astro";
 import { ItemCard } from "@/components/cards/ItemCard";
 import { getLocationString } from "@/utils/events";
 import { getFormattedDateRanges, parseDateLocal } from "@/utils/date";
 import { Calendar, MapPoint } from "@solar-icons/react-perf/LineDuotone";
 import type { FeaturedState } from "../ui/FeaturedStar";
-import { resolveLogoAsset } from "@/utils/images";
+import { resolveLogoAsset, type ImageLike } from "@/utils/images";
 
 export interface EventCardProps {
   eventId: string;
@@ -17,8 +16,8 @@ export interface EventCardProps {
     endDate?: Date | string;
     type: string;
     images?: {
-      logo?: ImageMetadata | { src: string; width?: number; height?: number };
-      hero?: ImageMetadata | { src: string; width?: number; height?: number };
+      logo?: ImageLike;
+      hero?: ImageLike;
     };
     links?: {
       website?: string;

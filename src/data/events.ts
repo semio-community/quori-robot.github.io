@@ -1,10 +1,11 @@
 import { type CollectionEntry, getCollection } from "astro:content";
+import { isDraftVisible } from "@/utils/drafts";
 
 /** Get all events, sorted by start date (upcoming first) */
 export async function getAllEvents(): Promise<CollectionEntry<"events">[]> {
   const events = await getCollection("events", ({ data }) => {
-    // In production, exclude drafts. In development, show all.
-    return import.meta.env.PROD ? data.draft !== true : true;
+    // In production, exclude drafts. In development, respect the draft visibility setting.
+    return isDraftVisible(data.draft);
   });
   const now = new Date();
 
@@ -363,8 +364,19 @@ export async function getEventsByRole(
   role: EventRole,
 ): Promise<CollectionEntry<"events">[]> {
   const events = await getAllEvents();
+  return events.filter((event) => event.data.roles.includes(role));
+}
+
+/** Get events associated with an organization */
+export async function getEventsByOrganization(
+  organizationId: string,
+): Promise<CollectionEntry<"events">[]> {
+  const events = await getAllEvents();
+  const lower = organizationId.toLowerCase();
   return events.filter((event) =>
-    event.data.roles.includes(role),
+    (event.data.organizations ?? []).some(
+      (org) => org.organizationId.toLowerCase() === lower,
+    ),
   );
 }
 

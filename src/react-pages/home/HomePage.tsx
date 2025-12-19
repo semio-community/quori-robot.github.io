@@ -5,6 +5,9 @@ import StrategySection from "@/react-pages/home/sections/StrategySection";
 import ProductSection from "@/react-pages/home/sections/ProductSection";
 import ValuesSection from "@/react-pages/home/sections/ValuesSection";
 import ConnectSection from "@/react-pages/home/sections/ConnectSection";
+import FundingPartnerSection, {
+  type FundingPartnerData,
+} from "@/react-pages/home/sections/FundingPartnerSection";
 import {
   configurator3DConfigurations,
   configurator3DModules,
@@ -13,11 +16,13 @@ import {
 export interface HomePageProps {
   projectCount: number;
   featuredEventCount: number;
+  fundingPartner?: FundingPartnerData | null;
 }
 
 export default function HomePage({
   projectCount: _projectCount,
   featuredEventCount: _featuredEventCount,
+  fundingPartner,
 }: HomePageProps) {
   return (
     <div className="space-y-12 pt-[72px] lg:pt-0">
@@ -47,6 +52,8 @@ export default function HomePage({
           autoAdvanceMs={6500}
         />
       </div>
+
+      <FundingPartnerSection partner={fundingPartner} />
 
       <VisionSection />
       <StrategySection />

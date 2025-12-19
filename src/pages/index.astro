@@ -16,6 +16,9 @@ import {
   getFeaturedEvents,
   getUpcomingEvents,
 } from "@/data/events";
+import { getEntry } from "astro:content";
+import { isDraftVisible } from "@/utils/drafts";
+import { resolveImageLike } from "@/utils/images";
 
 // Load data on the server (Astro)
 const allHardware = await getAllHardware();
@@ -35,6 +38,24 @@ const featuredEventCount = [
   ...featuredOnly.filter((f) => f.data.startDate > now),
 ].length;
 
+const nsfEntry = await getEntry("organizations", "nsf");
+const fundingPartner =
+  nsfEntry && isDraftVisible(nsfEntry.data.draft)
+    ? {
+        id: nsfEntry.id,
+        name: nsfEntry.data.name,
+        shortName: nsfEntry.data.shortName,
+        description: nsfEntry.data.description,
+        collaborationSummary: nsfEntry.data.collaborationSummary,
+        type: nsfEntry.data.type,
+        category: nsfEntry.data.category,
+        website: nsfEntry.data.links?.website,
+        logoSrc: resolveImageLike(
+          nsfEntry.data.images?.logo ?? nsfEntry.data.images?.logoUrl,
+        ),
+      }
+    : null;
+
 const pageTitle = "Home";
 const description = siteConfig.description;
 const ogImage = "/og/home.png";
@@ -53,6 +74,7 @@ const ogImage = "/og/home.png";
         client:load
         projectCount={projectCount}
         featuredEventCount={featuredEventCount}
+        fundingPartner={fundingPartner}
       />
     </SiteShell>
   </body>

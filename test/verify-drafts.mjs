@@ -5,22 +5,22 @@
  * Run with: node test/verify-drafts.mjs
  */
 
-import { readFile, readdir } from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { readFile, readdir } from "fs/promises";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..');
+const projectRoot = join(__dirname, "..");
 
 // ANSI color codes for terminal output
 const colors = {
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  reset: '\x1b[0m',
-  bold: '\x1b[1m',
+  green: "\x1b[32m",
+  red: "\x1b[31m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
 };
 
 /**
@@ -31,20 +31,22 @@ function parseFrontmatter(content) {
   if (!match) return {};
 
   const frontmatter = {};
-  const lines = match[1].split('\n');
+  const lines = match[1].split("\n");
 
   for (const line of lines) {
-    const colonIndex = line.indexOf(':');
+    const colonIndex = line.indexOf(":");
     if (colonIndex > 0) {
       const key = line.substring(0, colonIndex).trim();
       let value = line.substring(colonIndex + 1).trim();
 
       // Handle boolean values
-      if (value === 'true') value = true;
-      else if (value === 'false') value = false;
+      if (value === "true") value = true;
+      else if (value === "false") value = false;
       // Remove quotes if present
-      else if ((value.startsWith('"') && value.endsWith('"')) ||
-               (value.startsWith("'") && value.endsWith("'"))) {
+      else if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
         value = value.slice(1, -1);
       }
 
@@ -59,11 +61,13 @@ function parseFrontmatter(content) {
  * Check a single collection for draft content
  */
 async function checkCollection(collectionName) {
-  const collectionPath = join(projectRoot, 'src', 'content', collectionName);
+  const collectionPath = join(projectRoot, "src", "content", collectionName);
 
   try {
     const files = await readdir(collectionPath);
-    const mdxFiles = files.filter(f => f.endsWith('.mdx') || f.endsWith('.md'));
+    const mdxFiles = files.filter(
+      (f) => f.endsWith(".mdx") || f.endsWith(".md"),
+    );
 
     const results = {
       total: 0,
@@ -73,7 +77,7 @@ async function checkCollection(collectionName) {
 
     for (const file of mdxFiles) {
       const filePath = join(collectionPath, file);
-      const content = await readFile(filePath, 'utf-8');
+      const content = await readFile(filePath, "utf-8");
       const frontmatter = parseFrontmatter(content);
 
       results.total++;
@@ -93,8 +97,13 @@ async function checkCollection(collectionName) {
 
     return results;
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      return { total: 0, drafts: [], published: [], error: 'Collection not found' };
+    if (error.code === "ENOENT") {
+      return {
+        total: 0,
+        drafts: [],
+        published: [],
+        error: "Collection not found",
+      };
     }
     throw error;
   }
@@ -104,11 +113,13 @@ async function checkCollection(collectionName) {
  * Verify that draft filtering is configured in data helpers
  */
 async function checkDataHelper(helperName) {
-  const helperPath = join(projectRoot, 'src', 'data', `${helperName}.ts`);
+  const helperPath = join(projectRoot, "src", "data", `${helperName}.ts`);
 
   try {
-    const content = await readFile(helperPath, 'utf-8');
-    const hasDraftFilter = content.includes('data.draft !== true');
+    const content = await readFile(helperPath, "utf-8");
+    const hasDraftFilter =
+      content.includes("isDraftVisible(") ||
+      content.includes("shouldShowDrafts(");
     return { exists: true, hasDraftFilter };
   } catch (error) {
     return { exists: false, hasDraftFilter: false };
@@ -119,9 +130,18 @@ async function checkDataHelper(helperName) {
  * Main test runner
  */
 async function main() {
-  console.log(`${colors.bold}${colors.blue}=== Draft System Verification ===${colors.reset}\n`);
+  console.log(
+    `${colors.bold}${colors.blue}=== Draft System Verification ===${colors.reset}\n`,
+  );
 
-  const collections = ['hardware', 'software', 'events', 'partners', 'studies'];
+  const collections = [
+    "hardware",
+    "software",
+    "events",
+    "organizations",
+    "people",
+    "research",
+  ];
   let allTestsPassed = true;
 
   // Check each collection
@@ -135,12 +155,18 @@ async function main() {
       console.log(`  ${colors.yellow}⚠ ${results.error}${colors.reset}`);
     } else {
       console.log(`  Total files: ${results.total}`);
-      console.log(`  Published: ${colors.green}${results.published.length}${colors.reset}`);
-      console.log(`  Drafts: ${colors.yellow}${results.drafts.length}${colors.reset}`);
+      console.log(
+        `  Published: ${colors.green}${results.published.length}${colors.reset}`,
+      );
+      console.log(
+        `  Drafts: ${colors.yellow}${results.drafts.length}${colors.reset}`,
+      );
 
       if (results.drafts.length > 0) {
-        results.drafts.forEach(draft => {
-          console.log(`    ${colors.yellow}📝 ${draft.name} (${draft.file})${colors.reset}`);
+        results.drafts.forEach((draft) => {
+          console.log(
+            `    ${colors.yellow}📝 ${draft.name} (${draft.file})${colors.reset}`,
+          );
         });
       }
     }
@@ -149,9 +175,13 @@ async function main() {
     const helper = await checkDataHelper(collection);
     if (helper.exists) {
       if (helper.hasDraftFilter) {
-        console.log(`  ${colors.green}✓ Data helper has draft filtering${colors.reset}`);
+        console.log(
+          `  ${colors.green}✓ Data helper has draft filtering${colors.reset}`,
+        );
       } else {
-        console.log(`  ${colors.red}✗ Data helper missing draft filtering${colors.reset}`);
+        console.log(
+          `  ${colors.red}✗ Data helper missing draft filtering${colors.reset}`,
+        );
         allTestsPassed = false;
       }
     } else {
@@ -164,24 +194,36 @@ async function main() {
   // Check dynamic routes
   console.log(`${colors.bold}🔄 Dynamic Routes${colors.reset}`);
   const dynamicRoutes = [
-    { name: 'hardware', path: 'src/pages/hardware/[...slug].astro' },
-    { name: 'software', path: 'src/pages/software/[...slug].astro' },
+    { name: "hardware", path: "src/pages/hardware/[...slug].astro" },
+    { name: "software", path: "src/pages/software/[...slug].astro" },
+    { name: "events", path: "src/pages/events/[...slug].astro" },
+    { name: "people", path: "src/pages/people/[...slug].astro" },
+    { name: "organizations", path: "src/pages/organizations/[...slug].astro" },
+    { name: "research", path: "src/pages/research/[...slug].astro" },
   ];
 
   for (const route of dynamicRoutes) {
     const routePath = join(projectRoot, route.path);
     try {
-      const content = await readFile(routePath, 'utf-8');
-      const hasDraftFilter = content.includes('data.draft !== true');
+      const content = await readFile(routePath, "utf-8");
+      const hasDraftFilter =
+        content.includes("isDraftVisible(") ||
+        content.includes("shouldShowDrafts(");
 
       if (hasDraftFilter) {
-        console.log(`  ${colors.green}✓ ${route.name} route has draft filtering${colors.reset}`);
+        console.log(
+          `  ${colors.green}✓ ${route.name} route has draft filtering${colors.reset}`,
+        );
       } else {
-        console.log(`  ${colors.red}✗ ${route.name} route missing draft filtering${colors.reset}`);
+        console.log(
+          `  ${colors.red}✗ ${route.name} route missing draft filtering${colors.reset}`,
+        );
         allTestsPassed = false;
       }
     } catch (error) {
-      console.log(`  ${colors.yellow}⚠ ${route.name} route not found${colors.reset}`);
+      console.log(
+        `  ${colors.yellow}⚠ ${route.name} route not found${colors.reset}`,
+      );
     }
   }
 
@@ -208,16 +250,20 @@ async function main() {
   console.log();
 
   if (allTestsPassed) {
-    console.log(`${colors.green}${colors.bold}✅ All draft system checks passed!${colors.reset}`);
+    console.log(
+      `${colors.green}${colors.bold}✅ All draft system checks passed!${colors.reset}`,
+    );
     process.exit(0);
   } else {
-    console.log(`${colors.red}${colors.bold}❌ Some draft system checks failed!${colors.reset}`);
+    console.log(
+      `${colors.red}${colors.bold}❌ Some draft system checks failed!${colors.reset}`,
+    );
     process.exit(1);
   }
 }
 
 // Run the tests
-main().catch(error => {
+main().catch((error) => {
   console.error(`${colors.red}Error: ${error.message}${colors.reset}`);
   process.exit(1);
 });

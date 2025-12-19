@@ -45,9 +45,28 @@ export default function ContributorsPage({
   donorOrganizations,
   grantMakers,
   donorsCount,
-  sponsorsUniqueCount,
+  sponsorsUniqueCount: _sponsorsUniqueCount,
   orgNameById,
 }: ContributorsPageProps) {
+  const isPublished = <T extends { data: { draft?: boolean } }>(entry: T) =>
+    entry.data.draft !== true;
+
+  const boardMemberCount = hideBoardMembers
+    ? 0
+    : boardMembers.filter(isPublished).length;
+  const communityCount = communityMembers.filter(isPublished).length;
+  const partnerCount = partnerSections.reduce(
+    (sum, section) => sum + section.partners.filter(isPublished).length,
+    0,
+  );
+  const sponsorsCount = (() => {
+    const ids = new Set<string>();
+    donorPeople.filter(isPublished).forEach((p) => ids.add(`p:${p.id}`));
+    donorOrganizations.filter(isPublished).forEach((o) => ids.add(`o:${o.id}`));
+    grantMakers.filter(isPublished).forEach((o) => ids.add(`o:${o.id}`));
+    return ids.size;
+  })();
+
   return (
     <div className="space-y-16">
       <HeroHeader
@@ -58,24 +77,19 @@ export default function ContributorsPage({
           {
             label: "People",
             href: "#people",
-            indicatorText: (
-              (hideBoardMembers ? 0 : boardMembers.length) +
-                communityMembers.length || 0
-            ).toString(),
+            indicatorText: (boardMemberCount + communityCount || 0).toString(),
           },
           {
             label: "Partners",
             href: "#partners",
             variant: "secondary",
-            indicatorText: partnerSections
-              .reduce((sum, section) => sum + section.partners.length, 0)
-              .toString(),
+            indicatorText: partnerCount.toString(),
           },
           {
             label: "Sponsors",
             href: "#sponsors",
             variant: "tertiary",
-            indicatorText: sponsorsUniqueCount.toString(),
+            indicatorText: sponsorsCount.toString(),
           },
         ]}
       />

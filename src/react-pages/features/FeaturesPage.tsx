@@ -15,7 +15,7 @@ export default function FeaturesPage() {
         title="Features"
         description="Explore the modular design, configuration options, and evolution of the Quori platform."
         actions={[
-          { label: "Builder", href: "#builder", indicatorText: "29" },
+          { label: "Configurations", href: "#builder", indicatorText: "29" },
           {
             label: "Modules",
             href: "#modules",

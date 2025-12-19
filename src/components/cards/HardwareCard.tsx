@@ -1,10 +1,31 @@
 import type { FC } from "react";
-import type { CollectionEntry } from "astro:content";
+import type { ImageLike } from "@/utils/images";
 import { ItemCard } from "@/components/cards/ItemCard";
+
+type HardwareCardData = {
+  name?: string;
+  description?: string;
+  shortDescription?: string;
+  category?: string;
+  status?: string;
+  featured?: boolean;
+  links?: {
+    website?: string;
+    github?: string;
+    code?: string;
+    documentation?: string;
+    demo?: string;
+  };
+  images?: {
+    logo?: ImageLike;
+    hero?: ImageLike;
+    logoUrl?: string;
+  };
+};
 
 export interface HardwareCardProps {
   hardwareId: string;
-  data: CollectionEntry<"hardware">["data"];
+  data: HardwareCardData;
   className?: string;
 }
 

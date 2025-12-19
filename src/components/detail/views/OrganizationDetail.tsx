@@ -8,6 +8,7 @@ import InfoCard from "@/components/detail/InfoCard";
 import { ResearchCard } from "@/components/cards/ResearchCard";
 import { HardwareCard } from "@/components/cards/HardwareCard";
 import { SoftwareCard } from "@/components/cards/SoftwareCard";
+import { EventCard } from "@/components/cards/EventCard";
 import { OrganizationCard } from "@/components/cards/OrganizationCard";
 import {
   PersonListElement,
@@ -100,7 +101,13 @@ export function OrganizationDetail({
     (relatedContent?.research?.length || 0) > 0 ||
     (relatedContent?.hardware?.length || 0) > 0 ||
     (relatedContent?.software?.length || 0) > 0 ||
+    (relatedContent?.events?.length || 0) > 0 ||
     relatedOrganizations.length > 0;
+  const hasPartnerContributions =
+    (relatedContent?.research?.length || 0) > 0 ||
+    (relatedContent?.hardware?.length || 0) > 0 ||
+    (relatedContent?.software?.length || 0) > 0 ||
+    (relatedContent?.events?.length || 0) > 0;
 
   return (
     <BaseDetailLayout
@@ -238,9 +245,7 @@ export function OrganizationDetail({
       related={
         hasRelated ? (
           <div className="space-y-12">
-            {(relatedContent?.research?.length ||
-              relatedContent?.hardware?.length ||
-              relatedContent?.software?.length) && (
+            {hasPartnerContributions && (
               <div>
                 <h2 className="text-2xl font-bold mb-2">
                   Partner Contributions
@@ -286,6 +291,20 @@ export function OrganizationDetail({
                           key={sw.id}
                           softwareId={sw.id}
                           data={sw.data}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {(relatedContent?.events?.length || 0) > 0 && (
+                  <div className="mb-12">
+                    <h3 className="text-lg font-semibold mb-4">Events</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {relatedContent?.events?.map((event) => (
+                        <EventCard
+                          key={event.id}
+                          eventId={event.id}
+                          data={event.data}
                         />
                       ))}
                     </div>

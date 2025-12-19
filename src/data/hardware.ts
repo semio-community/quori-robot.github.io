@@ -1,10 +1,11 @@
 import { type CollectionEntry, getCollection } from "astro:content";
+import { isDraftVisible } from "@/utils/drafts";
 
 /** Get all hardware entries, sorted by featured status and name */
 export async function getAllHardware(): Promise<CollectionEntry<"hardware">[]> {
   const hardware = await getCollection("hardware", ({ data }) => {
-    // In production, exclude drafts. In development, show all.
-    return import.meta.env.PROD ? data.draft !== true : true;
+    // In production, exclude drafts. In development, respect the draft visibility setting.
+    return isDraftVisible(data.draft);
   });
   return hardware.sort((a, b) => {
     // Sort by featured first, then by status priority, then by name
@@ -154,9 +155,7 @@ export async function searchHardware(
           return true;
         }
         if (contributor.type === "organization") {
-          return contributor.organizationId
-            .toLowerCase()
-            .includes(lowerQuery);
+          return contributor.organizationId.toLowerCase().includes(lowerQuery);
         }
         if (contributor.type === "person") {
           return contributor.personId.toLowerCase().includes(lowerQuery);

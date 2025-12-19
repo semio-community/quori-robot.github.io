@@ -17,8 +17,10 @@ import { clsx } from "clsx";
  *    <SearchIcon />
  *  </NavIconButton>
  */
-export interface NavIconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
+export interface NavIconButtonProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "children"
+> {
   /**
    * Accessible name. Applied to aria-label and used as default title.
    */
@@ -82,11 +84,11 @@ export const NavIconButton = React.forwardRef<
   const baseClasses = clsx(
     "relative inline-flex items-center justify-center select-none",
     "rounded-lg transition-colors",
-    "focus:outline-2 focus:outline-accent-two outline-offset-2",
+    "focus:outline-2 focus:outline-accent-three outline-offset-2",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     sizeClasses,
     variantClasses,
-    active && "bg-accent-base/10 text-accent-two",
+    active && "bg-accent-base/10 text-accent-three",
     className,
   );
 

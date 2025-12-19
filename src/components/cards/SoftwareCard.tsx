@@ -1,11 +1,33 @@
 import type { FC } from "react";
-import type { CollectionEntry } from "astro:content";
 import { ItemCard } from "@/components/cards/ItemCard";
-import { resolveLogoAsset } from "@/utils/images";
+import { resolveLogoAsset, type ImageLike } from "@/utils/images";
+
+type SoftwareCardData = {
+  name?: string;
+  description?: string;
+  shortDescription?: string;
+  category?: string;
+  status?: string;
+  featured?: boolean;
+  links?: {
+    website?: string;
+    github?: string;
+    code?: string;
+    documentation?: string;
+    demo?: string;
+    pypi?: string;
+    npm?: string;
+  };
+  images?: {
+    logo?: ImageLike;
+    hero?: ImageLike;
+    logoUrl?: string;
+  };
+};
 
 export interface SoftwareCardProps {
   softwareId: string;
-  data: CollectionEntry<"software">["data"];
+  data: SoftwareCardData;
   className?: string;
 }
 

@@ -27,6 +27,7 @@ import {
   STATUS_COLORS,
 } from "@/config/statusConfig";
 import { resolveLogoAsset } from "@/utils/images";
+import { isDraftVisible } from "@/utils/drafts";
 
 const intlShort = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -51,7 +52,7 @@ const formatDate = (value?: string | Date | null, long = false) => {
 };
 
 const isVisible = <T extends { data: { draft?: boolean } }>(entry: T) =>
-  import.meta.env.PROD ? entry.data.draft !== true : true;
+  isDraftVisible(entry.data.draft);
 
 const hasCustomOgImage = (entry: { data: Record<string, unknown> }) =>
   Boolean((entry.data as any)?.ogImage);

@@ -6,6 +6,9 @@ import { getAllOrganizations } from "@/data/organizations";
 import { getPeopleByOrganization } from "@/data/people";
 import { getAllHardware } from "@/data/hardware";
 import { getAllSoftware } from "@/data/software";
+import { getResearchByOrganization } from "@/data/research";
+import { getEventsByOrganization } from "@/data/events";
+import { isDraftVisible } from "@/utils/drafts";
 import {
   OrganizationDetail,
   type KeyContact,
@@ -15,7 +18,7 @@ type PartnerEntry = CollectionEntry<"organizations">;
 
 export async function getStaticPaths() {
   const organizations = await getCollection("organizations", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
+    return isDraftVisible(data.draft);
   });
   const partners = organizations.filter((org) => org.data.isPartner);
   return partners.map((entry) => ({
@@ -53,7 +56,38 @@ async function getRelatedOrganizations(partner: PartnerEntry, limit = 3) {
 
 const relatedOrganizations = await getRelatedOrganizations(entry, 3);
 
+function getResearchSortTime(entry: CollectionEntry<"research">): number {
+  const value = entry.data.publishDate;
+  if (value) {
+    const date = value instanceof Date ? value : new Date(value);
+    if (!Number.isNaN(date.getTime())) {
+      return date.getTime();
+    }
+  }
+  const legacyYear = (entry.data as { year?: number }).year;
+  return typeof legacyYear === "number"
+    ? new Date(legacyYear, 0, 1).getTime()
+    : Number.NEGATIVE_INFINITY;
+}
+
+function sortResearchEntries(entries: CollectionEntry<"research">[]) {
+  return [...entries].sort((a, b) => {
+    if (a.data.featured !== b.data.featured) {
+      return a.data.featured ? -1 : 1;
+    }
+    const aTime = getResearchSortTime(a);
+    const bTime = getResearchSortTime(b);
+    if (aTime !== bTime) {
+      return bTime - aTime;
+    }
+    return a.data.title.localeCompare(b.data.title);
+  });
+}
+
 async function getPartnerRelatedContent(partnerId: string) {
+  const research = sortResearchEntries(
+    await getResearchByOrganization(partnerId),
+  );
   const hardware = (await getAllHardware()).filter((hw) =>
     hw.data.contributors?.some(
       (contributor) =>
@@ -70,7 +104,9 @@ async function getPartnerRelatedContent(partnerId: string) {
     ),
   );
 
-  return { research: [], hardware, software, events: [] } as {
+  const events = await getEventsByOrganization(partnerId);
+
+  return { research, hardware, software, events } as {
     research: CollectionEntry<"research">[];
     hardware: CollectionEntry<"hardware">[];
     software: CollectionEntry<"software">[];

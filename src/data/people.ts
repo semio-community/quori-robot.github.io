@@ -1,17 +1,16 @@
 import { getCollection, getEntry } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { isDraftVisible } from "@/utils/drafts";
 
-function formatPersonName(
-  data: CollectionEntry<"people">["data"],
-): string {
+function formatPersonName(data: CollectionEntry<"people">["data"]): string {
   return data.honorific ? `${data.honorific} ${data.name}`.trim() : data.name;
 }
 
 /** Get all people entries */
 export async function getAllPeople(): Promise<CollectionEntry<"people">[]> {
   return await getCollection("people", ({ data }) => {
-    // In production, exclude drafts. In development, show all.
-    return import.meta.env.PROD ? data.draft !== true : true;
+    // In production, exclude drafts. In development, respect the draft visibility setting.
+    return isDraftVisible(data.draft);
   });
 }
 
@@ -20,11 +19,9 @@ export async function getPerson(
   id: string,
 ): Promise<CollectionEntry<"people"> | undefined> {
   const person = await getEntry("people", id);
-  // In production, return undefined if the person is a draft or not public
-  if (person && import.meta.env.PROD) {
-    if (person.data.draft === true) {
-      return undefined;
-    }
+  // Return undefined when drafts are hidden.
+  if (person && !isDraftVisible(person.data.draft)) {
+    return undefined;
   }
   return person;
 }
@@ -164,7 +161,7 @@ export async function getFormattedAuthors(
   contributors: Array<{ personId: string; order: number }>,
   maxDisplay: number = 3,
 ): Promise<string> {
-  if (contributors.length === 0) return "Unknown Authors";
+  if (contributors.length === 0) return "";
 
   const authorNames = await getAuthorNamesForStudy(contributors);
 
@@ -233,8 +230,7 @@ export async function getRelatedPeople(
       );
       const sharedOrgs = person.data.affiliations.filter(
         (a) =>
-          (!a.endDate || a.endDate >= now) &&
-          currentOrgs.has(a.organizationId),
+          (!a.endDate || a.endDate >= now) && currentOrgs.has(a.organizationId),
       );
       score += sharedOrgs.length * 2;
     }

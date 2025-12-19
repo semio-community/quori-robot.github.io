@@ -7,11 +7,12 @@ import { getAllResearch } from "@/data/research";
 import { getAllHardware } from "@/data/hardware";
 import { getAllSoftware } from "@/data/software";
 import { PersonDetail } from "@/components/detail/views/PersonDetail";
+import { isDraftVisible } from "@/utils/drafts";
 
 export async function getStaticPaths() {
   const people = await getCollection("people", ({ data }) => {
-    // In production, exclude drafts and private people. In development, show all.
-    return import.meta.env.PROD ? data.draft !== true : true;
+    // In production, exclude drafts and private people. In development, respect the draft visibility setting.
+    return isDraftVisible(data.draft);
   });
   return people.map((entry) => ({
     params: { slug: entry.id },

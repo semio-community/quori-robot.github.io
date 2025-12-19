@@ -73,6 +73,7 @@ Visit `http://localhost:4321` to view the site.
 | `npm run dev`         | Start site + CMS preview dev servers together    |
 | `npm run dev:site`    | Start only the Astro dev server                  |
 | `npm run dev:cms`     | Start only the Decap CMS preview dev server      |
+| `npm run dev:no-drafts` | Start Astro dev server with drafts hidden     |
 | `npm run build`       | Build Decap bundle/config, Astro site, and search index |
 | `npm run build:site`  | Build only the Astro site to `./dist/`           |
 | `npm run build:cms`   | Regenerate Decap config and preview bundle       |
@@ -118,6 +119,12 @@ Edit `src/site.config.ts` to update:
   - `partners/` - Partner organizations
   - `people/` - Team and community members
   - `software/` - Software projects and tools
+
+### Draft Visibility (Dev)
+
+- Drafts are visible by default in dev.
+- Hide drafts by setting `SHOW_DRAFTS=false` or `PUBLIC_SHOW_DRAFTS=false`.
+- Shortcut: `npm run dev:no-drafts`.
   - `research/` - Research publications and papers
 - **Components**: Create reusable components in `src/components/`
 

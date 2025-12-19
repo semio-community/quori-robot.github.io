@@ -4,6 +4,7 @@ import BaseHead from "@/components/BaseHead.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
 import { getRelatedResearch as fetchRelatedResearch } from "@/data/research";
 import { getPerson, getFormattedAuthors } from "@/data/people";
+import { isDraftVisible } from "@/utils/drafts";
 import {
   ResearchDetail,
   type OrganizationRole,
@@ -13,8 +14,8 @@ import {
 
 export async function getStaticPaths() {
   const researchEntries = await getCollection("research", ({ data }) => {
-    // In production, exclude drafts. In development, show all.
-    return import.meta.env.PROD ? data.draft !== true : true;
+    // In production, exclude drafts. In development, respect the draft visibility setting.
+    return isDraftVisible(data.draft);
   });
   return researchEntries.map((entry) => ({
     params: { slug: entry.id },

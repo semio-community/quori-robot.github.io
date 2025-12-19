@@ -1,11 +1,38 @@
 import type { FC } from "react";
-import type { CollectionEntry } from "astro:content";
 import { ItemCard } from "@/components/cards/ItemCard";
-import { resolveLogoAsset } from "@/utils/images";
+import { resolveLogoAsset, type ImageLike } from "@/utils/images";
+
+type ResearchCardData = {
+  title?: string;
+  description?: string;
+  type?: string;
+  featured?: boolean;
+  publishDate?: string | Date;
+  year?: number;
+  links?: {
+    website?: string;
+    program?: string;
+    paper?: string;
+    documentation?: string;
+    pdf?: string;
+    proceedings?: string;
+    doi?: string;
+    arxiv?: string;
+    code?: string;
+    github?: string;
+    demo?: string;
+    video?: string;
+  };
+  images?: {
+    logo?: ImageLike;
+    hero?: ImageLike;
+    logoUrl?: string;
+  };
+};
 
 export interface ResearchCardProps {
   researchId: string;
-  data: CollectionEntry<"research">["data"];
+  data: ResearchCardData;
   className?: string;
 }
 
