@@ -105,6 +105,7 @@ export default function ModulesSection() {
         {moduleCards.map((m) => (
           <div
             key={m.id}
+            id={`module-${m.id}`}
             className="group flex flex-col bg-special-lighter rounded-lg hover:shadow-lg transition-all hover:scale-105 h-full overflow-hidden backdrop-blur-lg"
           >
             {/* Image section */}

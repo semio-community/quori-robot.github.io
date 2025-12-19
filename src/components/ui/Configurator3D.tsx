@@ -52,26 +52,38 @@ export function Configurator3D({
   }
 
   return (
-    <div className={clsx("w-full", className)}>
-      <Configurator3DToggleControls
-        moduleList={moduleList}
-        configurationEntries={configurationEntries}
-        activeConfigurationId={activeConfigurationId}
-        activeConfiguration={activeConfiguration}
-        activeModuleSet={activeModuleSet}
-        setConfigurationId={setConfigurationId}
-      />
+    <div
+      className={clsx(
+        "w-full rounded-xl border border-border-subtle bg-special-lighter/60",
+        className,
+      )}
+    >
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
+        <div className="order-2 lg:order-1 w-full lg:w-auto lg:flex-none">
+          <Configurator3DToggleControls
+            className="lg:h-[530px]"
+            moduleList={moduleList}
+            configurationEntries={configurationEntries}
+            activeConfigurationId={activeConfigurationId}
+            activeConfiguration={activeConfiguration}
+            activeModuleSet={activeModuleSet}
+            setConfigurationId={setConfigurationId}
+          />
+        </div>
 
-      <div className="w-full h-[500px] rounded-xl border border-border-subtle bg-special-lighter/60 overflow-hidden">
-        <Configurator3DCanvas
-          modules={modules}
-          activeConfiguration={activeConfiguration}
-          activeModuleSet={activeModuleSet}
-          enterFromByModule={enterFromByModule}
-          exitViaByModule={exitViaByModule}
-          offscreenPosition={offscreenPosition}
-          worldOffset={worldOffset}
-        />
+        <div className="order-1 lg:order-2 w-full lg:flex-1 min-w-0">
+          <div className="w-full h-[530px] overflow-hidden">
+            <Configurator3DCanvas
+              modules={modules}
+              activeConfiguration={activeConfiguration}
+              activeModuleSet={activeModuleSet}
+              enterFromByModule={enterFromByModule}
+              exitViaByModule={exitViaByModule}
+              offscreenPosition={offscreenPosition}
+              worldOffset={worldOffset}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

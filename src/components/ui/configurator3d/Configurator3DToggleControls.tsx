@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import type {
   ConfigurationEntry,
   ConfigurationId,
@@ -13,8 +14,124 @@ import {
   setDifferenceSize,
   setFromArray,
 } from "./sets";
+import { Configurator3DModuleToggleButton } from "./Configurator3DModuleToggleButton";
+
+type PreviewAction = "add" | "remove" | null;
+
+function renderActionGlyph(action: Exclude<PreviewAction, null>) {
+  if (action === "add") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-7 w-7"
+        aria-hidden="true"
+      >
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-7 w-7"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+function renderCheckGlyph() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  );
+}
+
+function renderInfoGlyph() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 10v6" />
+      <path d="M12 7h.01" />
+    </svg>
+  );
+}
+
+function renderChevronGlyph(direction: "left" | "right") {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      {direction === "left" ? (
+        <path d="M15 18l-6-6 6-6" />
+      ) : (
+        <path d="M9 18l6-6-6-6" />
+      )}
+    </svg>
+  );
+}
+
+function renderModulePreview(module: ModuleSpecification) {
+  if (module.previewImage) {
+    return (
+      <img
+        src={module.previewImage}
+        alt=""
+        className="h-full w-full object-contain"
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
+  if (module.preview) return module.preview;
+  return (
+    <span className="text-sm font-semibold text-foreground">
+      {module.name.slice(0, 1).toUpperCase()}
+    </span>
+  );
+}
 
 export function Configurator3DToggleControls({
+  className,
   moduleList,
   configurationEntries,
   activeConfigurationId,
@@ -22,6 +139,7 @@ export function Configurator3DToggleControls({
   activeModuleSet,
   setConfigurationId,
 }: {
+  className?: string;
   moduleList: ModuleSpecification[];
   configurationEntries: ConfigurationEntry[];
   activeConfigurationId: ConfigurationId;
@@ -30,6 +148,10 @@ export function Configurator3DToggleControls({
   setConfigurationId: (nextId: ConfigurationId) => void;
 }) {
   const [hoveredModuleId, setHoveredModuleId] = useState<ModuleId | null>(null);
+  const [desktopExpanded, setDesktopExpanded] = useState(true);
+  const lastPreviewActionByModuleRef = useRef<
+    Partial<Record<ModuleId, Exclude<PreviewAction, null>>>
+  >({});
 
   const configurationIndex = useMemo(() => {
     return configurationEntries.map(({ id, cfg }) => ({
@@ -174,7 +296,12 @@ export function Configurator3DToggleControls({
     }
 
     return { nextId, added, removed };
-  }, [activeConfigurationId, activeModuleSet, configurationIndex, hoveredModuleId]);
+  }, [
+    activeConfigurationId,
+    activeModuleSet,
+    configurationIndex,
+    hoveredModuleId,
+  ]);
 
   const toggleModule = (moduleId: ModuleId) => {
     const nextId = getNextConfigurationId(moduleId);
@@ -182,168 +309,191 @@ export function Configurator3DToggleControls({
     setConfigurationId(nextId);
   };
 
+  const getToggleState = (module: ModuleSpecification) => {
+    const isOn = activeModuleSet.has(module.id);
+    const nextId = getNextConfigurationId(module.id);
+    const canToggle = Boolean(nextId) && nextId !== activeConfigurationId;
+    const locked = isOn && !canToggle;
+    const disabled = (!isOn && !canToggle) || locked;
+
+    const previewAction: PreviewAction = hoverPreview
+      ? hoverPreview.added.has(module.id)
+        ? "add"
+        : hoverPreview.removed.has(module.id)
+          ? "remove"
+          : null
+      : null;
+    const showOverlay = Boolean(previewAction);
+    const displayedPreviewAction =
+      previewAction ?? lastPreviewActionByModuleRef.current[module.id] ?? null;
+
+    if (previewAction) {
+      lastPreviewActionByModuleRef.current[module.id] = previewAction;
+    }
+
+    const actionBadgeClassName =
+      displayedPreviewAction === "add"
+        ? "bg-accent-three text-white border-accent-three/70"
+        : displayedPreviewAction === "remove"
+          ? "bg-accent-one text-white border-accent-one/70"
+          : "bg-surface text-foreground border-border-subtle";
+
+    return {
+      isOn,
+      disabled,
+      locked,
+      showOverlay,
+      displayedPreviewAction,
+      actionBadgeClassName,
+    };
+  };
+
   return (
-    <div className="flex flex-col gap-4 mb-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+    <div className={clsx("w-full lg:w-auto", className)}>
+      {/* Mobile: horizontal toggles below the canvas */}
+      <div className="lg:hidden flex flex-col gap-3">
+        {/*<div className="rounded-xl border border-border-subtle bg-special-lighter/60 p-4">
           <p className="text-xs uppercase tracking-wide text-color-600 dark:text-color-400 mb-1">
             Current configuration
           </p>
           <p className="text-lg font-semibold text-foreground">
             {activeConfiguration?.name}
           </p>
+        </div>*/}
+
+        <div className="border-t border-border-subtle rounded-b-xl overflow-clip">
+          <div className="relative">
+            <ScrollArea.Root>
+              <ScrollArea.Viewport className="w-full">
+                <div className="flex w-max min-w-full justify-center">
+                  {moduleList.map((module) => {
+                    const state = getToggleState(module);
+                    return (
+                      <Configurator3DModuleToggleButton
+                        key={module.id}
+                        module={module}
+                        variant="square"
+                        sizeClassName="w-24 h-24"
+                        isOn={state.isOn}
+                        disabled={state.disabled}
+                        locked={state.locked}
+                        showOverlay={state.showOverlay}
+                        actionBadgeClassName={state.actionBadgeClassName}
+                        preview={renderModulePreview(module)}
+                        actionGlyph={
+                          state.displayedPreviewAction
+                            ? renderActionGlyph(state.displayedPreviewAction)
+                            : null
+                        }
+                        onToggle={() => toggleModule(module.id)}
+                        onHoverStart={() => setHoveredModuleId(module.id)}
+                        onHoverEnd={() =>
+                          setHoveredModuleId((prev) =>
+                            prev === module.id ? null : prev,
+                          )
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              </ScrollArea.Viewport>
+              <ScrollArea.Scrollbar
+                orientation="horizontal"
+                className="flex select-none touch-none h-2 p-0.5"
+              >
+                <ScrollArea.Thumb className="relative flex-1 rounded-full bg-border-subtle" />
+              </ScrollArea.Scrollbar>
+            </ScrollArea.Root>
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-linear-to-r from-special-lighter/80 to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-special-lighter/80 to-transparent" />
+          </div>
         </div>
       </div>
 
-      <div className="flex gap-3 overflow-x-auto pb-1">
-        {moduleList.map((module) => {
-          const isOn = activeModuleSet.has(module.id);
-          const nextId = getNextConfigurationId(module.id);
-          const canToggle = Boolean(nextId) && nextId !== activeConfigurationId;
-          const unavailable = !isOn && !canToggle;
-          const locked = isOn && !canToggle;
-          const disabled = unavailable || locked;
-          const isHovered = hoveredModuleId === module.id;
+      {/* Desktop: collapsible side panel */}
+      <div
+        className={clsx(
+          "hidden lg:flex flex-col h-full border-r border-border-subtle overflow-hidden",
+          "transition-all duration-200",
+          desktopExpanded ? "w-[340px]" : "w-16",
+        )}
+      >
+        <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-subtle">
+          <div
+            className={clsx(
+              "min-w-0",
+              desktopExpanded
+                ? "opacity-100"
+                : "hidden opacity-0 pointer-events-none",
+            )}
+          >
+            <p className="text-xs uppercase tracking-wide text-color-600 dark:text-color-400">
+              Modules
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setDesktopExpanded((prev) => !prev)}
+            aria-expanded={desktopExpanded}
+            className={clsx(
+              "inline-flex items-center justify-center rounded-md border border-border-subtle bg-surface/40 hover:bg-surface/70",
+              "h-8 w-10 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+              "shrink-0",
+              "text-color-600 dark:text-color-400 hover:text-foreground",
+            )}
+            title={desktopExpanded ? "Collapse panel" : "Expand panel"}
+          >
+            {renderChevronGlyph(desktopExpanded ? "left" : "right")}
+          </button>
+        </div>
 
-          const previewAction = hoverPreview
-            ? hoverPreview.added.has(module.id)
-              ? "add"
-              : hoverPreview.removed.has(module.id)
-                ? "remove"
-                : null
-            : null;
-          const showOverlay = Boolean(previewAction);
-          const overlayIsPrimary = showOverlay && isHovered;
-          const overlayBlurClass = showOverlay
-            ? overlayIsPrimary
-              ? "blur-[1.75px]"
-              : "blur-[1.25px]"
-            : "blur-0";
-
-          return (
-            <button
-              key={module.id}
-              type="button"
-              onClick={() => toggleModule(module.id)}
-              onMouseEnter={() => setHoveredModuleId(module.id)}
-              onMouseLeave={() =>
-                setHoveredModuleId((prev) => (prev === module.id ? null : prev))
-              }
-              onFocus={() => setHoveredModuleId(module.id)}
-              onBlur={() =>
-                setHoveredModuleId((prev) => (prev === module.id ? null : prev))
-              }
-              disabled={disabled}
-              aria-pressed={isOn}
-              title={module.name}
-              className={clsx(
-                "group relative overflow-hidden flex-none w-24 h-24 rounded-xl border-2 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-two/70",
-                unavailable
-                  ? "border-border-subtle bg-surface/30 text-foreground/40 cursor-not-allowed"
-                  : isOn
-                    ? clsx(
-                        "border-accent-two/60 bg-accent-two/10",
-                        locked ? "cursor-not-allowed" : "hover:bg-accent-two/15",
+        <ScrollArea.Root className="flex-1 min-h-0 border-b border-border-subtle">
+          <ScrollArea.Viewport
+            className={clsx(
+              "h-full w-full",
+              // desktopExpanded ? "px-3 py-3" : "px-2 py-2",
+            )}
+          >
+            <div>
+              {moduleList.map((module) => {
+                const state = getToggleState(module);
+                return (
+                  <Configurator3DModuleToggleButton
+                    key={module.id}
+                    module={module}
+                    variant="desktopRow"
+                    compact={!desktopExpanded}
+                    isOn={state.isOn}
+                    disabled={state.disabled}
+                    locked={state.locked}
+                    showOverlay={state.showOverlay}
+                    actionBadgeClassName={state.actionBadgeClassName}
+                    preview={renderModulePreview(module)}
+                    actionGlyph={
+                      state.displayedPreviewAction
+                        ? renderActionGlyph(state.displayedPreviewAction)
+                        : null
+                    }
+                    infoGlyph={renderInfoGlyph()}
+                    onToggle={() => toggleModule(module.id)}
+                    onHoverStart={() => setHoveredModuleId(module.id)}
+                    onHoverEnd={() =>
+                      setHoveredModuleId((prev) =>
+                        prev === module.id ? null : prev,
                       )
-                    : "border-border-subtle bg-surface/50 hover:bg-surface/80",
-                showOverlay && previewAction === "add"
-                  ? "border-accent-two/70"
-                  : null,
-                showOverlay && previewAction === "remove"
-                  ? "border-accent-one/70"
-                  : null,
-              )}
-            >
-              <div
-                className={clsx(
-                  "h-full w-full flex flex-col items-center justify-center gap-2 px-2 transition-[filter] duration-150",
-                  overlayBlurClass,
-                )}
-              >
-                <div
-                  className={clsx(
-                    "h-10 w-10 flex items-center justify-center overflow-hidden text-foreground",
-                  )}
-                >
-                  {module.previewImage ? (
-                    <img
-                      src={module.previewImage}
-                      alt=""
-                      className="h-full w-full object-contain"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : module.preview ? (
-                    module.preview
-                  ) : (
-                    <span className="text-sm font-semibold text-foreground">
-                      {module.name.slice(0, 1).toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[11px] font-medium leading-tight text-foreground text-center line-clamp-2">
-                  {module.name}
-                </span>
-              </div>
-
-              <div
-                className={clsx(
-                  "pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-150 ease-out",
-                  showOverlay ? "opacity-100" : "opacity-0",
-                )}
-              >
-                <div
-                  className={clsx(
-                    "absolute inset-0 backdrop-blur-sm transition-colors duration-150 ease-out",
-                    overlayIsPrimary
-                      ? "bg-surface/40 dark:bg-surface/30"
-                      : "bg-surface/30 dark:bg-surface/20",
-                  )}
-                />
-                <div
-                  className={clsx(
-                    "relative h-12 w-12 rounded-full border shadow-sm flex items-center justify-center transition-transform duration-150 ease-out will-change-transform",
-                    previewAction === "add"
-                      ? "bg-accent-two text-white border-accent-two/70"
-                      : previewAction === "remove"
-                        ? "bg-accent-one text-white border-accent-one/70"
-                        : "bg-surface text-foreground border-border-subtle",
-                    overlayIsPrimary ? "scale-100" : "scale-[0.9]",
-                  )}
-                >
-                  {previewAction === "add" ? (
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-7 w-7"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 5v14" />
-                      <path d="M5 12h14" />
-                    </svg>
-                  ) : previewAction === "remove" ? (
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-7 w-7"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14" />
-                    </svg>
-                  ) : null}
-                </div>
-              </div>
-            </button>
-          );
-        })}
+                    }
+                  />
+                );
+              })}
+            </div>
+          </ScrollArea.Viewport>
+          <ScrollArea.Scrollbar
+            orientation="vertical"
+            className="flex select-none touch-none p-1"
+          >
+            <ScrollArea.Thumb className="relative flex-1 rounded-full bg-border-subtle" />
+          </ScrollArea.Scrollbar>
+        </ScrollArea.Root>
       </div>
     </div>
   );
