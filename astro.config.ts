@@ -119,7 +119,7 @@ export default defineConfig({
   prefetch: true,
   // ! Please remember to replace the following site property with your own domain
   //   When moving to the custom domain (quori.org), set site to "https://quori.org" and base to "/".
-  site: "https://semio.community/quori-robot.github.io",
+  site: "https://quori.org",
   // Use repo base path for GitHub Pages; override via PR_PREVIEW_PATH when needed
   //   For quori.org deployments, use base: process.env.PR_PREVIEW_PATH || "/"
   base: process.env.PR_PREVIEW_PATH || "/",
