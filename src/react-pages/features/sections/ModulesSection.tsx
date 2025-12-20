@@ -31,29 +31,40 @@ const moduleCards: ModuleCardDefinition[] = [
     accentClassName: "text-accent-two",
     imageSrc: "/configurations/images/head-render.png",
     bullets: [
+      "3-DOFs (pan, tilt, lift)",
+      "Integrated RGB+D camera",
+      "Touchscreen display",
       "Pairs with mobile or stationary deployments",
-      "Mount point for speaker option",
+      "Mount point for smart speaker",
     ],
   },
   {
     id: "speaker",
-    name: "Speaker",
-    description: "Audio output module for speech and interaction cues.",
+    name: "Smart Speaker",
+    description:
+      "Audio input/output module for spoken dialogue and human-robot interaction.",
     Icon: SpeakerIcon,
     accentClassName: "text-accent-two",
     imageSrc: "/configurations/images/speaker-render.png",
-    bullets: ["Can mount on head, torso, base, or stand"],
+    bullets: [
+      "Can mount on head, torso, base, or stand",
+      "LED Light array for visual feedback",
+      "Physical control buttons",
+    ],
   },
   {
-    id: "torso",
-    name: "Torso",
-    description: "Adds stability and mounting space for front/back modules.",
-    Icon: TorsoIcon,
-    accentClassName: "text-accent-three",
-    imageSrc: "/configurations/images/torso-render.png",
+    id: "base",
+    name: "Mobile Base",
+    description: "Locomotion platform for navigation and mobile studies.",
+    Icon: BaseIcon,
+    accentClassName: "text-accent-one",
+    imageSrc: "/configurations/images/base-render.png",
     bullets: [
-      "Supports chest fascia and arm mounts",
-      "Typical bridge between base/stand and head",
+      "Holonomic 3-DOF control of (x, y, θ)",
+      "Integrated LiDAR sensors",
+      "LED Light array for visual feedback",
+      "Storage compartment",
+      "Battery pack and charging port",
     ],
   },
   {
@@ -63,7 +74,10 @@ const moduleCards: ModuleCardDefinition[] = [
     Icon: ChestIcon,
     accentClassName: "text-accent-base",
     imageSrc: "/configurations/images/chest-render.png",
-    bullets: ["Sits on the front of the torso", "Optional with arms"],
+    bullets: [
+      "Sits on the front of the torso",
+      "Customizable design for branding",
+    ],
   },
   {
     id: "arms",
@@ -72,25 +86,38 @@ const moduleCards: ModuleCardDefinition[] = [
     Icon: ArmsIcon,
     accentClassName: "text-accent-base",
     imageSrc: "/configurations/images/arms-render.png",
-    bullets: ["Can be used with or without chest", "Mounted slightly behind"],
+    bullets: [
+      "LED Light arrays for visual feedback",
+      "Can be used with or without chest",
+      "4-DOF per arm (shoulder flexion/abduction and elbow rotation/flexion)",
+    ],
   },
   {
-    id: "base",
-    name: "Mobile Base",
-    description: "Locomotion platform for navigation and mobile studies.",
-    Icon: BaseIcon,
-    accentClassName: "text-accent-one",
-    imageSrc: "/configurations/images/base-render.png",
-    bullets: ["Provides mobility + power", "Supports torso/head stacks"],
+    id: "torso",
+    name: "Torso",
+    description:
+      "Adds stability and mounting space for arms and chest modules.",
+    Icon: TorsoIcon,
+    accentClassName: "text-accent-three",
+    imageSrc: "/configurations/images/torso-render.png",
+    bullets: [
+      "Supports chest fascia and arm mounts",
+      "Typical bridge between base/stand and head",
+      "Utilizes the modular connector design as other modules for quick and easy swapping",
+    ],
   },
   {
     id: "stand",
     name: "Stand",
-    description: "Stationary base option for fixed-position experiments.",
+    description: "Stationary base option.",
     Icon: StandIcon,
     accentClassName: "text-accent-one",
     imageSrc: "/configurations/images/stand-render.png",
-    bullets: ["Swap-in for base configurations", "Stable, compact footprint"],
+    bullets: [
+      "Swap-in option for base configurations",
+      "Stable, compact footprint",
+      "Ideal for development or stationary deployments",
+    ],
   },
 ];
 
@@ -153,7 +180,7 @@ export default function ModulesSection() {
 
               {m.bullets.length > 0 ? (
                 <div className="text-sm text-color-600 dark:text-color-400 mb-3 min-h-10">
-                  {m.bullets.slice(0, 2).map((item) => (
+                  {m.bullets.map((item) => (
                     <div
                       key={`${m.id}-${item}`}
                       className="flex items-start gap-2"

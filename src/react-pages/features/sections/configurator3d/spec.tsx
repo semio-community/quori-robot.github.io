@@ -30,7 +30,7 @@ export const configurator3DInitialConfigurationId =
 export const configurator3DModules: Record<string, ModuleSpecification> = {
   speaker: {
     id: "speaker",
-    name: "Speaker",
+    name: "Smart Speaker",
     preview: <SpeakerIcon />,
     model: <SmartSpeakerModel />,
   },

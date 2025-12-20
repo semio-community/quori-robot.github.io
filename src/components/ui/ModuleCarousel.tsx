@@ -164,7 +164,12 @@ export function ModuleCarousel({
   const showControls = orderedConfigurationIds.length > 1;
 
   return (
-    <div className={clsx("w-full bg-special-lighter/60", className)}>
+    <div
+      className={clsx(
+        "w-full dark:bg-special-lighter/60 bg-neutral-200/60",
+        className,
+      )}
+    >
       <div className={clsx("relative w-full overflow-hidden", heightClassName)}>
         <Configurator3DCanvas
           modules={modules}
