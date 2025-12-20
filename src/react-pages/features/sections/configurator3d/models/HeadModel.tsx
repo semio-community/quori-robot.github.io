@@ -12,5 +12,5 @@ export default function HeadModel({
   url = "/configurations/models/Head.glb",
   ...props
 }: HeadModelProps) {
-  return <GLBModel url={url} modelOffset={[-0.03, 0, 0.7]} {...props} />;
+  return <GLBModel url={url} modelOffset={[-0.01, 0, 0.46]} {...props} />;
 }

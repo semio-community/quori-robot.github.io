@@ -20,6 +20,12 @@
   force = true
 
 [[redirects]]
+  from = "/community"
+  to = "/contributors/#partners"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/partners/*"
   to = "/organization/:splat"
   status = 301

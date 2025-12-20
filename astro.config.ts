@@ -52,7 +52,7 @@ export default defineConfig({
       // short_name: "Astro_Citrus",
       description: siteConfig.description,
       lang: siteConfig.lang,
-      icon: "public/icon.svg", // the source for generating favicon & icons
+      icon: "public/brand.svg", // the source for generating favicon & icons
       icons: [
         {
           src: "icons/apple-touch-icon.png", // used in src/components/BaseHead.astro L:26
@@ -120,6 +120,10 @@ export default defineConfig({
   // ! Please remember to replace the following site property with your own domain
   //   When moving to the custom domain (quori.org), set site to "https://quori.org" and base to "/".
   site: "https://quori.org",
+  redirects: {
+    "/community": "/contributors/#partners",
+    "/community/": "/contributors/#partners",
+  },
   // Use repo base path for GitHub Pages; override via PR_PREVIEW_PATH when needed
   //   For quori.org deployments, use base: process.env.PR_PREVIEW_PATH || "/"
   base: process.env.PR_PREVIEW_PATH || "/",

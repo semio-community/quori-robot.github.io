@@ -74,7 +74,7 @@ export default function FundingPartnerSection({
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 p-6 pt-0 md:pt-6">
+          <div className="flex flex-col flex-1 p-6 pt-6">
             <div className="flex flex-wrap gap-2 mb-4">
               {categoryLabel && (
                 <BasicChip text="Sponsor" variant="secondary" />

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import type {
@@ -149,9 +149,33 @@ export function Configurator3DToggleControls({
 }) {
   const [hoveredModuleId, setHoveredModuleId] = useState<ModuleId | null>(null);
   const [desktopExpanded, setDesktopExpanded] = useState(true);
+  const [canHover, setCanHover] = useState(true);
   const lastPreviewActionByModuleRef = useRef<
     Partial<Record<ModuleId, Exclude<PreviewAction, null>>>
   >({});
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setCanHover(mediaQuery.matches);
+    update();
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", update);
+      return () => mediaQuery.removeEventListener("change", update);
+    }
+    const legacy = mediaQuery as MediaQueryList & {
+      addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+      removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    };
+    legacy.addListener?.(update);
+    return () => legacy.removeListener?.(update);
+  }, []);
+
+  useEffect(() => {
+    if (canHover) return;
+    setHoveredModuleId(null);
+    lastPreviewActionByModuleRef.current = {};
+  }, [canHover]);
 
   const configurationIndex = useMemo(() => {
     return configurationEntries.map(({ id, cfg }) => ({
@@ -279,6 +303,7 @@ export function Configurator3DToggleControls({
   };
 
   const hoverPreview = useMemo(() => {
+    if (!canHover) return null;
     if (!hoveredModuleId) return null;
     const nextId = getNextConfigurationId(hoveredModuleId);
     if (!nextId || nextId === activeConfigurationId) return null;
@@ -299,6 +324,7 @@ export function Configurator3DToggleControls({
   }, [
     activeConfigurationId,
     activeModuleSet,
+    canHover,
     configurationIndex,
     hoveredModuleId,
   ]);
@@ -316,18 +342,19 @@ export function Configurator3DToggleControls({
     const locked = isOn && !canToggle;
     const disabled = (!isOn && !canToggle) || locked;
 
-    const previewAction: PreviewAction = hoverPreview
-      ? hoverPreview.added.has(module.id)
-        ? "add"
-        : hoverPreview.removed.has(module.id)
-          ? "remove"
-          : null
-      : null;
+    const previewAction: PreviewAction =
+      canHover && hoverPreview
+        ? hoverPreview.added.has(module.id)
+          ? "add"
+          : hoverPreview.removed.has(module.id)
+            ? "remove"
+            : null
+        : null;
     const showOverlay = Boolean(previewAction);
     const displayedPreviewAction =
       previewAction ?? lastPreviewActionByModuleRef.current[module.id] ?? null;
 
-    if (previewAction) {
+    if (previewAction && canHover) {
       lastPreviewActionByModuleRef.current[module.id] = previewAction;
     }
 
@@ -346,6 +373,16 @@ export function Configurator3DToggleControls({
       displayedPreviewAction,
       actionBadgeClassName,
     };
+  };
+
+  const handleHoverStart = (moduleId: ModuleId) => {
+    if (!canHover) return;
+    setHoveredModuleId(moduleId);
+  };
+
+  const handleHoverEnd = (moduleId: ModuleId) => {
+    if (!canHover) return;
+    setHoveredModuleId((prev) => (prev === moduleId ? null : prev));
   };
 
   return (
@@ -388,12 +425,8 @@ export function Configurator3DToggleControls({
                             : null
                         }
                         onToggle={() => toggleModule(module.id)}
-                        onHoverStart={() => setHoveredModuleId(module.id)}
-                        onHoverEnd={() =>
-                          setHoveredModuleId((prev) =>
-                            prev === module.id ? null : prev,
-                          )
-                        }
+                        onHoverStart={() => handleHoverStart(module.id)}
+                        onHoverEnd={() => handleHoverEnd(module.id)}
                       />
                     );
                   })}
@@ -478,12 +511,8 @@ export function Configurator3DToggleControls({
                     }
                     infoGlyph={renderInfoGlyph()}
                     onToggle={() => toggleModule(module.id)}
-                    onHoverStart={() => setHoveredModuleId(module.id)}
-                    onHoverEnd={() =>
-                      setHoveredModuleId((prev) =>
-                        prev === module.id ? null : prev,
-                      )
-                    }
+                    onHoverStart={() => handleHoverStart(module.id)}
+                    onHoverEnd={() => handleHoverEnd(module.id)}
                   />
                 );
               })}
