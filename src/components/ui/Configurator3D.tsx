@@ -58,10 +58,10 @@ export function Configurator3D({
         className,
       )}
     >
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
-        <div className="order-2 lg:order-1 w-full lg:w-auto lg:flex-none">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+        <div className="order-2 sm:order-1 w-full sm:w-auto sm:flex-none">
           <Configurator3DToggleControls
-            className="lg:h-[530px]"
+            className="sm:h-[555px]"
             moduleList={moduleList}
             configurationEntries={configurationEntries}
             activeConfigurationId={activeConfigurationId}
@@ -71,8 +71,8 @@ export function Configurator3D({
           />
         </div>
 
-        <div className="order-1 lg:order-2 w-full lg:flex-1 min-w-0">
-          <div className="w-full h-[530px] overflow-hidden">
+        <div className="order-1 sm:order-2 w-full sm:flex-1 min-w-0">
+          <div className="w-full h-[555px] overflow-hidden">
             <Configurator3DCanvas
               modules={modules}
               activeConfiguration={activeConfiguration}

@@ -6,6 +6,7 @@ export function Configurator3DModuleToggleButton({
   module,
   variant,
   sizeClassName,
+  paddingClassName,
   compact = false,
   isOn,
   disabled,
@@ -22,6 +23,7 @@ export function Configurator3DModuleToggleButton({
   module: ModuleSpecification;
   variant: "square" | "desktopRow";
   sizeClassName?: string;
+  paddingClassName?: string;
   compact?: boolean;
   isOn: boolean;
   disabled: boolean;
@@ -131,6 +133,9 @@ export function Configurator3DModuleToggleButton({
     );
   }
 
+  const isFixedSize = Boolean(sizeClassName);
+  const buttonPadding = paddingClassName ?? "px-3 py-2";
+
   return (
     <div className="flex items-stretch gap-2">
       <button
@@ -144,8 +149,11 @@ export function Configurator3DModuleToggleButton({
         aria-pressed={isOn}
         title={module.name}
         className={clsx(
-          "group flex-1 flex items-center gap-3 px-3 py-2 text-left transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+          "group flex items-center gap-3 text-left transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+          isFixedSize ? "flex-none" : "flex-1",
+          buttonPadding,
           compact ? "justify-center" : null,
+          sizeClassName,
           disabled
             ? "bg-surface/30 text-foreground/50 cursor-not-allowed"
             : isOn

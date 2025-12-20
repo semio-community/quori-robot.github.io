@@ -349,9 +349,9 @@ export function Configurator3DToggleControls({
   };
 
   return (
-    <div className={clsx("w-full lg:w-auto", className)}>
+    <div className={clsx("w-full sm:w-auto", className)}>
       {/* Mobile: horizontal toggles below the canvas */}
-      <div className="lg:hidden flex flex-col gap-3">
+      <div className="sm:hidden flex flex-col gap-3">
         {/*<div className="rounded-xl border border-border-subtle bg-special-lighter/60 p-4">
           <p className="text-xs uppercase tracking-wide text-color-600 dark:text-color-400 mb-1">
             Current configuration
@@ -372,8 +372,10 @@ export function Configurator3DToggleControls({
                       <Configurator3DModuleToggleButton
                         key={module.id}
                         module={module}
-                        variant="square"
-                        sizeClassName="w-24 h-24"
+                        variant="desktopRow"
+                        compact
+                        sizeClassName="w-14 h-16"
+                        paddingClassName="px-2 py-2"
                         isOn={state.isOn}
                         disabled={state.disabled}
                         locked={state.locked}
@@ -413,12 +415,12 @@ export function Configurator3DToggleControls({
       {/* Desktop: collapsible side panel */}
       <div
         className={clsx(
-          "hidden lg:flex flex-col h-full border-r border-border-subtle overflow-hidden",
+          "hidden sm:flex flex-col h-full border-r border-border-subtle overflow-hidden",
           "transition-all duration-200",
           desktopExpanded ? "w-[340px]" : "w-16",
         )}
       >
-        <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border-subtle">
+        <div className="flex items-center justify-between gap-2 px-3 py-2">
           <div
             className={clsx(
               "min-w-0",
@@ -447,7 +449,7 @@ export function Configurator3DToggleControls({
           </button>
         </div>
 
-        <ScrollArea.Root className="flex-1 min-h-0 border-b border-border-subtle">
+        <ScrollArea.Root className="flex-1 min-h-0">
           <ScrollArea.Viewport
             className={clsx(
               "h-full w-full",

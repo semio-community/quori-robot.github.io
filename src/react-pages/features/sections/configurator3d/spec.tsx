@@ -135,6 +135,15 @@ const baseConfigurations: Record<string, ConfigurationSpecification> = {
       arms: [0, 1.15, -0.25],
     },
   },
+  "base-torso-arms": {
+    id: "base-torso-arms",
+    name: "Base + Torso + Arms",
+    modulePositions: {
+      base: [0, -0.75, 0],
+      torso: [0, 0.9, 0],
+      arms: [0, 1.15, -0.25],
+    },
+  },
   "base-torso-speaker": {
     id: "base-torso-speaker",
     name: "Base + Torso + Speaker",
