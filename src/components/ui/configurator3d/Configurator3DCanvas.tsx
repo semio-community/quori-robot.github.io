@@ -40,6 +40,7 @@ function Configurator3DCanvasImpl({
       <Canvas
         shadows
         className="touch-none"
+        camera={{ fov: 50, position: [0, 1.5, 8] }}
         // frameloop="demand"
         dpr={[1, 1.5]}
         gl={{ powerPreference: "high-performance" }}
@@ -56,7 +57,7 @@ function Configurator3DCanvasImpl({
           global
           damping={0.2}
           snap={true}
-          rotation={[0.1, 0.3, 0]}
+          rotation={[0.1, -0.4, 0]}
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 2]}
         >
@@ -85,10 +86,10 @@ function Configurator3DCanvasImpl({
             })}
           </group>
         </PresentationControls>
-        <StaticGroundShadow
+        {/*<StaticGroundShadow
           position={[0, worldOffset[1] - 1.5, 0]}
           size={10 / 3}
-        />
+        />*/}
         <Environment preset="city" />
       </Canvas>
     </div>

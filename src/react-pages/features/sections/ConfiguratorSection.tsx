@@ -10,7 +10,7 @@ import {
 export default function ConfiguratorSection() {
   return (
     <Section
-      id="builder"
+      id="configurations"
       title="Configurations"
       subtitle="Preview supported module combinations by toggling different parts. Drag the robot to rotate."
       variant="secondary"

@@ -49,8 +49,8 @@ export default function FundingPartnerSection({
 
   return (
     <SectionBlock
-      id="funding-partner"
-      title="Funding Partner"
+      id="sponsor"
+      title="Primary Sponsor"
       subtitle="Sustaining open, reproducible HRI research through national research infrastructure support."
       variant="tertiary"
     >
@@ -77,7 +77,7 @@ export default function FundingPartnerSection({
           <div className="flex flex-col flex-1 p-6 pt-0 md:pt-6">
             <div className="flex flex-wrap gap-2 mb-4">
               {categoryLabel && (
-                <BasicChip text={categoryLabel} variant="secondary" />
+                <BasicChip text="Sponsor" variant="secondary" />
               )}
               {typeLabel && <BasicChip text={typeLabel} variant="default" />}
             </div>
