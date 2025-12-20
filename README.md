@@ -85,6 +85,7 @@ Visit `http://localhost:4321` to view the site.
 | `npm run lint`        | Run Biome linter                               |
 | `npm run check`       | Run Astro type checking                        |
 | `npm run verify:drafts` | Verify draft content status                  |
+| `npm run render:modules` | Render module PNGs into `public/configurations/images/` |
 | `npm run cms:config`  | Regenerate Decap CMS config from `src/content.config.ts` |
 | `npm run cms:preview` | Build Decap CMS preview bundle/styles (outputs to `public/admin`, all gitignored) |
 

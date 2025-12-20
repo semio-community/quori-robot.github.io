@@ -19,6 +19,7 @@
     "format:imports": "biome check --formatter-enabled=false --write",
     "check": "astro check",
     "verify:drafts": "node test/verify-drafts.mjs",
+    "render:modules": "node scripts/render-configurator-modules.mjs",
     "cms:preview": "vite build --config vite.cms.config.mjs",
     "cms:copy-assets": "node scripts/copy-admin-assets.mjs",
     "cms:config": "node scripts/generate-decap-config.mjs"
@@ -79,6 +80,7 @@
     "@types/mdast": "^4.0.4",
     "autoprefixer": "^10.4.21",
     "pagefind": "^1.3.0",
+    "playwright": "^1.57.0",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "0.14.1",
     "reading-time": "^1.5.0",

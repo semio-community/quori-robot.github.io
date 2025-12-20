@@ -41,6 +41,7 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Audio output module for speech and interaction cues.",
     Icon: SpeakerIcon,
     accentClassName: "text-accent-two",
+    imageSrc: "/configurations/images/speaker-render.png",
     bullets: ["Can mount on head, torso, base, or stand"],
   },
   {
