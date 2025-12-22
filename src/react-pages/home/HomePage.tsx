@@ -53,12 +53,12 @@ export default function HomePage({
         />
       </div>
 
-      <FundingPartnerSection partner={fundingPartner} />
-
       <VisionSection />
       <StrategySection />
       <ProductSection />
       <ValuesSection />
+
+      <FundingPartnerSection partner={fundingPartner} />
 
       <ConnectSection />
     </div>

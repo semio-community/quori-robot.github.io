@@ -104,12 +104,12 @@ export default function Header({
         <a
           aria-label={siteConfig.title}
           aria-current={currentPath === "/" ? "page" : undefined}
-          className="group flex items-center sm:relative h-8 w-8 md:p-2 rounded-lg justify-center hover:bg-accent-base/10 transition-colors lg:w-auto lg:justify-start"
+          className="group flex items-center sm:relative h-8 px-2 md:p-2 rounded-lg justify-start hover:bg-accent-base/10 transition-colors"
           href={homeUrl()}
         >
           <img src="/brand.svg" className="size-5 dark:hidden block" />
           <img src="/brand-dark.svg" className="size-5 hidden dark:block" />
-          <strong className="max-[320px]:hidden text-base hidden lg:block z-10 mb-0 ms-2 lg:text-base xl:text-xl hover:opacity-90 whitespace-nowrap">
+          <strong className="block z-10 mb-0 ms-2 text-base xl:text-xl hover:opacity-90 whitespace-nowrap">
             {siteConfig.title}
           </strong>
         </a>
