@@ -84,6 +84,7 @@ export function Configurator3DModuleToggleButton({
               href={`#module-${module.id}`}
               title={`Learn about the ${module.name}`}
               aria-label={`Learn about the ${module.name}`}
+              onClick={(event) => event.stopPropagation()}
               className={clsx(
                 "h-10 w-10 inline-flex items-center justify-center rounded-lg border px-2 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
                 "border-border-subtle bg-surface/40 hover:bg-surface/70 text-color-600 dark:text-color-400 hover:text-foreground",
