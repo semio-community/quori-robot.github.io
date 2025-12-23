@@ -114,7 +114,10 @@ const moduleCards: ModuleCardDefinition[] = [
       "Adds stability and mounting space for arms and chest modules.",
     Icon: TorsoIcon,
     accentClassName: "text-accent-three",
-    imageSrc: { light: "/configurations/images/torso-render.png" },
+    imageSrc: {
+      light: "/configurations/images/Torso_light.gif",
+      dark: "/configurations/images/Torso_dark.gif",
+    },
     bullets: [
       "Supports chest fascia and arm mounts",
       "Typical bridge between base/stand and head",
