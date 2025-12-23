@@ -18,7 +18,7 @@ type ModuleCardDefinition = {
   description: string;
   Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   accentClassName: string;
-  imageSrc?: string;
+  imageSrc?: { light: string; dark?: string } | string;
   bullets: string[];
 };
 
@@ -29,7 +29,10 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Core sensing and expressive interaction surface.",
     Icon: HeadIcon,
     accentClassName: "text-accent-two",
-    imageSrc: "/configurations/images/head-render.png",
+    imageSrc: {
+      light: "/configurations/images/Head_light.gif",
+      dark: "/configurations/images/Head_dark.gif",
+    },
     bullets: [
       "3-DOFs (pan, tilt, lift)",
       "Integrated RGB+D camera",
@@ -45,7 +48,10 @@ const moduleCards: ModuleCardDefinition[] = [
       "Audio input/output module for spoken dialogue and human-robot interaction.",
     Icon: SpeakerIcon,
     accentClassName: "text-accent-two",
-    imageSrc: "/configurations/images/speaker-render.png",
+    imageSrc: {
+      light: "/configurations/images/Speaker_light.gif",
+      dark: "/configurations/images/Speaker_dark.gif",
+    },
     bullets: [
       "Can mount on head, torso, base, or stand",
       "LED Light array for visual feedback",
@@ -58,7 +64,10 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Locomotion platform for navigation and mobile studies.",
     Icon: BaseIcon,
     accentClassName: "text-accent-one",
-    imageSrc: "/configurations/images/base-render.png",
+    imageSrc: {
+      light: "/configurations/images/Base_light.gif",
+      dark: "/configurations/images/Base_dark.gif",
+    },
     bullets: [
       "Holonomic 3-DOF control of (x, y, θ)",
       "Integrated LiDAR sensors",
@@ -73,7 +82,10 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Front fascia for sensors, displays, and branding.",
     Icon: ChestIcon,
     accentClassName: "text-accent-base",
-    imageSrc: "/configurations/images/chest-render.png",
+    imageSrc: {
+      light: "/configurations/images/Chest_light.gif",
+      dark: "/configurations/images/Chest_dark.gif",
+    },
     bullets: [
       "Sits on the front of the torso",
       "Customizable design for branding",
@@ -85,7 +97,10 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Optional manipulation modules mounted behind the torso.",
     Icon: ArmsIcon,
     accentClassName: "text-accent-base",
-    imageSrc: "/configurations/images/arms-render.png",
+    imageSrc: {
+      light: "/configurations/images/Arms_light.gif",
+      dark: "/configurations/images/Arms_dark.gif",
+    },
     bullets: [
       "LED Light arrays for visual feedback",
       "Can be used with or without chest",
@@ -99,7 +114,7 @@ const moduleCards: ModuleCardDefinition[] = [
       "Adds stability and mounting space for arms and chest modules.",
     Icon: TorsoIcon,
     accentClassName: "text-accent-three",
-    imageSrc: "/configurations/images/torso-render.png",
+    imageSrc: { light: "/configurations/images/torso-render.png" },
     bullets: [
       "Supports chest fascia and arm mounts",
       "Typical bridge between base/stand and head",
@@ -112,7 +127,10 @@ const moduleCards: ModuleCardDefinition[] = [
     description: "Stationary base option.",
     Icon: StandIcon,
     accentClassName: "text-accent-one",
-    imageSrc: "/configurations/images/stand-render.png",
+    imageSrc: {
+      light: "/configurations/images/Stand_light.gif",
+      dark: "/configurations/images/Stand_dark.gif",
+    },
     bullets: [
       "Swap-in option for base configurations",
       "Stable, compact footprint",
@@ -135,22 +153,44 @@ export default function ModulesSection() {
             key={m.id}
             id={`module-${m.id}`}
             className={clsx(
-              "group bg-special-lighter rounded-lg hover:shadow-lg transition-all hover:scale-105 h-full overflow-hidden backdrop-blur-lg",
+              "group bg-neutral-200 dark:bg-neutral-800 rounded-lg hover:shadow-lg transition-all hover:scale-105 h-full overflow-hidden backdrop-blur-lg",
               "flex flex-col sm:flex-row sm:items-stretch",
               index % 2 === 1 ? "sm:flex-row-reverse" : null,
             )}
           >
             {/* Image section */}
             <div className="mb-4 sm:mb-0 sm:w-1/2">
-              <div className="aspect-square sm:aspect-auto sm:h-full overflow-hidden bg-linear-to-br from-special-lighter to-special relative">
+              <div className="aspect-square sm:aspect-auto sm:h-full overflow-hidden bg-[#C9C9C9] dark:bg-[#4D4D4D] relative">
                 {m.imageSrc ? (
-                  <img
-                    src={m.imageSrc}
-                    alt={m.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  (() => {
+                    const source =
+                      typeof m.imageSrc === "string"
+                        ? { light: m.imageSrc }
+                        : m.imageSrc;
+                    return (
+                      <>
+                        <img
+                          src={source.light}
+                          alt={m.name}
+                          className={clsx(
+                            "w-full h-full object-cover group-hover:scale-110 transition-transform duration-300",
+                            source.dark ? "dark:hidden" : null,
+                          )}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {source.dark ? (
+                          <img
+                            src={source.dark}
+                            alt={m.name}
+                            className="hidden dark:block w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        ) : null}
+                      </>
+                    );
+                  })()
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className={clsx("h-24 w-24", m.accentClassName)}>
