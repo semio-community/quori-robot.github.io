@@ -57,11 +57,11 @@ function Configurator3DCanvasImpl({
           global
           damping={0.2}
           snap={true}
-          rotation={[0.1, -0.4, 0]}
+          // rotation={[0.1, -0.4, 0]}
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 2]}
         >
-          <group position={worldOffset}>
+          <group position={worldOffset} rotation={[0.1, -0.4, 0]}>
             {Object.entries(modules).map(([key, module]) => {
               const position =
                 activeConfiguration?.modulePositions?.[module.id] ?? undefined;
