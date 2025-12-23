@@ -30,6 +30,7 @@ export default function GetInvolvedPage() {
           </>
         }
         actions={[
+          { label: "Make a Donation", href: "#donate" },
           {
             label: "Join the Mailing List",
             href: "#mailing-list",
@@ -76,19 +77,30 @@ export default function GetInvolvedPage() {
                 <Target className="w-12 h-12 mx-auto mb-3 text-accent-two" />
                 <h4 className="font-semibold mb-2">Impactful</h4>
                 <p className="text-sm text-color-600 dark:text-color-400">
-                  100% of donations directly support our programs and
-                  initiatives
+                  100% of donations directly support the Quori project and
+                  community
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              <CallToActionButton
-                href="https://donate.stripe.com/cNiaEX4ZE07R8Wj8Yva7C00"
-                size="large"
-              >
-                Donate Now
-              </CallToActionButton>
+              <div className="flex gap-4 justify-center">
+                <CallToActionButton
+                  href="https://donate.stripe.com/cNiaEX4ZE07R8Wj8Yva7C00"
+                  size="large"
+                >
+                  Donate Now
+                </CallToActionButton>
+
+                <CallToActionButton
+                  href="mailto:info@semio.ai"
+                  size="large"
+                  variant="secondary"
+                  ariaLabel="Email info@semio.ai"
+                >
+                  Contact Us
+                </CallToActionButton>
+              </div>
               <p className="text-sm text-color-600 dark:text-color-400 pt-3">
                 Donations are handled through the managing entity and fiscal
                 sponsor for Quori,
@@ -96,6 +108,8 @@ export default function GetInvolvedPage() {
                 <a
                   href="https://semio.community"
                   className="text-accent-three hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Semio Community
                 </a>

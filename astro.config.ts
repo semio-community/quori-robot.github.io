@@ -122,7 +122,6 @@ export default defineConfig({
   site: "https://quori.org",
   redirects: {
     "/community": "/contributors/#partners",
-    "/community/": "/contributors/#partners",
   },
   // Use repo base path for GitHub Pages; override via PR_PREVIEW_PATH when needed
   //   For quori.org deployments, use base: process.env.PR_PREVIEW_PATH || "/"

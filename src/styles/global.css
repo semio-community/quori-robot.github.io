@@ -1,13 +1,13 @@
 @import "tailwindcss";
 @import "../assets/fonts/Gilroy.css";
 
-@source "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}";
+@source "../**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}";
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
   /* Content paths */
-  --content: "./src/**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}";
+  --content: "../**/*.{astro,html,js,jsx,md,svelte,ts,tsx,vue}";
 
   /* Screen sizes */
   --breakpoint-xs: 320px;

@@ -63,6 +63,8 @@ export default function ConnectSection({
   ariaLabel,
   className,
   gridClassName,
+  donateHref = "https://donate.stripe.com/cNiaEX4ZE07R8Wj8Yva7C00",
+  donateText = "Make a Donation",
   mailingListHref = "https://forms.gle/RaU4n2BHMzENj94f8",
   mailingListText = "Join the Mailing List",
 }: ConnectSectionProps) {
@@ -78,9 +80,27 @@ export default function ConnectSection({
       <div
         className={
           gridClassName ??
-          "grid grid-cols-1 gap-10 bg-accent-base/10 p-10 rounded-lg backdrop-blur-lg"
+          "grid grid-cols-1 md:grid-cols-3 grid-rows-3 md:grid-rows-1 gap-10 bg-accent-base/10 p-10 rounded-lg backdrop-blur-lg"
         }
       >
+        <CallToActionButton
+          href={donateHref}
+          size="large"
+          variant="primary"
+          fullWidth
+          ariaLabel="Make a donation"
+        >
+          {donateText}
+        </CallToActionButton>
+        <CallToActionButton
+          href="mailto:info@semio.ai"
+          size="large"
+          variant="secondary"
+          fullWidth
+          ariaLabel="Email info@semio.ai"
+        >
+          Contact Us
+        </CallToActionButton>
         <CallToActionButton
           href={mailingListHref}
           size="large"

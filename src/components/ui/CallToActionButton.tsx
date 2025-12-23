@@ -114,6 +114,11 @@ export const CallToActionButton: React.FC<CallToActionButtonProps> = ({
     className,
   );
 
+  const isExternalLink = Boolean(href?.startsWith("http"));
+  const linkTarget = target ?? (isExternalLink ? "_blank" : undefined);
+  const linkRel =
+    rel ?? (linkTarget === "_blank" ? "noopener noreferrer" : undefined);
+
   // Render as anchor tag if href is provided
   if (href) {
     return (
@@ -121,8 +126,8 @@ export const CallToActionButton: React.FC<CallToActionButtonProps> = ({
         href={href}
         className={baseClasses}
         aria-label={ariaLabel}
-        target={target}
-        rel={rel}
+        target={linkTarget}
+        rel={linkRel}
       >
         {children}
         {indicatorText ? (
