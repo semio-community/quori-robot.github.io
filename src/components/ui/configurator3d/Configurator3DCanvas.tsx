@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
-import React, { memo, useEffect, useMemo, useRef } from "react";
+import { Environment, useContextBridge } from "@react-three/drei";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import { easing } from "maath";
 import { MathUtils, type Group } from "three";
@@ -12,6 +12,10 @@ import type {
 } from "./types";
 import { AnimatedModuleGroup } from "./AnimatedModuleGroup";
 import { StaticGroundShadow } from "./StaticGroundShadow";
+import {
+  CanvasVisibilityContext,
+  useCanvasVisibility,
+} from "./CanvasVisibilityContext";
 
 type PresentationControlsProps = {
   enabled?: boolean;
@@ -46,6 +50,7 @@ function DemandPresentationControls({
   const gl = useThree((state) => state.gl);
   const { size } = useThree();
   const invalidate = useThree((state) => state.invalidate);
+  const isVisible = useCanvasVisibility();
   const explDomElement = domElement || events.connected || gl.domElement;
   const isInteractingRef = useRef(false);
 
@@ -67,6 +72,7 @@ function DemandPresentationControls({
   );
 
   useEffect(() => {
+    if (!isVisible) return undefined;
     if (global && cursor && enabled) {
       explDomElement.style.cursor = "grab";
       gl.domElement.style.cursor = "";
@@ -76,7 +82,7 @@ function DemandPresentationControls({
       };
     }
     return undefined;
-  }, [cursor, enabled, explDomElement, gl.domElement, global]);
+  }, [cursor, enabled, explDomElement, gl.domElement, global, isVisible]);
 
   const [animation] = React.useState({
     scale: 1,
@@ -90,6 +96,7 @@ function DemandPresentationControls({
   }, [invalidate]);
 
   useFrame((state, delta) => {
+    if (!isVisible) return;
     if (!ref.current) return;
     easing.damp3(ref.current.scale, animation.scale, animation.damping, delta);
     easing.dampE(
@@ -114,6 +121,12 @@ function DemandPresentationControls({
       isInteractingRef.current = false;
     }
   });
+
+  useEffect(() => {
+    if (isVisible) {
+      invalidate();
+    }
+  }, [invalidate, isVisible]);
 
   const bind = useGesture(
     {
@@ -144,7 +157,9 @@ function DemandPresentationControls({
         animation.damping =
           snap && !down && typeof snap !== "boolean" ? snap : damping;
         isInteractingRef.current = down;
-        invalidate();
+        if (isVisible) {
+          invalidate();
+        }
         return [nextY, nextX];
       },
     },
@@ -176,6 +191,10 @@ function Configurator3DCanvasImpl({
   worldOffset: Vec3;
 }) {
   const seenModuleIdsRef = useRef<Set<ModuleId>>(new Set());
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastIntersectionRef = useRef(true);
+  const ContextBridge = useContextBridge(CanvasVisibilityContext);
 
   useEffect(() => {
     for (const id of activeModuleSet) {
@@ -183,63 +202,105 @@ function Configurator3DCanvasImpl({
     }
   }, [activeModuleSet]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const target = containerRef.current;
+    if (!target || typeof IntersectionObserver === "undefined")
+      return undefined;
+
+    const updateVisibility = (isIntersecting: boolean) => {
+      lastIntersectionRef.current = isIntersecting;
+      const documentVisible =
+        typeof document === "undefined" ||
+        document.visibilityState === "visible";
+      setIsVisible(isIntersecting && documentVisible);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) {
+          updateVisibility(entry.isIntersecting);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+
+    observer.observe(target);
+
+    const handleVisibilityChange = () => {
+      updateVisibility(lastIntersectionRef.current);
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   return (
-    <div className="w-full h-full">
-      <Canvas
-        shadows
-        className="touch-none"
-        camera={{ fov: 50, position: [0, 1.5, 8] }}
-        frameloop="demand"
-        dpr={[1, 1.5]}
-        gl={{ powerPreference: "high-performance" }}
-      >
-        <ambientLight intensity={0.5} />
-        <spotLight
-          position={[10, 10, 10]}
-          angle={0.15}
-          penumbra={1}
-          shadow-mapSize={2048}
-          castShadow
-        />
-        <DemandPresentationControls
-          global
-          damping={0.2}
-          snap={true}
-          // rotation={[0.1, -0.4, 0]}
-          polar={[-Math.PI / 3, Math.PI / 3]}
-          azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+    <div ref={containerRef} className="w-full h-full">
+      <CanvasVisibilityContext.Provider value={isVisible}>
+        <Canvas
+          shadows
+          className="touch-none"
+          camera={{ fov: 50, position: [0, 1.5, 8] }}
+          frameloop="demand"
+          dpr={[1, 1.5]}
+          gl={{ powerPreference: "high-performance" }}
         >
-          <group position={worldOffset} rotation={[0.1, -0.4, 0]}>
-            {Object.entries(modules).map(([key, module]) => {
-              const position =
-                activeConfiguration?.modulePositions?.[module.id] ?? undefined;
-              const resolvedPosition = (position ?? offscreenPosition) as Vec3;
-              const isPresent = activeModuleSet.has(module.id);
-              const shouldRenderModel =
-                isPresent ||
-                Boolean(exitViaByModule[module.id]) ||
-                seenModuleIdsRef.current.has(module.id);
-              return (
-                <AnimatedModuleGroup
-                  key={key}
-                  module={module}
-                  targetPosition={resolvedPosition}
-                  isPresent={isPresent}
-                  renderModel={shouldRenderModel}
-                  enterFrom={enterFromByModule[module.id]}
-                  exitVia={exitViaByModule[module.id]}
-                  offscreenPosition={offscreenPosition}
-                />
-              );
-            })}
-          </group>
-        </DemandPresentationControls>
-        {/*<StaticGroundShadow
-          position={[0, worldOffset[1] - 1.5, 0]}
-          size={10 / 3}
-        />*/}
-        <Environment preset="city" />
-      </Canvas>
+          <ContextBridge>
+            <ambientLight intensity={0.5} />
+            <spotLight
+              position={[10, 10, 10]}
+              angle={0.15}
+              penumbra={1}
+              shadow-mapSize={2048}
+              castShadow
+            />
+            <DemandPresentationControls
+              global
+              damping={0.2}
+              snap={true}
+              // rotation={[0.1, -0.4, 0]}
+              polar={[-Math.PI / 3, Math.PI / 3]}
+              azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+            >
+              <group position={worldOffset} rotation={[0.1, -0.4, 0]}>
+                {Object.entries(modules).map(([key, module]) => {
+                  const position =
+                    activeConfiguration?.modulePositions?.[module.id] ??
+                    undefined;
+                  const resolvedPosition = (position ??
+                    offscreenPosition) as Vec3;
+                  const isPresent = activeModuleSet.has(module.id);
+                  const shouldRenderModel =
+                    isPresent ||
+                    Boolean(exitViaByModule[module.id]) ||
+                    seenModuleIdsRef.current.has(module.id);
+                  return (
+                    <AnimatedModuleGroup
+                      key={key}
+                      module={module}
+                      targetPosition={resolvedPosition}
+                      isPresent={isPresent}
+                      renderModel={shouldRenderModel}
+                      enterFrom={enterFromByModule[module.id]}
+                      exitVia={exitViaByModule[module.id]}
+                      offscreenPosition={offscreenPosition}
+                    />
+                  );
+                })}
+              </group>
+            </DemandPresentationControls>
+            {/*<StaticGroundShadow
+              position={[0, worldOffset[1] - 1.5, 0]}
+              size={10 / 3}
+            />*/}
+            <Environment preset="city" />
+          </ContextBridge>
+        </Canvas>
+      </CanvasVisibilityContext.Provider>
     </div>
   );
 }

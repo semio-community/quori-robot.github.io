@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { LoopRepeat, type Group } from "three";
+import { useCanvasVisibility } from "@/components/ui/configurator3d/CanvasVisibilityContext";
 
 type Vec3 = [number, number, number];
 
@@ -42,6 +44,9 @@ export default function GLBModel({
   const gltf = useGLTF(url);
   const groupRef = useRef<Group>(null);
   const { actions } = useAnimations(gltf.animations ?? [], groupRef);
+  const invalidate = useThree((state) => state.invalidate);
+  const isAnimatingRef = useRef(false);
+  const isVisible = useCanvasVisibility();
 
   const scene = useMemo(() => {
     const scene = gltf.scene.clone(true) as Group;
@@ -64,6 +69,11 @@ export default function GLBModel({
     if (!actions) return;
 
     const names = animationNames ?? Object.keys(actions);
+    if (names.length === 0) return;
+    isAnimatingRef.current = true;
+    if (isVisible) {
+      invalidate();
+    }
     names.forEach((name) => {
       const action = actions[name];
       if (!action) return;
@@ -73,11 +83,24 @@ export default function GLBModel({
     });
 
     return () => {
+      isAnimatingRef.current = false;
       names.forEach((name) => {
         actions[name]?.stop();
       });
     };
-  }, [actions, animationNames, playAnimations]);
+  }, [actions, animationNames, invalidate, isVisible, playAnimations]);
+
+  useFrame(() => {
+    if (isAnimatingRef.current && isVisible) {
+      invalidate();
+    }
+  });
+
+  useEffect(() => {
+    if (isVisible && isAnimatingRef.current) {
+      invalidate();
+    }
+  }, [invalidate, isVisible]);
 
   return (
     <group ref={groupRef} {...props}>
