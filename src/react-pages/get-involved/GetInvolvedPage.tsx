@@ -86,7 +86,7 @@ export default function GetInvolvedPage() {
             <div className="text-center">
               <div className="flex gap-4 justify-center">
                 <CallToActionButton
-                  href="https://donate.stripe.com/cNiaEX4ZE07R8Wj8Yva7C00"
+                  href="https://donate.semio.community/b/00w3cv77McUD6Ob2A7a7C01"
                   size="large"
                 >
                   Donate Now
