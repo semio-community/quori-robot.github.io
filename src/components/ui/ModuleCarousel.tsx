@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { Configurator3DCanvas } from "./configurator3d/Configurator3DCanvas";
 import { useConfigurator3DState } from "./configurator3d/useConfigurator3DState";
+import Tooltip from "@/components/ui/Tooltip";
 import {
   DEFAULT_OFFSCREEN_POSITION,
   type ConfigurationId,
@@ -10,6 +11,7 @@ import {
   type ModuleSpecification,
   type Vec3,
 } from "./configurator3d/types";
+import { url } from "@/utils/url";
 
 export interface ModuleCarouselProps {
   modules: Record<ModuleId, ModuleSpecification>;
@@ -42,6 +44,23 @@ function renderChevronGlyph(direction: "left" | "right") {
       ) : (
         <path d="M9 18l6-6-6-6" />
       )}
+    </svg>
+  );
+}
+
+function renderCaretGlyph() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-3.5 w-3.5"
+      aria-hidden="true"
+    >
+      <path d="M9 18l6-6-6-6" />
     </svg>
   );
 }
@@ -162,6 +181,8 @@ export function ModuleCarousel({
   }
 
   const showControls = orderedConfigurationIds.length > 1;
+  const getPlatformHref = (configId: ConfigurationId) =>
+    url(`/platform/?config=${encodeURIComponent(configId)}#configurations`);
 
   return (
     <div
@@ -171,15 +192,39 @@ export function ModuleCarousel({
       )}
     >
       <div className={clsx("relative w-full overflow-hidden", heightClassName)}>
-        <Configurator3DCanvas
-          modules={modules}
-          activeConfiguration={activeConfiguration}
-          activeModuleSet={activeModuleSet}
-          enterFromByModule={enterFromByModule}
-          exitViaByModule={exitViaByModule}
-          offscreenPosition={offscreenPosition}
-          worldOffset={worldOffset}
-        />
+        <Tooltip
+          side="bottom"
+          sideOffset={-50}
+          className="group/linktip hover:bg-surface border-2 border-transparent hover:border-accent-base transition-colors"
+          content={
+            activeConfigurationId ? (
+              <a
+                href={getPlatformHref(activeConfigurationId)}
+                className="group/linktip inline-flex items-center gap-1 text-xs font-semibold text-surface group-hover/linktip:text-accent-base"
+              >
+                <span>Explore this configuration</span>
+                <span
+                  aria-hidden="true"
+                  className="translate-x-0 group-hover/linktip:translate-x-0.5 group-hover/linktip:text-accent-three transition-[transform,colors]"
+                >
+                  {renderCaretGlyph()}
+                </span>
+              </a>
+            ) : null
+          }
+        >
+          <div className="h-full w-full">
+            <Configurator3DCanvas
+              modules={modules}
+              activeConfiguration={activeConfiguration}
+              activeModuleSet={activeModuleSet}
+              enterFromByModule={enterFromByModule}
+              exitViaByModule={exitViaByModule}
+              offscreenPosition={offscreenPosition}
+              worldOffset={worldOffset}
+            />
+          </div>
+        </Tooltip>
 
         {showActiveName && activeConfiguration?.name ? (
           <div className="pointer-events-none absolute left-0 right-0 top-0 flex justify-center px-4 pt-6">

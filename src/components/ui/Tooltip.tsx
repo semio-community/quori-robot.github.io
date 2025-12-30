@@ -68,8 +68,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             sideOffset={sideOffset}
             alignOffset={alignOffset}
             className={clsx(
-              "rounded-md bg-accent-base px-2 py-1 text-xs font-medium text-surface shadow-lg",
-              "data-[state=delayed-open]:animate-in data-[state=open]:fade-in z-100",
+              "tooltip-content rounded-full bg-accent-base px-2 py-1 text-xs font-medium text-surface shadow-lg z-100",
               className,
             )}
           >

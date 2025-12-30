@@ -28,7 +28,7 @@ const moduleCards: ModuleCardDefinition[] = [
     name: "Head",
     description: "Core sensing and expressive interaction surface.",
     Icon: HeadIcon,
-    accentClassName: "text-accent-two",
+    accentClassName: "text-accent-base",
     imageSrc: {
       light: "/configurations/images/Head_light.gif",
       dark: "/configurations/images/Head_dark.gif",
@@ -47,7 +47,7 @@ const moduleCards: ModuleCardDefinition[] = [
     description:
       "Audio input/output module for spoken dialogue and human-robot interaction.",
     Icon: SpeakerIcon,
-    accentClassName: "text-accent-two",
+    accentClassName: "text-accent-base",
     imageSrc: {
       light: "/configurations/images/Speaker_light.gif",
       dark: "/configurations/images/Speaker_dark.gif",
@@ -63,7 +63,7 @@ const moduleCards: ModuleCardDefinition[] = [
     name: "Mobile Base",
     description: "Locomotion platform for navigation and mobile studies.",
     Icon: BaseIcon,
-    accentClassName: "text-accent-one",
+    accentClassName: "text-accent-base",
     imageSrc: {
       light: "/configurations/images/Base_light.gif",
       dark: "/configurations/images/Base_dark.gif",
@@ -113,7 +113,7 @@ const moduleCards: ModuleCardDefinition[] = [
     description:
       "Adds stability and mounting space for arms and chest modules.",
     Icon: TorsoIcon,
-    accentClassName: "text-accent-three",
+    accentClassName: "text-accent-base",
     imageSrc: {
       light: "/configurations/images/Torso_light.gif",
       dark: "/configurations/images/Torso_dark.gif",
@@ -129,7 +129,7 @@ const moduleCards: ModuleCardDefinition[] = [
     name: "Stand",
     description: "Stationary base option.",
     Icon: StandIcon,
-    accentClassName: "text-accent-one",
+    accentClassName: "text-accent-base",
     imageSrc: {
       light: "/configurations/images/Stand_light.gif",
       dark: "/configurations/images/Stand_dark.gif",
@@ -228,7 +228,7 @@ export default function ModulesSection() {
                       key={`${m.id}-${item}`}
                       className="flex items-start gap-2"
                     >
-                      <SettingsMinimalistic className="text-accent-two mt-0.5 w-4 h-4 shrink-0" />
+                      <SettingsMinimalistic className="text-accent-three mt-0.5 w-4 h-4 shrink-0" />
                       <span className="text-sm text-accent-base">{item}</span>
                     </div>
                   ))}

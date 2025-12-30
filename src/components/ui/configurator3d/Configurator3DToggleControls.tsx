@@ -15,6 +15,7 @@ import {
   setFromArray,
 } from "./sets";
 import { Configurator3DModuleToggleButton } from "./Configurator3DModuleToggleButton";
+import Tooltip from "@/components/ui/Tooltip";
 
 type PreviewAction = "add" | "remove" | null;
 
@@ -389,15 +390,6 @@ export function Configurator3DToggleControls({
     <div className={clsx("w-full sm:w-auto", className)}>
       {/* Mobile: horizontal toggles below the canvas */}
       <div className="sm:hidden flex flex-col gap-3">
-        {/*<div className="rounded-xl border border-border-subtle bg-special-lighter/60 p-4">
-          <p className="text-xs uppercase tracking-wide text-color-600 dark:text-color-400 mb-1">
-            Current configuration
-          </p>
-          <p className="text-lg font-semibold text-foreground">
-            {activeConfiguration?.name}
-          </p>
-        </div>*/}
-
         <div className="border-t border-border-subtle rounded-b-xl overflow-clip">
           <div className="relative">
             <ScrollArea.Root>
@@ -418,6 +410,7 @@ export function Configurator3DToggleControls({
                         locked={state.locked}
                         showOverlay={state.showOverlay}
                         actionBadgeClassName={state.actionBadgeClassName}
+                        previewAction={state.displayedPreviewAction}
                         preview={renderModulePreview(module)}
                         actionGlyph={
                           state.displayedPreviewAction
@@ -466,20 +459,25 @@ export function Configurator3DToggleControls({
               Modules
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setDesktopExpanded((prev) => !prev)}
-            aria-expanded={desktopExpanded}
-            className={clsx(
-              "inline-flex items-center justify-center rounded-md border border-border-subtle bg-surface/40 hover:bg-surface/70",
-              "h-8 w-10 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-              "shrink-0",
-              "text-color-600 dark:text-color-400 hover:text-foreground",
-            )}
-            title={desktopExpanded ? "Collapse panel" : "Expand panel"}
+          <Tooltip
+            side="bottom"
+            sideOffset={8}
+            content={desktopExpanded ? "Collapse panel" : "Expand panel"}
           >
-            {renderChevronGlyph(desktopExpanded ? "left" : "right")}
-          </button>
+            <button
+              type="button"
+              onClick={() => setDesktopExpanded((prev) => !prev)}
+              aria-expanded={desktopExpanded}
+              className={clsx(
+                "inline-flex items-center justify-center rounded-md border border-border-subtle bg-surface/40 hover:bg-surface/70",
+                "h-8 w-10 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+                "shrink-0",
+                "text-color-600 dark:text-color-400 hover:text-foreground",
+              )}
+            >
+              {renderChevronGlyph(desktopExpanded ? "left" : "right")}
+            </button>
+          </Tooltip>
         </div>
 
         <ScrollArea.Root className="flex-1 min-h-0">
@@ -503,6 +501,7 @@ export function Configurator3DToggleControls({
                     locked={state.locked}
                     showOverlay={state.showOverlay}
                     actionBadgeClassName={state.actionBadgeClassName}
+                    previewAction={state.displayedPreviewAction}
                     preview={renderModulePreview(module)}
                     actionGlyph={
                       state.displayedPreviewAction

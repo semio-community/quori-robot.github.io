@@ -1,5 +1,6 @@
 import React from "react";
 import { clsx } from "clsx";
+import Tooltip from "@/components/ui/Tooltip";
 import type { ModuleSpecification } from "./types";
 
 export function Configurator3DModuleToggleButton({
@@ -13,6 +14,7 @@ export function Configurator3DModuleToggleButton({
   locked,
   showOverlay,
   actionBadgeClassName,
+  previewAction,
   preview,
   actionGlyph,
   infoGlyph,
@@ -30,6 +32,7 @@ export function Configurator3DModuleToggleButton({
   locked: boolean;
   showOverlay: boolean;
   actionBadgeClassName: string;
+  previewAction?: "add" | "remove" | null;
   preview: React.ReactNode;
   actionGlyph: React.ReactNode;
   infoGlyph?: React.ReactNode;
@@ -40,6 +43,23 @@ export function Configurator3DModuleToggleButton({
   const overlayLayerClassName =
     "absolute inset-0 flex items-center justify-center transition-opacity duration-150 transform-[translateZ(0)]";
   const overlayLayerStyle = { willChange: "opacity" } as const;
+  const renderTooltip = (
+    content: React.ReactNode,
+    child: React.ReactElement,
+    side: "top" | "bottom" | "left" | "right" = "top",
+    disabled = false,
+  ) => (
+    <Tooltip side={side} sideOffset={6} content={content} disabled={disabled}>
+      {child}
+    </Tooltip>
+  );
+
+  const actionTooltipText =
+    previewAction === "add"
+      ? `Add the ${module.name}`
+      : previewAction === "remove"
+        ? `Remove the ${module.name}`
+        : null;
 
   const body = (
     <>
@@ -60,14 +80,19 @@ export function Configurator3DModuleToggleButton({
           )}
           style={overlayLayerStyle}
         >
-          <div
-            className={clsx(
-              "h-10 w-10 rounded-full border shadow-sm flex items-center justify-center",
-              actionBadgeClassName,
-            )}
-          >
-            {actionGlyph}
-          </div>
+          {renderTooltip(
+            actionTooltipText,
+            <div
+              className={clsx(
+                "h-10 w-10 rounded-full border shadow-sm flex items-center justify-center",
+                actionBadgeClassName,
+              )}
+            >
+              {actionGlyph}
+            </div>,
+            "bottom",
+            !showOverlay || !actionTooltipText,
+          )}
         </div>
       </div>
 
@@ -80,18 +105,21 @@ export function Configurator3DModuleToggleButton({
               </p>
             </div>
 
-            <a
-              href={`#module-${module.id}`}
-              title={`Learn about the ${module.name}`}
-              aria-label={`Learn about the ${module.name}`}
-              onClick={(event) => event.stopPropagation()}
-              className={clsx(
-                "h-10 w-10 inline-flex items-center justify-center rounded-lg border px-2 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-                "border-border-subtle bg-surface/40 hover:bg-surface/70 text-color-600 dark:text-color-400 hover:text-foreground",
-              )}
-            >
-              {infoGlyph}
-            </a>
+            {renderTooltip(
+              `Learn about the ${module.name}`,
+              <a
+                href={`#module-${module.id}`}
+                aria-label={`Learn about the ${module.name}`}
+                onClick={(event) => event.stopPropagation()}
+                className={clsx(
+                  "h-10 w-10 inline-flex items-center justify-center rounded-lg border px-2 transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+                  "border-border-subtle bg-surface/40 hover:bg-surface/70 text-color-600 dark:text-color-400 hover:text-foreground",
+                )}
+              >
+                {infoGlyph}
+              </a>,
+              "bottom",
+            )}
           </>
         )
       ) : (
@@ -103,7 +131,8 @@ export function Configurator3DModuleToggleButton({
   );
 
   if (variant === "square") {
-    return (
+    return renderTooltip(
+      module.name,
       <button
         type="button"
         onClick={onToggle}
@@ -113,7 +142,6 @@ export function Configurator3DModuleToggleButton({
         onBlur={onHoverEnd}
         disabled={disabled}
         aria-pressed={isOn}
-        title={module.name}
         className={clsx(
           "group relative overflow-hidden flex-none rounded-none transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
           sizeClassName,
@@ -130,43 +158,46 @@ export function Configurator3DModuleToggleButton({
         <div className="h-full w-full flex flex-col items-center justify-center gap-2 px-2">
           {body}
         </div>
-      </button>
+      </button>,
     );
   }
 
   const isFixedSize = Boolean(sizeClassName);
   const buttonPadding = paddingClassName ?? "px-3 py-2";
 
+  const buttonElement = (
+    <button
+      type="button"
+      onClick={onToggle}
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+      onFocus={onHoverStart}
+      onBlur={onHoverEnd}
+      disabled={disabled}
+      aria-pressed={isOn}
+      className={clsx(
+        "group flex items-center gap-3 text-left transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
+        isFixedSize ? "flex-none" : "flex-1",
+        buttonPadding,
+        compact ? "justify-center" : null,
+        sizeClassName,
+        disabled
+          ? "bg-surface/30 text-foreground/50 cursor-not-allowed"
+          : isOn
+            ? clsx(
+                "bg-accent-three/20 hover:bg-accent-three/30",
+                locked ? "cursor-not-allowed" : "hover:bg-accent-three/15",
+              )
+            : "bg-transparent hover:bg-foreground/20",
+      )}
+    >
+      {body}
+    </button>
+  );
+
   return (
     <div className="flex items-stretch gap-2">
-      <button
-        type="button"
-        onClick={onToggle}
-        onMouseEnter={onHoverStart}
-        onMouseLeave={onHoverEnd}
-        onFocus={onHoverStart}
-        onBlur={onHoverEnd}
-        disabled={disabled}
-        aria-pressed={isOn}
-        title={module.name}
-        className={clsx(
-          "group flex items-center gap-3 text-left transition-colors duration-150 focus:outline-none focus-visible:ring focus-visible:ring-accent-three/70",
-          isFixedSize ? "flex-none" : "flex-1",
-          buttonPadding,
-          compact ? "justify-center" : null,
-          sizeClassName,
-          disabled
-            ? "bg-surface/30 text-foreground/50 cursor-not-allowed"
-            : isOn
-              ? clsx(
-                  "bg-accent-three/20 hover:bg-accent-three/30",
-                  locked ? "cursor-not-allowed" : "hover:bg-accent-three/15",
-                )
-              : "bg-transparent hover:bg-foreground/20",
-        )}
-      >
-        {body}
-      </button>
+      {compact ? renderTooltip(module.name, buttonElement) : buttonElement}
     </div>
   );
 }

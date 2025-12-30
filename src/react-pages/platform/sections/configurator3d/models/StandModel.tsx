@@ -12,5 +12,5 @@ export default function StandModel({
   url = "/configurations/models/Stand.glb",
   ...props
 }: StandModelProps) {
-  return <GLBModel url={url} modelOffset={[0, 0, 0.5]} {...props} />;
+  return <GLBModel url={url} modelOffset={[0, 0, 0.48]} {...props} />;
 }
