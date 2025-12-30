@@ -100,7 +100,7 @@ async function toDataUrlWithRasterize(
 let assetIndexPromise: Promise<AssetIndex> | null = null;
 const assetDataCache = new Map<string, string>();
 
-const BADGE_ICON_COLOR = "#FF9E00";
+const BADGE_ICON_COLOR = "#F9FAFB";
 const BADGE_ICON_SIZE = 200;
 
 const createBadgeIcon = (Icon: ComponentType<SVGProps<SVGSVGElement>>) => {

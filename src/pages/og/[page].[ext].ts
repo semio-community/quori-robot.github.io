@@ -52,7 +52,7 @@ const STATIC_PAGES: Record<string, OgImageProps> = {
 };
 
 const BADGE_ICON_SIZE = 180;
-const BADGE_ICON_COLOR = "#FF9E00";
+const BADGE_ICON_COLOR = "#F9FAFB";
 
 const createBadgeIcon = (Icon: NavigationIcon) => {
   const svg = renderToStaticMarkup(
