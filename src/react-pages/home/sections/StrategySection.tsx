@@ -27,23 +27,23 @@ export interface StrategySectionProps {
 
 export default function StrategySection({
   id = "strategy",
-  title = "Strategy",
-  subtitle = "Our process to achieve our purpose is by establishing a shared platform for hardware and software, and building a community through resources, events, and collaboration.",
+  title = "Our Strategy",
+  subtitle = "We are building a shared platform for HRI hardware and software, and building a community through resources, events, and collaboration.",
   ariaLabel,
   className,
   cardClassName,
   primaryCopy = (
     <>
-      We align the community around a common platform and shared rituals—docs,
-      events, and collaboration channels—so improvements spread quickly and
-      newcomers are never alone.
+      We align the community around a common platform and shared
+      rituals—resources, events, and collaboration channels—so improvements
+      spread quickly and newcomers are never alone.
     </>
   ),
   features = [
     {
       title: "Shared platform",
       description:
-        "Open Quori hardware and modular HRI software so upgrades ripple across every team instead of staying siloed.",
+        "Open-source Quori hardware and HRI software modules so upgrades ripple across every team instead of staying siloed.",
       icon: <Global className="w-12 h-12 mx-auto mb-3 text-accent-one" />,
     },
     {
@@ -55,7 +55,7 @@ export default function StrategySection({
     {
       title: "Events and learning",
       description:
-        "Workshops, office hours, and demos where we share what's working, surface challenges, and onboard new collaborators.",
+        "Workshops, tutorials, and demos where we share what's working, surface challenges, and onboard new collaborators.",
       icon: (
         <SquareAcademicCap className="w-12 h-12 mx-auto mb-3 text-accent-one" />
       ),

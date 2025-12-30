@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Box3, Vector3, type PerspectiveCamera, type Group } from "three";
-import { configurator3DModules } from "@/react-pages/features/sections/configurator3d/spec";
+import { configurator3DModules } from "@/react-pages/platform/sections/configurator3d/spec";
 import { Environment, useProgress } from "@react-three/drei";
 
 const VIEW_SIZE = 1024;

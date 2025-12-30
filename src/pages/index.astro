@@ -16,6 +16,7 @@ import {
   getFeaturedEvents,
   getUpcomingEvents,
 } from "@/data/events";
+import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 import { isDraftVisible } from "@/utils/drafts";
 import { resolveImageLike } from "@/utils/images";
@@ -56,6 +57,32 @@ const fundingPartner =
       }
     : null;
 
+const contributorOrganizationIds = [
+  "university-of-pennsylvania",
+  "oregon-state-university",
+  "semio-community",
+  "semio-ai",
+  "ologic-inc",
+  "ik-studio",
+  "peerbots",
+  "nsf",
+];
+
+const contributorEntries = await Promise.all(
+  contributorOrganizationIds.map((id) => getEntry("organizations", id)),
+);
+
+const contributorOrganizations = contributorEntries.reduce<
+  { id: string; data: CollectionEntry<"organizations">["data"] }[]
+>((acc, entry, idx) => {
+  if (!entry || !isDraftVisible(entry.data.draft)) return acc;
+  acc.push({
+    id: contributorOrganizationIds[idx]!,
+    data: entry.data,
+  });
+  return acc;
+}, []);
+
 const pageTitle = "Home";
 const description = siteConfig.description;
 const ogImage = "/og/home.png";
@@ -75,6 +102,7 @@ const ogImage = "/og/home.png";
         projectCount={projectCount}
         featuredEventCount={featuredEventCount}
         fundingPartner={fundingPartner}
+        contributors={contributorOrganizations}
       />
     </SiteShell>
   </body>

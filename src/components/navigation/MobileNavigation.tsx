@@ -7,6 +7,7 @@ import { NavIconButton } from "./NavIconButton";
 import { useSearch } from "@/components/search";
 import { navIconMap } from "@/components/navigation/navIcons";
 import { url as buildUrl } from "@/utils/url";
+import type { LinkSection, Section } from "@/site.config";
 
 interface MobileNavigationProps {
   menuLinks: Array<{
@@ -14,17 +15,10 @@ interface MobileNavigationProps {
     title: string;
     inHeader: boolean;
     callToAction?: boolean;
+    sections?: Section[];
   }>;
   currentPath: string;
   urlPrefix?: string;
-  menuSections?: Record<
-    string,
-    Array<{
-      title: string;
-      href: string;
-      icon?: string;
-    }>
-  >;
 }
 
 // Helper function to construct URLs
@@ -102,7 +96,6 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
   menuLinks,
   currentPath,
   urlPrefix = "",
-  menuSections = {},
 }) => {
   const [open, setOpen] = React.useState(false);
 
@@ -119,6 +112,10 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
   }, [open, searchOpen]);
 
   const url = (path: string) => makeUrl(path, urlPrefix);
+  const getLinkSections = (sections?: Section[]) =>
+    (sections ?? []).filter(
+      (section): section is LinkSection => section.kind === "link",
+    );
   const getCurrentPageName = () => {
     if (currentPath === "/" || currentPath === "") return "Home";
     const exact = menuLinks.find((m) => m.path === currentPath);
@@ -480,41 +477,45 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                 visible: { opacity: 1, x: 0 },
                               }}
                             >
-                              {link.callToAction ? (
-                                <CallToActionButton
-                                  href={url(link.path)}
-                                  size="medium"
-                                  variant="tertiary"
-                                  fullWidth
-                                  className="text-center"
-                                >
-                                  {link.title}
-                                </CallToActionButton>
-                              ) : (
-                                <>
-                                  <div className="flex items-center gap-2">
-                                    <a
-                                      href={url(link.path)}
-                                      className={clsx(
-                                        "flex-1 block px-4 py-3 rounded-lg transition-all duration-200",
-                                        currentPath === link.path
-                                          ? "bg-accent-base/10 text-accent-three font-semibold"
-                                          : "text-foreground hover:bg-accent-base/5 hover:text-accent-base",
-                                      )}
-                                    >
-                                      <span className="flex items-center gap-2">
-                                        {(() => {
-                                          const IconComponent =
-                                            navIconMap[link.path];
-                                          return IconComponent ? (
-                                            <IconComponent className="w-4 h-4 text-accent-base" />
-                                          ) : null;
-                                        })()}
-                                        <span>{link.title}</span>
-                                      </span>
-                                    </a>
-                                    {Array.isArray(menuSections[link.path]) &&
-                                      menuSections[link.path]!.length > 0 && (
+                              {(() => {
+                                const linkSections = getLinkSections(
+                                  link.sections,
+                                );
+                                const hasSections = linkSections.length > 0;
+                                return link.callToAction ? (
+                                  <CallToActionButton
+                                    href={url(link.path)}
+                                    size="medium"
+                                    variant="tertiary"
+                                    fullWidth
+                                    className="text-center"
+                                  >
+                                    {link.title}
+                                  </CallToActionButton>
+                                ) : (
+                                  <>
+                                    <div className="flex items-center gap-2">
+                                      <a
+                                        href={url(link.path)}
+                                        className={clsx(
+                                          "flex-1 block px-4 py-3 rounded-lg transition-all duration-200",
+                                          currentPath === link.path
+                                            ? "bg-accent-base/10 text-accent-three font-semibold"
+                                            : "text-foreground hover:bg-accent-base/5 hover:text-accent-base",
+                                        )}
+                                      >
+                                        <span className="flex items-center gap-2">
+                                          {(() => {
+                                            const IconComponent =
+                                              navIconMap[link.path];
+                                            return IconComponent ? (
+                                              <IconComponent className="w-4 h-4 text-accent-base" />
+                                            ) : null;
+                                          })()}
+                                          <span>{link.title}</span>
+                                        </span>
+                                      </a>
+                                      {hasSections && (
                                         <button
                                           type="button"
                                           aria-label={`Toggle sections for ${link.title}`}
@@ -544,18 +545,19 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                           </svg>
                                         </button>
                                       )}
-                                  </div>
-                                  {openSection === link.path &&
-                                    Array.isArray(menuSections[link.path]) &&
-                                    menuSections[link.path]!.length > 0 && (
-                                      <motion.ul
-                                        className="mt-2 ml-4 space-y-1"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: "auto" }}
-                                        transition={{ duration: 0.2 }}
-                                      >
-                                        {menuSections[link.path]!.map(
-                                          (section) => (
+                                    </div>
+                                    {openSection === link.path &&
+                                      hasSections && (
+                                        <motion.ul
+                                          className="mt-2 ml-4 space-y-1"
+                                          initial={{ opacity: 0, height: 0 }}
+                                          animate={{
+                                            opacity: 1,
+                                            height: "auto",
+                                          }}
+                                          transition={{ duration: 0.2 }}
+                                        >
+                                          {linkSections.map((section) => (
                                             <li key={section.href}>
                                               <a
                                                 href={url(section.href)}
@@ -564,12 +566,12 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
                                                 {section.title}
                                               </a>
                                             </li>
-                                          ),
-                                        )}
-                                      </motion.ul>
-                                    )}
-                                </>
-                              )}
+                                          ))}
+                                        </motion.ul>
+                                      )}
+                                  </>
+                                );
+                              })()}
                             </motion.li>
                           ))}
                       </motion.ul>

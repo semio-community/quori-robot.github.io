@@ -12,7 +12,7 @@ import type { ComponentType, SVGProps } from "react";
 export type NavigationIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 const baseRouteIconMap: Record<string, NavigationIcon> = {
-  features: CpuBolt,
+  platform: CpuBolt,
   projects: TestTube,
   services: UserHandUp,
   events: Calendar,

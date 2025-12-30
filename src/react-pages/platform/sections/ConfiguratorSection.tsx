@@ -5,7 +5,7 @@ import {
   configurator3DConfigurations,
   configurator3DInitialConfigurationId,
   configurator3DModules,
-} from "@/react-pages/features/sections/configurator3d/spec";
+} from "@/react-pages/platform/sections/configurator3d/spec";
 
 export default function ConfiguratorSection() {
   return (

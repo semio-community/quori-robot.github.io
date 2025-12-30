@@ -19,7 +19,7 @@ export default function FeaturesPage() {
       <HeroHeader
         fullBleed
         icon={<CpuBolt className="w-16 h-16 text-accent-two" />}
-        title="Features"
+        title="Platform"
         description="Explore the modular design, configuration options, and evolution of the Quori platform."
         actions={[
           {

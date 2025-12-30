@@ -20,17 +20,17 @@ export interface VisionSectionProps {
   features?: Feature[];
 }
 
-export default function VisionSection({
-  id = "vision",
-  title = "Vision",
-  subtitle = "Our purpose is to bridge the accessibility gap and accelerate HRI development for researchers, and address the replication crisis to solidify HRI as a scientific discipline.",
+export default function MissionSection({
+  id = "mission",
+  title = "Our Mission",
+  subtitle = "We aim to bridge the accessibility gap and accelerate research and development for human-robot interaction (HRI), and to address the replication crisis to solidify HRI as a scientific discipline.",
   ariaLabel,
   className,
   cardClassName,
   primaryCopy = (
     <>
       We are building an HRI ecosystem where anyone can access the same tools,
-      replicate results with confidence, and move faster from idea to impact.
+      move faster from idea to impact, and replicate results with confidence.
     </>
   ),
   features = [
@@ -49,7 +49,7 @@ export default function VisionSection({
     {
       title: "Reproducible by default",
       description:
-        "Shared protocols and cross-lab comparisons that tackle the replication crisis and strengthen HRI as a discipline.",
+        "Shared protocols and cross-lab comparisons that tackle the replication crisis and strengthen HRI as a science.",
       icon: <Copy className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
     },
   ],

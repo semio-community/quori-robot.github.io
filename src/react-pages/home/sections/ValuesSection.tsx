@@ -27,8 +27,8 @@ export interface ValuesSectionProps {
 
 export default function ValuesSection({
   id = "values",
-  title = "Values",
-  subtitle = "We are a friendly and rebellious community that values collaboration, innovation, and inclusivity in human-robot interaction (HRI).",
+  title = "Our Values",
+  subtitle = "We are a friendly and rebellious community that values collaboration, innovation, and inclusivity in HRI.",
   ariaLabel,
   className,
   cardClassName,

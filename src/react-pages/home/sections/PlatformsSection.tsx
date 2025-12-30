@@ -25,10 +25,10 @@ export interface ProductSectionProps {
   features?: Feature[];
 }
 
-export default function ProductSection({
-  id = "product",
-  title = "Product",
-  subtitle = "Our product of our process is the Quori social robot hardware and HRI software tools, replication studies network, and community events.",
+export default function PlatformsSection({
+  id = "platforms",
+  title = "Our Platforms",
+  subtitle = "The Quori platform offers social robot hardware and HRI software tools, a replication studies network, and community events.",
   ariaLabel,
   className,
   cardClassName,
@@ -41,9 +41,9 @@ export default function ProductSection({
   ),
   features = [
     {
-      title: "Quori hardware platform",
+      title: "Quori robot hardware",
       description:
-        "A modular social robot with interchangeable components, standard interfaces, and reference builds for varied research needs.",
+        "A reconfigurable social robot with modular components based on a standard hardware interface, and reference builds for varied research needs.",
       icon: (
         <SquareTransferHorizontal className="w-12 h-12 mx-auto mb-3 text-accent-three" />
       ),
@@ -51,24 +51,18 @@ export default function ProductSection({
     {
       title: "HRI software tools",
       description:
-        "Open-source behaviors, perception pipelines, and evaluation tooling tuned for social interaction and rapid iteration.",
+        "Open-source software for low-level to high-level control and sensing; no-code tools for rapidly creating, deploying, and sharing functionality.",
       icon: (
         <Programming className="w-12 h-12 mx-auto mb-3 text-accent-three" />
       ),
     },
     {
-      title: "Replication studies network",
+      title: "Research studies network",
       description:
-        "Coordinated studies and shared datasets that benchmark results across sites and harden findings.",
+        "Coordinated studies and shared datasets to support replication efforts and benchmark results across sites to strengthen findings.",
       icon: (
         <ThreeSquares className="w-12 h-12 mx-auto mb-3 text-accent-three" />
       ),
-    },
-    {
-      title: "Community events",
-      description:
-        "Meetups, demos, and conferences that connect contributors and showcase advances from across the ecosystem.",
-      icon: <Calendar className="w-12 h-12 mx-auto mb-3 text-accent-three" />,
     },
   ],
 }: ProductSectionProps) {
@@ -98,7 +92,7 @@ export default function ProductSection({
           ) : null}
 
           {features.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {features.map((feature, idx) => (
                 <div
                   key={`${feature.title}-${idx}`}

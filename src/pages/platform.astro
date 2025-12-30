@@ -1,14 +1,14 @@
 ---
 import BaseHead from "@/components/BaseHead.astro";
 import SiteShell from "@/layouts/SiteShell.astro";
-import FeaturesPage from "@/react-pages/features/FeaturesPage";
+import PlatformPage from "@/react-pages/platform/PlatformPage";
 
 const meta = {
-  title: "Features",
+  title: "Platform",
   description:
     "Explore the modular design, configuration builder, and evolution of the Quori social robot platform.",
 };
-const ogImage = "/og/features.png";
+const ogImage = "/og/Platform.png";
 ---
 
 <html
@@ -24,7 +24,7 @@ const ogImage = "/og/features.png";
   </head>
   <body class="relative min-h-screen w-full bg-surface">
     <SiteShell noPaddingTop showBackground={false}>
-      <FeaturesPage client:load />
+      <PlatformPage client:load />
     </SiteShell>
   </body>
 </html>

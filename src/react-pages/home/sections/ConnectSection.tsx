@@ -87,6 +87,8 @@ export default function ConnectSection({
           href={donateHref}
           size="large"
           variant="primary"
+          rel="noopener noreferrer"
+          target="_blank"
           fullWidth
           ariaLabel="Make a donation"
         >
@@ -105,6 +107,8 @@ export default function ConnectSection({
           href={mailingListHref}
           size="large"
           variant="tertiary"
+          rel="noopener noreferrer"
+          target="_blank"
           fullWidth
           ariaLabel="Join the Quori mailing list"
         >
