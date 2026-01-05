@@ -33,6 +33,7 @@ const serializeEvents = allEvents.map((event) => ({
     featured: event.data.featured,
     links: event.data.links,
     location: event.data.location,
+    imagePolicy: event.data.imagePolicy,
     images: {
       hero: resolveImageLike(event.data.images?.hero),
       logo: resolveImageLike(event.data.images?.logo),

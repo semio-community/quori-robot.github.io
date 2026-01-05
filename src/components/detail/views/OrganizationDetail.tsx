@@ -15,7 +15,7 @@ import {
   type PersonListElementProps,
 } from "@/components/cards/PersonListElement";
 import BasicChip from "@/components/ui/BasicChip";
-import { resolveLogoAsset } from "@/utils/images";
+import { resolveDetailImagePolicy, resolveLogoAsset } from "@/utils/images";
 
 type OrganizationData = CollectionEntry<"organizations">["data"];
 
@@ -65,6 +65,11 @@ export function OrganizationDetail({
   relatedOrganizations = [],
   keyContacts = [],
 }: OrganizationDetailProps) {
+  const detailImages = resolveDetailImagePolicy({
+    hero: data.images?.hero,
+    logoOrAvatar: resolveLogoAsset(data.images),
+    policy: data.imagePolicy,
+  });
   const badges = [
     {
       text: typeLabels[data.type] || data.type,
@@ -113,7 +118,7 @@ export function OrganizationDetail({
     <BaseDetailLayout
       hero={
         <DetailHero
-          image={data.images?.hero}
+          image={detailImages.image}
           title={data.shortName ? data.shortName : data.name}
           subtitle={
             data.shortName && data.shortName !== data.name
@@ -122,8 +127,10 @@ export function OrganizationDetail({
           }
           badges={badges}
           featuredState={data.featured ? "featured" : "not-featured"}
-          logo={resolveLogoAsset(data.images)}
+          logo={detailImages.profile}
           entityType="organization"
+          showFallbackAvatar={detailImages.showFallbackIcon}
+          logoBackdrop={detailImages.logoBackdrop}
         />
       }
       links={

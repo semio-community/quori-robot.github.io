@@ -4,7 +4,12 @@ import { getLocationString } from "@/utils/events";
 import { getFormattedDateRanges, parseDateLocal } from "@/utils/date";
 import { Calendar, MapPoint } from "@solar-icons/react-perf/LineDuotone";
 import type { FeaturedState } from "../ui/FeaturedStar";
-import { resolveLogoAsset, type ImageLike } from "@/utils/images";
+import {
+  resolveCardImagePolicy,
+  resolveLogoAsset,
+  type ImageLike,
+  type ImagePolicy,
+} from "@/utils/images";
 
 export interface EventCardProps {
   eventId: string;
@@ -19,6 +24,7 @@ export interface EventCardProps {
       logo?: ImageLike;
       hero?: ImageLike;
     };
+    imagePolicy?: ImagePolicy;
     links?: {
       website?: string;
       registration?: string;
@@ -62,6 +68,12 @@ export const EventCard: FC<EventCardProps> = ({ eventId, data }) => {
     return "not-featured";
   }, [status, data.featured]);
 
+  const cardImages = resolveCardImagePolicy({
+    hero: data.images?.hero,
+    logoOrAvatar: resolveLogoAsset(data.images),
+    policy: data.imagePolicy,
+  });
+
   return (
     <ItemCard
       title={data.displayName || data.name || eventId}
@@ -82,9 +94,11 @@ export const EventCard: FC<EventCardProps> = ({ eventId, data }) => {
       ]}
       href={`/events/${eventId}`}
       type="events"
-      image={data.images?.hero}
+      image={cardImages.image}
       imageAlt={data.name}
-      logo={resolveLogoAsset(data.images)}
+      logo={cardImages.logo}
+      showFallbackAvatar={cardImages.showFallbackIcon}
+      logoBackdrop={cardImages.logoBackdrop}
       status={status}
       category={category}
       featuredState={featuredState}

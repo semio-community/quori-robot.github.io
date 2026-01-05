@@ -1,5 +1,6 @@
 import type { FC } from "react";
-import type { ImageLike } from "@/utils/images";
+import type { ImageLike, ImagePolicy } from "@/utils/images";
+import { resolveCardImagePolicy, resolveLogoAsset } from "@/utils/images";
 import { ItemCard } from "@/components/cards/ItemCard";
 
 type HardwareCardData = {
@@ -21,6 +22,7 @@ type HardwareCardData = {
     hero?: ImageLike;
     logoUrl?: string;
   };
+  imagePolicy?: ImagePolicy;
 };
 
 export interface HardwareCardProps {
@@ -37,6 +39,11 @@ export const HardwareCard: FC<HardwareCardProps> = ({
   const categoryLabel = data.category
     ? data.category.charAt(0).toUpperCase() + data.category.slice(1)
     : "";
+  const cardImages = resolveCardImagePolicy({
+    hero: data.images?.hero,
+    logoOrAvatar: resolveLogoAsset(data.images),
+    policy: data.imagePolicy,
+  });
 
   return (
     <ItemCard
@@ -44,8 +51,11 @@ export const HardwareCard: FC<HardwareCardProps> = ({
       description={data.shortDescription || data.description}
       href={`/hardware/${hardwareId}`}
       type="hardware"
-      image={data.images?.hero}
+      image={cardImages.image}
       imageAlt={data.name}
+      logo={cardImages.logo}
+      showFallbackAvatar={cardImages.showFallbackIcon}
+      logoBackdrop={cardImages.logoBackdrop}
       status={data.status}
       category={categoryLabel}
       featuredState={data.featured ? "featured" : "not-featured"}
