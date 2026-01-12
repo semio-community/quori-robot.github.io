@@ -6,7 +6,7 @@ import ConnectSection from "@/react-pages/home/sections/ConnectSection";
 import { HardwareCard } from "@/components/cards/HardwareCard";
 import { SoftwareCard } from "@/components/cards/SoftwareCard";
 import { ResearchCard } from "@/components/cards/ResearchCard";
-import type { ImageLike } from "@/utils/images";
+import type { ImageLike, ImagePolicy } from "@/utils/images";
 import { TestTube } from "@solar-icons/react-perf/LineDuotone";
 
 type ProjectImageSet = {
@@ -53,6 +53,7 @@ type HardwareProject = {
     featured?: boolean;
     links?: HardwareLinks;
     images?: ProjectImageSet;
+    imagePolicy?: ImagePolicy;
   };
 };
 
@@ -67,6 +68,7 @@ type SoftwareProject = {
     featured?: boolean;
     links?: SoftwareLinks;
     images?: ProjectImageSet;
+    imagePolicy?: ImagePolicy;
   };
 };
 
@@ -80,6 +82,7 @@ type ResearchProject = {
     publishDate?: string | Date;
     links?: ResearchLinks;
     images?: ProjectImageSet;
+    imagePolicy?: ImagePolicy;
   };
 };
 

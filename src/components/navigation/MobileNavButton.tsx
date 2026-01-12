@@ -1,5 +1,6 @@
 import React from "react";
 import { clsx } from "clsx";
+import { getNavHighlightClasses } from "@/components/navigation/navVariant";
 
 export interface MobileNavButtonProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -63,15 +64,17 @@ export const MobileNavButton = React.forwardRef<
   ref,
 ) {
   const sizeClasses = size === "lg" ? "h-9 w-9" : "h-8 w-8"; // default md -> 32px, lg -> 36px
+  const navHighlight = getNavHighlightClasses();
 
   const baseClasses = clsx(
     "relative inline-flex items-center justify-center select-none",
     "rounded-lg transition-colors",
     "bg-color-100 text-accent-base hover:bg-accent-base/10",
-    "focus:outline-2 focus:outline-accent-three outline-offset-2",
+    "focus:outline-2 outline-offset-2",
+    navHighlight.focusOutline,
     "disabled:opacity-50 disabled:cursor-not-allowed",
     sizeClasses,
-    active && "bg-accent-base/10 text-accent-three",
+    active && clsx("bg-accent-base/10", navHighlight.text),
     className,
   );
 

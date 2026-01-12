@@ -1,6 +1,11 @@
 import type { FC } from "react";
 import { ItemCard } from "@/components/cards/ItemCard";
-import { resolveLogoAsset, type ImageLike } from "@/utils/images";
+import {
+  resolveCardImagePolicy,
+  resolveLogoAsset,
+  type ImageLike,
+  type ImagePolicy,
+} from "@/utils/images";
 
 type ResearchCardData = {
   title?: string;
@@ -28,6 +33,7 @@ type ResearchCardData = {
     hero?: ImageLike;
     logoUrl?: string;
   };
+  imagePolicy?: ImagePolicy;
 };
 
 export interface ResearchCardProps {
@@ -66,7 +72,11 @@ export const ResearchCard: FC<ResearchCardProps> = ({
   const demoLink = data.links?.demo || data.links?.video;
   const websiteLink = data.links?.website || data.links?.program;
 
-  const customLogo = resolveLogoAsset(data.images);
+  const cardImages = resolveCardImagePolicy({
+    hero: data.images?.hero,
+    logoOrAvatar: resolveLogoAsset(data.images),
+    policy: data.imagePolicy,
+  });
 
   return (
     <ItemCard
@@ -74,9 +84,11 @@ export const ResearchCard: FC<ResearchCardProps> = ({
       description={data.description}
       href={`/research/${researchId}`}
       type="research"
-      image={data.images?.hero}
+      image={cardImages.image}
       imageAlt={data.title}
-      logo={customLogo}
+      logo={cardImages.logo}
+      showFallbackAvatar={cardImages.showFallbackIcon}
+      logoBackdrop={cardImages.logoBackdrop}
       category={category}
       featuredState={data.featured ? "featured" : "not-featured"}
       links={{

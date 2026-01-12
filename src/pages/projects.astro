@@ -33,6 +33,7 @@ const serializeHardware = (item: (typeof hardware)[number]) => ({
     featured: item.data.featured,
     links: item.data.links,
     images: serializeImages(item.data.images),
+    imagePolicy: item.data.imagePolicy,
   },
 });
 
@@ -47,6 +48,7 @@ const serializeSoftware = (item: (typeof software)[number]) => ({
     featured: item.data.featured,
     links: item.data.links,
     images: serializeImages(item.data.images),
+    imagePolicy: item.data.imagePolicy,
   },
 });
 
@@ -63,6 +65,7 @@ const serializeResearch = (item: (typeof research)[number]) => ({
         : item.data.publishDate,
     links: item.data.links,
     images: serializeImages(item.data.images),
+    imagePolicy: item.data.imagePolicy,
   },
 });
 

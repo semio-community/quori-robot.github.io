@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { EventCard } from "@/components/cards/EventCard";
 import Section from "@/components/sections/Section";
-import type { ImageLike } from "@/utils/images";
+import type { ImageLike, ImagePolicy } from "@/utils/images";
 
 type LinkMap = {
   website?: string;
@@ -31,6 +31,7 @@ export type SerializedEvent = {
     featured?: boolean;
     links?: LinkMap;
     location?: Location;
+    imagePolicy?: ImagePolicy;
     images?: {
       logo?: ImageRef;
       hero?: ImageRef;

@@ -20,6 +20,10 @@ export const siteConfig: SiteConfig = {
   ogLocale: "en_US",
   // Used to construct the meta title property found in src/components/BaseHead.astro L:11, and webmanifest name found in astro.config.ts L:42
   title: "Quori",
+  navigation: {
+    highlightVariant: "tertiary",
+    ctaVariant: "tertiary",
+  },
 };
 
 export interface LinkSection {
