@@ -10,7 +10,7 @@ function formatPersonName(data: CollectionEntry<"people">["data"]): string {
 export async function getAllPeople(): Promise<CollectionEntry<"people">[]> {
   return await getCollection("people", ({ data }) => {
     // In production, exclude drafts. In development, respect the draft visibility setting.
-    return isDraftVisible(data.draft);
+    return isDraftVisible(data.draft, data.sites);
   });
 }
 
@@ -20,7 +20,7 @@ export async function getPerson(
 ): Promise<CollectionEntry<"people"> | undefined> {
   const person = await getEntry("people", id);
   // Return undefined when drafts are hidden.
-  if (person && !isDraftVisible(person.data.draft)) {
+  if (person && !isDraftVisible(person.data.draft, person.data.sites)) {
     return undefined;
   }
   return person;

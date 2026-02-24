@@ -5,7 +5,7 @@ import { isDraftVisible } from "@/utils/drafts";
 export async function getAllHardware(): Promise<CollectionEntry<"hardware">[]> {
   const hardware = await getCollection("hardware", ({ data }) => {
     // In production, exclude drafts. In development, respect the draft visibility setting.
-    return isDraftVisible(data.draft);
+    return isDraftVisible(data.draft, data.sites);
   });
   return hardware.sort((a, b) => {
     // Sort by featured first, then by status priority, then by name

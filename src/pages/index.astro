@@ -41,7 +41,7 @@ const featuredEventCount = [
 
 const nsfEntry = await getEntry("organizations", "nsf");
 const fundingPartner =
-  nsfEntry && isDraftVisible(nsfEntry.data.draft)
+  nsfEntry && isDraftVisible(nsfEntry.data.draft, nsfEntry.data.sites)
     ? {
         id: nsfEntry.id,
         name: nsfEntry.data.name,
@@ -76,7 +76,7 @@ const contributorEntries = await Promise.all(
 const contributorOrganizations = contributorEntries.reduce<
   { id: string; data: CollectionEntry<"organizations">["data"] }[]
 >((acc, entry, idx) => {
-  if (!entry || !isDraftVisible(entry.data.draft)) return acc;
+  if (!entry || !isDraftVisible(entry.data.draft, entry.data.sites)) return acc;
   acc.push({
     id: contributorOrganizationIds[idx]!,
     data: entry.data,

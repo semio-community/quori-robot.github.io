@@ -5,7 +5,7 @@ import { isDraftVisible } from "@/utils/drafts";
 export async function getAllEvents(): Promise<CollectionEntry<"events">[]> {
   const events = await getCollection("events", ({ data }) => {
     // In production, exclude drafts. In development, respect the draft visibility setting.
-    return isDraftVisible(data.draft);
+    return isDraftVisible(data.draft, data.sites);
   });
   const now = new Date();
 
