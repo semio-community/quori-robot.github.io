@@ -45,7 +45,6 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",
-    "@semio/ecosystem-content-schema": "file:../semio-content-schema",
     "@shikijs/transformers": "^1.25.1",
     "@solar-icons/react-perf": "^1.0.0",
     "@tailwindcss/vite": "^4.1.11",
@@ -71,7 +70,8 @@
     "satori-html": "^0.3.2",
     "sharp": "^0.33.5",
     "unified": "^11.0.5",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "@semio-community/ecosystem-content-schema": "^0.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
