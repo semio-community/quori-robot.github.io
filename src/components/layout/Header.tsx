@@ -13,12 +13,27 @@ export type HeaderProps = {
   navCollections: NavCollections;
 };
 
+function normalizeCurrentPath(currentPath: string, urlPrefix: string) {
+  if (!urlPrefix || urlPrefix === "/") {
+    return currentPath;
+  }
+  if (currentPath === urlPrefix) {
+    return "/";
+  }
+  if (currentPath.startsWith(`${urlPrefix}/`)) {
+    const stripped = currentPath.slice(urlPrefix.length);
+    return stripped.startsWith("/") ? stripped : `/${stripped}`;
+  }
+  return currentPath;
+}
+
 export default function Header({ currentPath, navCollections }: HeaderProps) {
   const urlPrefix = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+  const normalizedCurrentPath = normalizeCurrentPath(currentPath, urlPrefix);
 
   return (
     <SharedHeader
-      currentPath={currentPath}
+      currentPath={normalizedCurrentPath}
       siteTitle={siteConfig.title}
       homeHref={homeUrl()}
       showMobileGlow={false}
@@ -35,7 +50,7 @@ export default function Header({ currentPath, navCollections }: HeaderProps) {
       }
       navigation={
         <NavigationMenuComponent
-          currentPath={currentPath}
+          currentPath={normalizedCurrentPath}
           menuLinks={menuLinks}
           navCollections={navCollections}
           urlPrefix={urlPrefix}
@@ -44,7 +59,7 @@ export default function Header({ currentPath, navCollections }: HeaderProps) {
       search={
         <SearchApp
           menuLinks={menuLinks}
-          currentPath={currentPath}
+          currentPath={normalizedCurrentPath}
           urlPrefix={urlPrefix}
         />
       }
