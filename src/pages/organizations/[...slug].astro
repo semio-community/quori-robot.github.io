@@ -6,6 +6,7 @@ import { getAllOrganizations } from "@/data/organizations";
 import { getPeopleByOrganization } from "@/data/people";
 import { getAllHardware } from "@/data/hardware";
 import { getAllSoftware } from "@/data/software";
+import { serializeOrganizationKeyContact } from "@/utils/person";
 import { getResearchByOrganization } from "@/data/research";
 import { getEventsByOrganization } from "@/data/events";
 import { isDraftVisible } from "@/utils/drafts";
@@ -125,24 +126,13 @@ const ogImage = `/og/organizations/${entry.id}.png`;
 const affiliatedPeople = await getPeopleByOrganization(entry.id);
 const keyContacts: KeyContact[] = affiliatedPeople
   .slice(0, 6)
-  .map((personEntry) => {
-    const affiliation = personEntry.data.affiliations?.find(
-      (aff) => aff.organizationId === entry.id,
-    );
-    return {
-      personId: personEntry.id,
-      person: personEntry.data,
-      role: affiliation?.role,
-      department: affiliation?.department,
-      currentAffiliation: affiliation
-        ? {
-            organizationId: entry.id,
-            partnerName: data.shortName || data.name,
-            role: affiliation.role,
-          }
-        : undefined,
-    };
-  });
+  .map((personEntry) =>
+    serializeOrganizationKeyContact({
+      personEntry,
+      organizationId: entry.id,
+      partnerName: data.shortName || data.name,
+    }),
+  );
 ---
 
 <html
