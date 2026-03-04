@@ -51,8 +51,14 @@ const formatDate = (value?: string | Date | null, long = false) => {
   return (long ? intlLong : intlShort).format(date);
 };
 
-const isVisible = <T extends { data: { draft?: boolean } }>(entry: T) =>
-  isDraftVisible(entry.data.draft, entry.data.sites);
+const isVisible = <
+  T extends {
+    data: {
+      draft?: boolean;
+      sites?: readonly ("semio" | "quori" | "vizij")[];
+    };
+  },
+>(entry: T) => isDraftVisible(entry.data.draft, entry.data.sites);
 
 const hasCustomOgImage = (entry: { data: Record<string, unknown> }) =>
   Boolean((entry.data as any)?.ogImage);
