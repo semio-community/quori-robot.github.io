@@ -42,7 +42,7 @@ export default function Header({ currentPath, navCollections }: HeaderProps) {
         <>
           <img src="/brand.svg" className="size-5 dark:hidden block" />
           <img src="/brand-dark.svg" className="size-5 hidden dark:block" />
-          <strong className="block z-10 mb-0 ms-2 text-base xl:text-xl hover:opacity-90 whitespace-nowrap uppercase">
+          <strong className="block z-10 mb-0 ms-2 text-base xl:text-xl hover:opacity-90 whitespace-nowrap uppercase text-foreground">
             {siteConfig.title.charAt(0)}
             <span className="text-xs xl:text-sm">{siteConfig.title.slice(1)}</span>
           </strong>
