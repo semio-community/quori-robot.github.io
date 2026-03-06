@@ -7,6 +7,7 @@ import {
   PersonListElement,
   PersonCard,
   OrganizationCard,
+  BaseUrlProvider,
 } from "@semio-community/ecosystem-site-core";
 import { UsersGroupTwoRounded } from "@solar-icons/react-perf/LineDuotone";
 import { toPersonCardData, toOrganizationCardData } from "@/utils/card-mappers";
@@ -36,6 +37,7 @@ export interface ContributorsPageProps {
   donorsCount: number;
   sponsorsUniqueCount: number;
   orgNameById: Record<string, string>;
+  baseUrl?: string;
 }
 
 export default function ContributorsPage({
@@ -50,6 +52,7 @@ export default function ContributorsPage({
   donorsCount,
   sponsorsUniqueCount: _sponsorsUniqueCount,
   orgNameById,
+  baseUrl,
 }: ContributorsPageProps) {
   const isPublished = <T extends { data: { draft?: boolean } }>(entry: T) =>
     entry.data.draft !== true;
@@ -71,6 +74,7 @@ export default function ContributorsPage({
   })();
 
   return (
+    <BaseUrlProvider baseUrl={baseUrl ?? "/"}>
     <div className="space-y-16">
       <HeroHeader
         icon={<UsersGroupTwoRounded className="w-16 h-16 text-accent-two" />}
@@ -232,6 +236,7 @@ export default function ContributorsPage({
         </div>
       </Section>
     </div>
+    </BaseUrlProvider>
   );
 }
 
