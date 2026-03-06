@@ -148,7 +148,7 @@ export default function ContributorsSection({
         {partner && (
           <div className="group bg-special-lighter rounded-lg hover:shadow-lg transition-all hover:scale-[1.01] h-full overflow-hidden backdrop-blur-lg flex flex-col md:flex-row md:items-stretch">
             <div className="md:w-2/5">
-              <div className="h-full min-h-[220px] bg-linear-to-br from-special-lighter to-special flex items-center justify-center p-10">
+              <div className="h-full min-h-55 bg-linear-to-br from-special-lighter to-special flex items-center justify-center p-10">
                 {partner.logoSrc ? (
                   <img
                     src={partner.logoSrc}
