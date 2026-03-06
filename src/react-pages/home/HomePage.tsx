@@ -32,7 +32,7 @@ export default function HomePage({
   contributors = [],
 }: HomePageProps) {
   return (
-    <div className="space-y-12 pt-[72px] lg:pt-0">
+    <div className="space-y-12">
       <div
         className="relative mb-8 sm:mb-12"
         style={{
