@@ -13,7 +13,9 @@ import {
   configurator3DConfigurations,
   configurator3DModules,
 } from "@/react-pages/platform/sections/configurator3d/spec";
-import { CallToActionButton } from "@semio-community/ecosystem-site-core";
+import { CallToActionButton, BaseUrlProvider } from "@semio-community/ecosystem-site-core";
+
+const BASE_URL = import.meta.env.BASE_URL;
 
 export interface HomePageProps {
   projectCount: number;
@@ -32,6 +34,7 @@ export default function HomePage({
   contributors = [],
 }: HomePageProps) {
   return (
+    <BaseUrlProvider baseUrl={BASE_URL}>
     <div className="space-y-12">
       <div
         className="relative mb-8 sm:mb-12"
@@ -129,5 +132,6 @@ export default function HomePage({
 
       <ConnectSection />
     </div>
+    </BaseUrlProvider>
   );
 }
