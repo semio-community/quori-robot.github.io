@@ -1,9 +1,11 @@
 import React from "react";
 import SectionBlock from "@/components/sections/SectionBlock";
-import BasicChip from "@/components/ui/BasicChip";
-import { CallToActionButton } from "@/components/ui/CallToActionButton";
+import {
+  BasicChip,
+  CallToActionButton,
+  OrganizationListElement,
+} from "@semio-community/ecosystem-site-core";
 import type { CollectionEntry } from "astro:content";
-import { OrganizationListElement } from "@/components/cards/OrganizationListElement";
 import { url } from "@/utils/url";
 
 export interface FundingPartnerData {

@@ -1,6 +1,6 @@
 import React from "react";
 import Section from "@/components/sections/Section";
-import FeatureCard from "@/components/cards/FeatureCard";
+import { FeatureCard } from "@semio-community/ecosystem-site-core";
 import {
   SettingsMinimalistic,
   Eye,

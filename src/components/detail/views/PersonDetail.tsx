@@ -8,12 +8,14 @@ import {
 import ContentSection from "@/components/detail/ContentSection";
 import InfoCard from "@/components/detail/InfoCard";
 import LinkSection from "@/components/detail/LinkSection";
-import { ResearchCard } from "@/components/cards/ResearchCard";
-import { HardwareCard } from "@/components/cards/HardwareCard";
-import { SoftwareCard } from "@/components/cards/SoftwareCard";
-import { EventCard } from "@/components/cards/EventCard";
+import {
+  ResearchCard,
+  HardwareCard,
+  SoftwareCard,
+  EventCard,
+  OrganizationListElement,
+} from "@semio-community/ecosystem-site-core";
 import { RelatedItemsGrid } from "@/components/detail/RelatedItemsGrid";
-import { OrganizationListElement } from "@/components/cards/OrganizationListElement";
 import { resolveDetailImagePolicy } from "@/utils/images";
 
 type PersonData = CollectionEntry<"people">["data"];

@@ -1,6 +1,6 @@
 import React from "react";
 import { clsx } from "clsx";
-import Tooltip from "@/components/ui/Tooltip";
+import { Tooltip } from "@semio-community/ecosystem-site-core";
 import type { ModuleSpecification } from "./types";
 
 export function Configurator3DModuleToggleButton({

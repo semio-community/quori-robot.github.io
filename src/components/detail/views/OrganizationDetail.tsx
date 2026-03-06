@@ -5,16 +5,16 @@ import { DetailHero } from "@/components/detail/DetailHero";
 import ContentSection from "@/components/detail/ContentSection";
 import LinkSection from "@/components/detail/LinkSection";
 import InfoCard from "@/components/detail/InfoCard";
-import { ResearchCard } from "@/components/cards/ResearchCard";
-import { HardwareCard } from "@/components/cards/HardwareCard";
-import { SoftwareCard } from "@/components/cards/SoftwareCard";
-import { EventCard } from "@/components/cards/EventCard";
-import { OrganizationCard } from "@/components/cards/OrganizationCard";
 import {
+  ResearchCard,
+  HardwareCard,
+  SoftwareCard,
+  EventCard,
+  OrganizationCard,
   PersonListElement,
   type PersonListElementProps,
-} from "@/components/cards/PersonListElement";
-import BasicChip from "@/components/ui/BasicChip";
+  BasicChip,
+} from "@semio-community/ecosystem-site-core";
 import { resolveDetailImagePolicy, resolveLogoAsset } from "@/utils/images";
 
 type OrganizationData = CollectionEntry<"organizations">["data"];

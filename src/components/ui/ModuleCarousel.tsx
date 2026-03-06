@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { Configurator3DCanvas } from "./configurator3d/Configurator3DCanvas";
 import { useConfigurator3DState } from "./configurator3d/useConfigurator3DState";
-import Tooltip from "@/components/ui/Tooltip";
+import { Tooltip } from "@semio-community/ecosystem-site-core";
 import {
   DEFAULT_OFFSCREEN_POSITION,
   type ConfigurationId,

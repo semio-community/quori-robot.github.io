@@ -9,12 +9,13 @@ import SpecificationsList from "@/components/detail/SpecificationsList";
 import FeaturesList from "@/components/detail/FeaturesList";
 import ChipsList from "@/components/detail/ChipsList";
 import { RelatedItemsGrid } from "@/components/detail/RelatedItemsGrid";
-import { OrganizationListElement } from "@/components/cards/OrganizationListElement";
 import {
+  OrganizationListElement,
   PersonListElement,
   type PersonListElementProps,
-} from "@/components/cards/PersonListElement";
-import { getStatusColor, getStatusLabel } from "@/config/statusConfig";
+  getStatusColor,
+  getStatusLabel,
+} from "@semio-community/ecosystem-site-core";
 import { resolveDetailImagePolicy, resolveLogoAsset } from "@/utils/images";
 
 type SoftwareData = CollectionEntry<"software">["data"];

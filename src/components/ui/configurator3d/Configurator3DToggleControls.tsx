@@ -15,7 +15,7 @@ import {
   setFromArray,
 } from "./sets";
 import { Configurator3DModuleToggleButton } from "./Configurator3DModuleToggleButton";
-import Tooltip from "@/components/ui/Tooltip";
+import { Tooltip } from "@semio-community/ecosystem-site-core";
 
 type PreviewAction = "add" | "remove" | null;
 

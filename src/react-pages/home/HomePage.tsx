@@ -13,7 +13,7 @@ import {
   configurator3DConfigurations,
   configurator3DModules,
 } from "@/react-pages/platform/sections/configurator3d/spec";
-import { CallToActionButton } from "@/components/ui/CallToActionButton";
+import { CallToActionButton } from "@semio-community/ecosystem-site-core";
 
 export interface HomePageProps {
   projectCount: number;

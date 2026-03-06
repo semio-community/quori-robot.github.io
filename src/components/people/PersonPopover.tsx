@@ -1,9 +1,9 @@
 import React from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { Avatar } from "@/components/ui/Avatar";
+import { Avatar } from "@semio-community/ecosystem-site-core";
+import type { LinkType } from "@semio-community/ecosystem-site-core";
 import "./PersonPopover.css";
 import { User, UserBlockRounded } from "@solar-icons/react-perf/LineDuotone";
-import type { LinkType } from "@/components/ui/IconButton";
 import LinkSection from "@/components/detail/LinkSection";
 
 export interface PersonPopoverProps {
