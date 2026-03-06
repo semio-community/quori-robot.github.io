@@ -6,7 +6,7 @@ import { getAllOrganizations } from "@/data/organizations";
 import { getPeopleByOrganization } from "@/data/people";
 import { getAllHardware } from "@/data/hardware";
 import { getAllSoftware } from "@/data/software";
-import { toOrganizationKeyContact, BaseUrlProvider } from "@semio-community/ecosystem-site-core";
+import { toOrganizationKeyContact } from "@semio-community/ecosystem-site-core";
 import { getResearchByOrganization } from "@/data/research";
 import { getEventsByOrganization } from "@/data/events";
 import { isDraftVisible } from "@/utils/drafts";
@@ -148,14 +148,13 @@ const keyContacts: DetailKeyContact[] = affiliatedPeople
       showBackground={false}
       containerClassName="max-w-5xl"
     >
-      <BaseUrlProvider baseUrl={import.meta.env.BASE_URL}>
-        <OrganizationDetail
-          data={data}
-          relatedContent={relatedContent}
-          relatedOrganizations={relatedOrganizations}
-          keyContacts={keyContacts}
-        />
-      </BaseUrlProvider>
+      <OrganizationDetail
+        data={data}
+        relatedContent={relatedContent}
+        relatedOrganizations={relatedOrganizations}
+        keyContacts={keyContacts}
+        baseUrl={import.meta.env.BASE_URL}
+      />
     </SiteShell>
   </body>
 </html>
