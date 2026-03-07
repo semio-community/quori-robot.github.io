@@ -1,9 +1,15 @@
-import { NavigationMenuComponent } from "@/components/navigation/NavigationMenu";
 import { SearchApp } from "@/components/search/SearchApp";
 import { menuLinks, siteConfig } from "@/site.config";
 import type { NavCollections } from "@/site.config";
-import { homeUrl } from "@/utils/url";
-import { Header as SharedHeader } from "@semio-community/ecosystem-site-core";
+import { homeUrl, url } from "@/utils/url";
+import {
+  Header as SharedHeader,
+  BoundNavigationMenu,
+  getNavHighlightClasses,
+  resolveNavCtaVariant,
+  resolveNavHighlightVariant,
+} from "@semio-community/ecosystem-site-core";
+import { navIconMap } from "@/components/navigation/navIcons";
 
 const quoriHomeLinkClassName =
   "group flex items-center sm:relative h-8 px-2 md:p-2 rounded-lg justify-start hover:bg-accent-base/10 transition-colors";
@@ -12,6 +18,14 @@ export type HeaderProps = {
   currentPath: string;
   navCollections: NavCollections;
 };
+
+const navHighlight = getNavHighlightClasses(
+  resolveNavHighlightVariant(siteConfig.navigation?.highlightVariant),
+);
+const ctaVariant = resolveNavCtaVariant({
+  ctaVariant: siteConfig.navigation?.ctaVariant,
+  highlightVariant: siteConfig.navigation?.highlightVariant,
+});
 
 function normalizeCurrentPath(currentPath: string, urlPrefix: string) {
   if (!urlPrefix || urlPrefix === "/") {
@@ -30,6 +44,7 @@ function normalizeCurrentPath(currentPath: string, urlPrefix: string) {
 export default function Header({ currentPath, navCollections }: HeaderProps) {
   const urlPrefix = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   const normalizedCurrentPath = normalizeCurrentPath(currentPath, urlPrefix);
+  const resolveHref = (path: string) => url(path, urlPrefix || import.meta.env.BASE_URL);
 
   return (
     <SharedHeader
@@ -49,11 +64,14 @@ export default function Header({ currentPath, navCollections }: HeaderProps) {
         </>
       }
       navigation={
-        <NavigationMenuComponent
+        <BoundNavigationMenu
           currentPath={normalizedCurrentPath}
           menuLinks={menuLinks}
           navCollections={navCollections}
-          urlPrefix={urlPrefix}
+          resolveHref={resolveHref}
+          navHighlight={navHighlight}
+          ctaVariant={ctaVariant}
+          dropdownIconMap={navIconMap}
         />
       }
       search={
