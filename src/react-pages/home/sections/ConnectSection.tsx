@@ -1,120 +1,43 @@
 import React from "react";
-import SectionBlock from "@/components/sections/SectionBlock";
-import { CallToActionButton } from "@semio-community/ecosystem-site-core";
+import { ConnectSection as SharedConnectSection, CallToActionButton } from "@semio-community/ecosystem-site-core";
+import type { ConnectSectionProps } from "@semio-community/ecosystem-site-core";
 
-export interface ConnectSectionProps {
-  /**
-   * Section id (anchor target). Defaults to "connect".
-   */
-  id?: string;
-  /**
-   * Section heading. Defaults to "Connect With Us".
-   */
-  title?: string;
-  /**
-   * Section subheading (under the title).
-   * Defaults to the homepage copy.
-   */
-  subtitle?: string;
-  /**
-   * Optional aria-label for the section wrapper.
-   * If not provided, the title is used.
-   */
-  ariaLabel?: string;
-  /**
-   * Additional class names applied to the outer section element.
-   */
-  className?: string;
-  /**
-   * Class names applied to the CTA grid wrapper.
-   */
-  gridClassName?: string;
-  /**
-   * Donation link. Defaults to the current site Stripe link.
-   */
-  donateHref?: string;
-  /**
-   * Volunteer link. Defaults to the current site Google Form.
-   */
-  volunteerHref?: string;
-  /**
-   * Mailing list link. Defaults to the current site Google Form.
-   */
-  mailingListHref?: string;
-  /**
-   * Custom CTA labels (optional).
-   */
-  donateText?: string;
-  volunteerText?: string;
-  mailingListText?: string;
-}
+export type { ConnectSectionProps };
 
-/**
- * ConnectSection
- *
- * Renders the "Connect With Us" section used on the homepage with a
- * three-column CTA grid: Donate, Volunteer, and Join the Mailing List.
- * Uses the shared SectionBlock and CallToActionButton components.
- */
-export default function ConnectSection({
-  id = "connect",
-  title = "Connect With Us",
-  subtitle = "Join our community and stay informed about our initiatives",
-  ariaLabel,
-  className,
-  gridClassName,
-  donateHref = "https://donate.semio.community/b/00w3cv77McUD6Ob2A7a7C01",
-  donateText = "Make a Donation",
-  mailingListHref = "https://forms.gle/RaU4n2BHMzENj94f8",
-  mailingListText = "Join the Mailing List",
-}: ConnectSectionProps) {
+export default function ConnectSection(props: ConnectSectionProps) {
   return (
-    <SectionBlock
-      id={id}
-      title={title}
-      subtitle={subtitle}
-      ariaLabel={ariaLabel || title}
-      className={className}
-      variant="tertiary"
-    >
-      <div
-        className={
-          gridClassName ??
-          "grid grid-cols-1 md:grid-cols-3 grid-rows-3 md:grid-rows-1 gap-10 bg-accent-base/10 p-10 rounded-lg backdrop-blur-lg"
-        }
+    <SharedConnectSection sectionVariant="tertiary" {...props}>
+      <CallToActionButton
+        href="https://donate.semio.community/b/00w3cv77McUD6Ob2A7a7C01"
+        size="large"
+        variant="primary"
+        rel="noopener noreferrer"
+        target="_blank"
+        fullWidth
+        ariaLabel="Make a donation"
       >
-        <CallToActionButton
-          href={donateHref}
-          size="large"
-          variant="primary"
-          rel="noopener noreferrer"
-          target="_blank"
-          fullWidth
-          ariaLabel="Make a donation"
-        >
-          {donateText}
-        </CallToActionButton>
-        <CallToActionButton
-          href="mailto:info@semio.ai"
-          size="large"
-          variant="secondary"
-          fullWidth
-          ariaLabel="Email info@semio.ai"
-        >
-          Contact Us
-        </CallToActionButton>
-        <CallToActionButton
-          href={mailingListHref}
-          size="large"
-          variant="tertiary"
-          rel="noopener noreferrer"
-          target="_blank"
-          fullWidth
-          ariaLabel="Join the Quori mailing list"
-        >
-          {mailingListText}
-        </CallToActionButton>
-      </div>
-    </SectionBlock>
+        Make a Donation
+      </CallToActionButton>
+      <CallToActionButton
+        href="mailto:info@semio.ai"
+        size="large"
+        variant="secondary"
+        fullWidth
+        ariaLabel="Email info@semio.ai"
+      >
+        Contact Us
+      </CallToActionButton>
+      <CallToActionButton
+        href="https://forms.gle/RaU4n2BHMzENj94f8"
+        size="large"
+        variant="tertiary"
+        rel="noopener noreferrer"
+        target="_blank"
+        fullWidth
+        ariaLabel="Join the Quori mailing list"
+      >
+        Join the Mailing List
+      </CallToActionButton>
+    </SharedConnectSection>
   );
 }
