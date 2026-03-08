@@ -1,12 +1,12 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import BaseHead from "@/components/BaseHead.astro";
-import SiteShell from "@/layouts/SiteShell.astro";
 import { getRelatedHardware } from "@/data/hardware";
 import { getPerson } from "@/data/people";
-import { HardwareDetail } from "@semio-community/ecosystem-site-core";
-import { isDraftVisible } from "@/utils/drafts";
+import SiteShell from "@/layouts/SiteShell.astro";
 import { toOrganizationCardData } from "@/utils/card-mappers";
+import { isDraftVisible } from "@/utils/drafts";
+import { HardwareDetail } from "@semio-community/ecosystem-site-core";
 
 export async function getStaticPaths() {
   const hardware = await getCollection("hardware", ({ data }) => {

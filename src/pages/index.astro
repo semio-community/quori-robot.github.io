@@ -8,16 +8,16 @@ import "../assets/fonts/Gilroy.css";
 
 import { siteConfig } from "@/site.config";
 
-import { getAllHardware } from "@/data/hardware";
-import { getAllSoftware } from "@/data/software";
-import { getAllResearch } from "@/data/research";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
 import {
   getCurrentEvents,
   getFeaturedEvents,
   getUpcomingEvents,
 } from "@/data/events";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
+import { getAllHardware } from "@/data/hardware";
+import { getAllResearch } from "@/data/research";
+import { getAllSoftware } from "@/data/software";
 import { isDraftVisible } from "@/utils/drafts";
 import { resolveImageLike } from "@/utils/images";
 
@@ -78,6 +78,7 @@ const contributorOrganizations = contributorEntries.reduce<
 >((acc, entry, idx) => {
   if (!entry || !isDraftVisible(entry.data.draft, entry.data.sites)) return acc;
   acc.push({
+    // biome-ignore lint/style/noNonNullAssertion: idx comes from entries enumeration which is bounded by the same array length
     id: contributorOrganizationIds[idx]!,
     data: entry.data,
   });

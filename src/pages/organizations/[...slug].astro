@@ -1,16 +1,16 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import BaseHead from "@/components/BaseHead.astro";
-import SiteShell from "@/layouts/SiteShell.astro";
+import { getEventsByOrganization } from "@/data/events";
+import { getAllHardware } from "@/data/hardware";
 import { getAllOrganizations } from "@/data/organizations";
 import { getPeopleByOrganization } from "@/data/people";
-import { getAllHardware } from "@/data/hardware";
-import { getAllSoftware } from "@/data/software";
-import { toOrganizationKeyContact } from "@semio-community/ecosystem-site-core";
 import { getResearchByOrganization } from "@/data/research";
-import { getEventsByOrganization } from "@/data/events";
+import { getAllSoftware } from "@/data/software";
+import SiteShell from "@/layouts/SiteShell.astro";
 import { isDraftVisible } from "@/utils/drafts";
-import { OrganizationDetail, type DetailKeyContact } from "@semio-community/ecosystem-site-core";
+import { toOrganizationKeyContact } from "@semio-community/ecosystem-site-core";
+import { type DetailKeyContact, OrganizationDetail } from "@semio-community/ecosystem-site-core";
 
 type PartnerEntry = CollectionEntry<"organizations">;
 
