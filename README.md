@@ -65,7 +65,6 @@ src/
 │   ├── search/           SearchProvider, SearchModal, SearchApp
 │   ├── hero/             HeroHeader.tsx (Quori-branded glyph animation)
 │   ├── background/       ParallaxHexBackground.tsx
-│   ├── people/           PersonPopover.tsx
 │   └── ui/               Configurator, Configurator3D, ModuleCarousel (Quori-specific)
 └── utils/                url.ts, date.ts, images.ts, events.ts, etc.
 ```

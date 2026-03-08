@@ -154,7 +154,6 @@ npm run format       # Format code
 - `src/components/hero/HeroHeader.tsx` — Quori branded hero with glyph animation
 - `src/components/background/ParallaxHexBackground.tsx` — branded background
 - `src/components/ui/Configurator3D.tsx` + `configurator3d/` — Quori hardware 3D
-- `src/components/people/PersonPopover.tsx` — site-specific routing and data
 - `src/components/search/` — Pagefind search
 - `src/components/BaseHead.astro` — site-specific meta config
 - `src/components/navigation/navIcons.ts` — site-specific route→icon mapping
