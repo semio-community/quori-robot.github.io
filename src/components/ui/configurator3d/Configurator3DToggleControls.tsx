@@ -443,7 +443,7 @@ export function Configurator3DToggleControls({
         className={clsx(
           "hidden sm:flex flex-col h-full border-r border-border-subtle overflow-hidden",
           "transition-all duration-200",
-          desktopExpanded ? "w-[340px]" : "w-16",
+          desktopExpanded ? "w-85" : "w-16",
         )}
       >
         <div className="flex items-center justify-between gap-2 px-3 py-2">

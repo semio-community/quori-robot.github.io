@@ -76,7 +76,7 @@ export function ModuleCarousel({
   configurationIds,
   initialConfigurationId,
   className,
-  heightClassName = "h-[300px] sm:h-[380px] md:h-[460px]",
+  heightClassName = "h-75 sm:h-95 md:h-115",
   worldOffset = [0, -0.8, 0],
   offscreenPosition = DEFAULT_OFFSCREEN_POSITION,
   autoAdvance = true,
