@@ -154,7 +154,7 @@ npm run format       # Format code
 - `src/components/hero/HeroHeader.tsx` — Quori branded hero with glyph animation
 - `src/components/background/ParallaxHexBackground.tsx` — branded background
 - `src/components/ui/Configurator3D.tsx` + `configurator3d/` — Quori hardware 3D
-- `src/components/search/` — Pagefind search
+- `src/components/search/` — Pagefind search integration (uses `SearchProvider`, `SearchModal`, `SearchMobilePanel` from package, but the `useSearch` hook and Pagefind wiring are site-specific)
 - `src/components/BaseHead.astro` — site-specific meta config
 - `src/components/navigation/navIcons.ts` — site-specific route→icon mapping
 
@@ -165,3 +165,5 @@ If you see logic that is identical across all three ecosystem sites, it belongs 
 - Layout primitives (`PageSection`, `SubsectionGrid`, `SectionBlock`)
 - Detail page components (`BaseDetailLayout`, `DetailHero`, `InfoCard`, etc.)
 - Events page (`EventsSections`), Header/Footer shells, SkipLink
+- Search UI (`SearchProvider`, `SearchModal`, `SearchMobilePanel`) — site wires `useSearch()` hook
+- Theme (`ThemeProvider`) — manages dark/light mode toggle
