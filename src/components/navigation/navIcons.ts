@@ -1,28 +1,27 @@
+import { mapSlugKeysToRouteKeys } from "@semio-community/ecosystem-site-core";
 import {
-  CpuBolt,
-  TestTube,
-  UserHandUp,
-  Calendar,
-  UsersGroupTwoRounded,
-  UserPlusRounded,
-  Document2,
+	Calendar,
+	CpuBolt,
+	Document2,
+	TestTube,
+	UserHandUp,
+	UserPlusRounded,
+	UsersGroupTwoRounded,
 } from "@solar-icons/react-perf/LineDuotone";
 import type { ComponentType, SVGProps } from "react";
 
 export type NavigationIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
 const baseRouteIconMap: Record<string, NavigationIcon> = {
-  platform: CpuBolt,
-  projects: TestTube,
-  services: UserHandUp,
-  events: Calendar,
-  contributors: UsersGroupTwoRounded,
-  "get-involved": UserPlusRounded,
-  about: Document2,
+	platform: CpuBolt,
+	projects: TestTube,
+	services: UserHandUp,
+	events: Calendar,
+	contributors: UsersGroupTwoRounded,
+	"get-involved": UserPlusRounded,
+	about: Document2,
 };
 
-export const navIconMap = Object.fromEntries(
-  Object.entries(baseRouteIconMap).map(([slug, Icon]) => [`/${slug}/`, Icon]),
-) as Record<string, NavigationIcon>;
+export const navIconMap = mapSlugKeysToRouteKeys(baseRouteIconMap);
 
 export const mainRouteIconMap = baseRouteIconMap;

@@ -1,106 +1,47 @@
+import {
+	type MissionSectionProps,
+	MissionSection as SharedMissionSection,
+} from "@semio-community/ecosystem-site-core";
+import { Copy, Stopwatch, TestTube } from "@solar-icons/react-perf/LineDuotone";
 import React from "react";
-import SectionBlock from "@/components/sections/SectionBlock";
-import { TestTube, Stopwatch, Copy } from "@solar-icons/react-perf/LineDuotone";
 
-interface Feature {
-  title: string;
-  description: string;
-  icon?: React.ReactNode;
-  className?: string;
-}
+export type { MissionSectionProps };
 
-export interface VisionSectionProps {
-  id?: string;
-  title?: string;
-  subtitle?: string;
-  ariaLabel?: string;
-  className?: string;
-  cardClassName?: string;
-  primaryCopy?: React.ReactNode;
-  features?: Feature[];
-}
+const defaultPrimaryCopy = (
+	<>
+		We are building an HRI ecosystem where anyone can access the same tools, move faster from idea
+		to impact, and replicate results with confidence.
+	</>
+);
 
-export default function MissionSection({
-  id = "mission",
-  title = "Our Mission",
-  subtitle = "We aim to bridge the accessibility gap and accelerate research and development for human-robot interaction (HRI), and to address the replication crisis to solidify HRI as a scientific discipline.",
-  ariaLabel,
-  className,
-  cardClassName,
-  primaryCopy = (
-    <>
-      We are building an HRI ecosystem where anyone can access the same tools,
-      move faster from idea to impact, and replicate results with confidence.
-    </>
-  ),
-  features = [
-    {
-      title: "Accessible for every lab",
-      description:
-        "Transparent bills of materials, kits, and onboarding that let new teams join without prohibitive cost or complexity.",
-      icon: <TestTube className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
-    },
-    {
-      title: "Faster experimentation",
-      description:
-        "Reference behaviors, quick-start robot configurations, and study templates keep researchers focused on new insights.",
-      icon: <Stopwatch className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
-    },
-    {
-      title: "Reproducible by default",
-      description:
-        "Shared protocols and cross-lab comparisons that tackle the replication crisis and strengthen HRI as a science.",
-      icon: <Copy className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
-    },
-  ],
-}: VisionSectionProps) {
-  return (
-    <SectionBlock
-      id={id}
-      title={title}
-      subtitle={subtitle}
-      ariaLabel={ariaLabel || title}
-      variant="primary"
-      className={className}
-    >
-      <div className="max-w-4xl mx-auto">
-        <div
-          className={`bg-special-lighter rounded-lg p-8 border border-special mb-8 backdrop-blur-lg ${
-            cardClassName || ""
-          }`}
-        >
-          {primaryCopy ? (
-            <div className="text-lg leading-relaxed text-center mb-6">
-              {typeof primaryCopy === "string" ? (
-                <p>{primaryCopy}</p>
-              ) : (
-                primaryCopy
-              )}
-            </div>
-          ) : null}
+const defaultFeatures: MissionSectionProps["features"] = [
+	{
+		title: "Accessible for every lab",
+		description:
+			"Transparent bills of materials, kits, and onboarding that let new teams join without prohibitive cost or complexity.",
+		icon: <TestTube className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
+	},
+	{
+		title: "Faster experimentation",
+		description:
+			"Reference behaviors, quick-start robot configurations, and study templates keep researchers focused on new insights.",
+		icon: <Stopwatch className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
+	},
+	{
+		title: "Reproducible by default",
+		description:
+			"Shared protocols and cross-lab comparisons that tackle the replication crisis and strengthen HRI as a science.",
+		icon: <Copy className="w-12 h-12 mx-auto mb-3 text-accent-two" />,
+	},
+];
 
-          {features.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {features.map((feature, idx) => (
-                <div
-                  key={`${feature.title}-${idx}`}
-                  className={`text-center ${feature.className || ""}`}
-                >
-                  {feature.icon ? (
-                    <div className="w-12 h-12 mx-auto mb-3 text-accent-two flex items-center justify-center">
-                      {feature.icon}
-                    </div>
-                  ) : null}
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-accent-base/50">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </SectionBlock>
-  );
+export default function MissionSection(props: MissionSectionProps) {
+	return (
+		<SharedMissionSection
+			subtitle="We aim to bridge the accessibility gap and accelerate research and development for human-robot interaction (HRI), and to address the replication crisis to solidify HRI as a scientific discipline."
+			primaryCopy={defaultPrimaryCopy}
+			features={defaultFeatures}
+			{...props}
+		/>
+	);
 }

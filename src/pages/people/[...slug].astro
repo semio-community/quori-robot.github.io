@@ -1,13 +1,13 @@
 ---
 import { type CollectionEntry, getCollection, getEntry } from "astro:content";
-import BaseHead from "@/components/BaseHead.astro";
-import SiteShell from "@/layouts/SiteShell.astro";
+import { getAllHardware } from "@/data/hardware";
 import { getPeopleByExpertise, getPeopleByOrganization } from "@/data/people";
 import { getAllResearch } from "@/data/research";
-import { getAllHardware } from "@/data/hardware";
 import { getAllSoftware } from "@/data/software";
-import { PersonDetail } from "@/components/detail/views/PersonDetail";
+import SiteShell from "@/layouts/SiteShell.astro";
+import { toOrganizationCardData } from "@/utils/card-mappers";
 import { isDraftVisible } from "@/utils/drafts";
+import { PersonDetail } from "@semio-community/ecosystem-site-core";
 
 export async function getStaticPaths() {
   const people = await getCollection("people", ({ data }) => {
@@ -27,7 +27,7 @@ const fullName = data.honorific ? `${data.honorific} ${data.name}` : data.name;
 // Get related people (by expertise or organization)
 async function getRelatedPeople(
   person: CollectionEntry<"people">,
-  limit: number = 3,
+  limit = 3,
 ) {
   const relatedPeople: CollectionEntry<"people">[] = [];
   const seenIds = new Set<string>([person.id]);
@@ -266,36 +266,23 @@ if (data.links?.mastodon) {
 }
 ---
 
-<html
-  class="overflow-x-hidden grid scroll-pt-[72px] scroll-smooth font-sans text-text text-xl md:text-base antialiased"
-  lang="en"
->
-  <head>
-    <BaseHead
-      title={meta.title}
-      description={meta.description}
-      ogImage={ogImage}
-    />
-  </head>
-  <body class="relative min-h-screen w-full bg-surface">
     <SiteShell
-      noPaddingTop
-      showBackground={false}
+  title={meta.title}
+  description={meta.description}
+  ogImage={ogImage}
+  showBackground={false}
       containerClassName="max-w-5xl"
-    >
+>
       <PersonDetail
         data={data}
         fullName={fullName}
         badges={badges}
-        links={data.links}
-        bio={data.bio}
-        expertise={data.expertise || []}
         currentAffiliations={currentAffiliations.map((aff) => ({
           organizationId: aff.organizationId,
           organizationName:
             aff.organization?.data?.shortName || aff.organization?.data?.name,
           organizationImages: aff.organization?.data?.images,
-          organizationData: aff.organization?.data,
+          organizationData: aff.organization?.data ? toOrganizationCardData(aff.organization.data) : undefined,
           role: aff.role,
           department: aff.department,
         }))}
@@ -304,7 +291,7 @@ if (data.links?.mastodon) {
           organizationName:
             aff.organization?.data?.shortName || aff.organization?.data?.name,
           organizationImages: aff.organization?.data?.images,
-          organizationData: aff.organization?.data,
+          organizationData: aff.organization?.data ? toOrganizationCardData(aff.organization.data) : undefined,
           role: aff.role,
           department: aff.department,
         }))}
@@ -315,6 +302,7 @@ if (data.links?.mastodon) {
           events: relatedContent.events,
         }}
         relatedPeople={relatedPeople}
+        baseUrl={import.meta.env.BASE_URL}
       />
     </SiteShell>
   </body>

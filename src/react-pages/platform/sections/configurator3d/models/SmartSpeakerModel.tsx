@@ -1,16 +1,16 @@
-import React from "react";
+import type React from "react";
 import GLBModel from "./GLBModel";
 
 export interface SmartSpeakerModelProps extends React.ComponentProps<"group"> {
-  /**
-   * Public URL to the GLB asset.
-   */
-  url?: string;
+	/**
+	 * Public URL to the GLB asset.
+	 */
+	url?: string;
 }
 
 export default function SmartSpeakerModel({
-  url = "/configurations/models/SmartSpeaker.glb",
-  ...props
+	url = "/configurations/models/SmartSpeaker.glb",
+	...props
 }: SmartSpeakerModelProps) {
-  return <GLBModel url={url} {...props} modelOffset={[0, 0, 0.47]} />;
+	return <GLBModel url={url} {...props} modelOffset={[0, 0, 0.47]} />;
 }
