@@ -1,6 +1,5 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
-import BaseHead from "@/components/BaseHead.astro";
 import { getEventsByOrganization } from "@/data/events";
 import { getAllHardware } from "@/data/hardware";
 import { getAllOrganizations } from "@/data/organizations";
@@ -132,22 +131,13 @@ const keyContacts: DetailKeyContact[] = affiliatedPeople
   );
 ---
 
-<html
-  class="overflow-x-hidden grid scroll-pt-18 scroll-smooth font-sans text-text text-xl md:text-base antialiased"
-  lang="en"
->
-  <head>
-    <BaseHead
-      title={meta.title}
-      description={meta.description}
-      ogImage={ogImage}
-    />
-  </head>
-  <body class="relative min-h-screen w-full bg-surface">
     <SiteShell
-      showBackground={false}
+  title={meta.title}
+  description={meta.description}
+  ogImage={ogImage}
+  showBackground={false}
       containerClassName="max-w-5xl"
-    >
+>
       <OrganizationDetail
         data={data}
         relatedContent={relatedContent}

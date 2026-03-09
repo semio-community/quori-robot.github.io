@@ -1,6 +1,5 @@
 ---
 import { type CollectionEntry, getCollection, getEntry } from "astro:content";
-import BaseHead from "@/components/BaseHead.astro";
 import { getFormattedAuthors, getPerson } from "@/data/people";
 import { getRelatedResearch as fetchRelatedResearch } from "@/data/research";
 import SiteShell from "@/layouts/SiteShell.astro";
@@ -80,22 +79,13 @@ const validRelatedSoftware = relatedSoftwareItems.filter(
 );
 ---
 
-<html
-  class="overflow-x-hidden grid scroll-pt-18 scroll-smooth font-sans text-text text-xl md:text-base antialiased"
-  lang="en"
->
-  <head>
-    <BaseHead
-      title={meta.title}
-      description={meta.description}
-      ogImage={ogImage}
-    />
-  </head>
-  <body class="relative min-h-screen w-full bg-surface">
     <SiteShell
-      showBackground={false}
+  title={meta.title}
+  description={meta.description}
+  ogImage={ogImage}
+  showBackground={false}
       containerClassName="max-w-5xl"
-    >
+>
       <ResearchDetail
         data={data}
         authors={authorsWithData}
