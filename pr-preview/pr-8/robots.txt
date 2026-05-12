@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://quori.org/pr-preview/pr-8/sitemap-index.xml
