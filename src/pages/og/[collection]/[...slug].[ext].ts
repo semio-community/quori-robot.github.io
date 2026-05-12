@@ -10,10 +10,12 @@ import { renderOgImage } from "@/og/renderer";
 import type { OgImageAsset, OgImageProps } from "@/og/types";
 import { isDraftVisible } from "@/utils/drafts";
 import { resolveLogoAsset } from "@/utils/images";
+import { siteConfig } from "@/site.config";
 import { Resvg } from "@resvg/resvg-js";
 import {
 	STATUS_COLORS,
 	getCategoryLabel,
+	getHeadlineRole,
 	getStatusLabel,
 } from "@semio-community/ecosystem-site-core";
 import {
@@ -492,7 +494,7 @@ async function mapPerson(
 	const fullName = entry.data.honorific
 		? `${entry.data.honorific} ${entry.data.name}`
 		: entry.data.name;
-	const role = entry.data.title;
+	const role = getHeadlineRole(entry.data, siteConfig.homeOrganizationId);
 	const expertise = entry.data.expertise?.slice(0, 2) ?? [];
 	const description =
 		entry.data.bio || (expertise.length ? `Expertise: ${expertise.join(", ")}` : undefined);
