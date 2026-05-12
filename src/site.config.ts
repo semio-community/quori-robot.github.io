@@ -24,6 +24,8 @@ export const siteConfig: SiteConfig = {
 		highlightVariant: "tertiary",
 		ctaVariant: "tertiary",
 	},
+	homeOrganizationId: "semio-community",
+	suppressOrganizationPage: false,
 };
 
 export interface LinkSection {

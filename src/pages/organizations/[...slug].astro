@@ -7,9 +7,15 @@ import { getPeopleByOrganization } from "@/data/people";
 import { getResearchByOrganization } from "@/data/research";
 import { getAllSoftware } from "@/data/software";
 import SiteShell from "@/layouts/SiteShell.astro";
+import { siteConfig } from "@/site.config";
 import { isDraftVisible } from "@/utils/drafts";
-import { toOrganizationKeyContact } from "@semio-community/ecosystem-site-core";
-import { type DetailKeyContact, OrganizationDetail } from "@semio-community/ecosystem-site-core";
+import {
+  type DetailKeyContact,
+  OrganizationDetail,
+  filterHomeOrganization,
+  sortFeaturedFirst,
+  toOrganizationKeyContact,
+} from "@semio-community/ecosystem-site-core";
 
 type PartnerEntry = CollectionEntry<"organizations">;
 
@@ -17,7 +23,10 @@ export async function getStaticPaths() {
   const organizations = await getCollection("organizations", ({ data }) => {
     return isDraftVisible(data.draft, data.sites);
   });
-  const partners = organizations.filter((org) => org.data.isPartner);
+  const partners = filterHomeOrganization(
+    organizations.filter((org) => org.data.isPartner),
+    siteConfig,
+  );
   return partners.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -120,7 +129,7 @@ const meta = {
 const ogImage = `/og/organizations/${entry.id}.png`;
 
 const affiliatedPeople = await getPeopleByOrganization(entry.id);
-const keyContacts: DetailKeyContact[] = affiliatedPeople
+const keyContacts: DetailKeyContact[] = sortFeaturedFirst(affiliatedPeople)
   .slice(0, 6)
   .map((personEntry) =>
     toOrganizationKeyContact({
