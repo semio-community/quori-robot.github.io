@@ -13,6 +13,8 @@ import {
   type DetailKeyContact,
   OrganizationDetail,
   filterHomeOrganization,
+  findPressForEntity,
+  isFeaturedOnSite,
   sortFeaturedFirst,
   toOrganizationKeyContact,
 } from "@semio-community/ecosystem-site-core";
@@ -78,8 +80,8 @@ function getResearchSortTime(entry: CollectionEntry<"research">): number {
 
 function sortResearchEntries(entries: CollectionEntry<"research">[]) {
   return [...entries].sort((a, b) => {
-    if (a.data.featured !== b.data.featured) {
-      return a.data.featured ? -1 : 1;
+    if (isFeaturedOnSite(a) !== isFeaturedOnSite(b)) {
+      return isFeaturedOnSite(a) ? -1 : 1;
     }
     const aTime = getResearchSortTime(a);
     const bTime = getResearchSortTime(b);
@@ -112,11 +114,18 @@ async function getPartnerRelatedContent(partnerId: string) {
 
   const events = await getEventsByOrganization(partnerId);
 
-  return { research, hardware, software, events } as {
+  // Press items that reference this organization via `relatedOrganizations`.
+  const allPress = await getCollection("press", ({ data }) =>
+    isDraftVisible(data.draft, data.sites),
+  );
+  const press = findPressForEntity(allPress, "organizations", partnerId);
+
+  return { research, hardware, software, events, press } as {
     research: CollectionEntry<"research">[];
     hardware: CollectionEntry<"hardware">[];
     software: CollectionEntry<"software">[];
     events: CollectionEntry<"events">[];
+    press: CollectionEntry<"press">[];
   };
 }
 
@@ -144,7 +153,6 @@ const keyContacts: DetailKeyContact[] = sortFeaturedFirst(affiliatedPeople)
   title={meta.title}
   description={meta.description}
   ogImage={ogImage}
-  showBackground={false}
       containerClassName="max-w-5xl"
 >
       <OrganizationDetail

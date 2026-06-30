@@ -5,7 +5,7 @@ import { getPerson } from "@/data/people";
 import SiteShell from "@/layouts/SiteShell.astro";
 import { toOrganizationCardData } from "@/utils/card-mappers";
 import { isDraftVisible } from "@/utils/drafts";
-import { HardwareDetail } from "@semio-community/ecosystem-site-core";
+import { HardwareDetail, findPressForEntity } from "@semio-community/ecosystem-site-core";
 
 export async function getStaticPaths() {
   const hardware = await getCollection("hardware", ({ data }) => {
@@ -80,13 +80,18 @@ const orgContributors = await Promise.all(
       };
     }),
 );
+
+// Press items that reference this hardware via `relatedHardware`.
+const allPress = await getCollection("press", ({ data }) =>
+  isDraftVisible(data.draft, data.sites),
+);
+const relatedPress = findPressForEntity(allPress, "hardware", entry.id);
 ---
 
     <SiteShell
   title={meta.title}
   description={meta.description}
   ogImage={ogImage}
-  showBackground={false}
       containerClassName="max-w-5xl"
 >
       <HardwareDetail
@@ -94,6 +99,7 @@ const orgContributors = await Promise.all(
         organizationContributors={orgContributors}
         peopleContributors={validPeopleContributors}
         relatedHardware={relatedHardware}
+        relatedPress={relatedPress}
         baseUrl={import.meta.env.BASE_URL}
       />
     </SiteShell>
