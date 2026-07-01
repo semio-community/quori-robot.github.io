@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { getAllEvents } from "@/data/events";
 import { getAllHardware } from "@/data/hardware";
 import { getAllOrganizations } from "@/data/organizations";
@@ -23,6 +24,7 @@ import {
 	CalendarMark,
 	CodeSquare,
 	CpuBolt,
+	Document2,
 	TestTube,
 	User,
 } from "@solar-icons/react-perf/LineDuotone";
@@ -30,6 +32,7 @@ import type { APIContext } from "astro";
 import type { ImageMetadata } from "astro";
 import React, { type ComponentType, type SVGProps } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { isFeaturedOnSite } from "@semio-community/ecosystem-site-core";
 
 const intlShort = new Intl.DateTimeFormat("en-US", {
 	month: "short",
@@ -57,7 +60,7 @@ const isVisible = <
 	T extends {
 		data: {
 			draft?: boolean;
-			sites?: readonly ("semio" | "quori" | "vizij")[];
+			sites?: readonly ("semio-community" | "quori" | "vizij")[];
 		};
 	},
 >(
@@ -365,7 +368,7 @@ async function mapHardware(
 		eyebrow: categoryLabel,
 		title: entry.data.name,
 		description: entry.data.shortDescription || entry.data.description || "",
-		badge: entry.data.featured ? "featured" : undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
 		badgeIcon: createBadgeIcon(CpuBolt),
 		avatarInitial: entry.data.name?.[0]?.toUpperCase() || "H",
 		heroImage: await loadOgImageAsset(entry.data.images?.hero, "hardware"),
@@ -387,7 +390,7 @@ async function mapSoftware(
 		eyebrow: "Software",
 		title: entry.data.name,
 		description: entry.data.shortDescription || entry.data.description || "",
-		badge: entry.data.featured ? "featured" : undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
 		badgeIcon: createBadgeIcon(CodeSquare),
 		avatarInitial: entry.data.name?.[0]?.toUpperCase() || "S",
 		heroImage: await loadOgImageAsset(entry.data.images?.hero, "software"),
@@ -449,7 +452,7 @@ async function mapEvent(
 		eyebrow: entry.data.type || "Event",
 		title: entry.data.displayName || entry.data.name,
 		description: entry.data.description || undefined,
-		badge: entry.data.featured ? "featured" : undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
 		badgeIcon: createBadgeIcon(CalendarMark),
 		avatarInitial: "E",
 		heroImage: await loadOgImageAsset(entry.data.images?.hero, "events"),
@@ -502,12 +505,95 @@ async function mapPerson(
 		eyebrow: role || "Contributor",
 		title: fullName,
 		description,
-		badge: entry.data.featured ? "featured" : undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
 		badgeIcon: createBadgeIcon(User),
 		avatarInitial: entry.data.name?.[0]?.toUpperCase() || "P",
 		heroImage: await loadOgImageAsset(entry.data.images?.hero, "people"),
 		logoImage: await loadOgImageAsset(entry.data.images?.avatar, "people"),
 		categoryLabel: role,
+		logoMode: "cover",
+	};
+}
+
+const PRESS_TYPE_LABEL: Record<string, string> = {
+	announcement: "Announcement",
+	publication: "Publication",
+	story: "Story",
+};
+
+const PUBLICATION_KIND_LABEL: Record<string, string> = {
+	paper: "Paper",
+	preprint: "Preprint",
+	thesis: "Thesis",
+	report: "Report",
+	article: "Article",
+	essay: "Essay",
+	whitepaper: "Whitepaper",
+	dataset: "Dataset",
+	benchmark: "Benchmark",
+};
+
+async function mapPress(
+	entry: CollectionEntry<"press">,
+): Promise<OgImageProps> {
+	const type = entry.data.type;
+	const eyebrow =
+		type === "publication"
+			? PUBLICATION_KIND_LABEL[entry.data.publicationKind] ||
+				PRESS_TYPE_LABEL[type]
+			: PRESS_TYPE_LABEL[type] || "Press";
+	const externalSource =
+		type === "story" && entry.data.externalSource
+			? entry.data.externalSource
+			: undefined;
+	const venue = type === "publication" ? entry.data.venue : undefined;
+	const dateLabel = entry.data.publishDate
+		? formatDate(entry.data.publishDate, true)
+		: undefined;
+
+	return {
+		eyebrow,
+		title: entry.data.title || entry.id,
+		description: entry.data.description || undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
+		badgeIcon: createBadgeIcon(Document2),
+		avatarInitial: (entry.data.title || "P").charAt(0).toUpperCase(),
+		heroImage: await loadOgImageAsset(entry.data.images?.hero, "press"),
+		logoImage: await loadOgImageAsset(
+			resolveContentLogo(entry.data.images),
+			"press",
+		),
+		categoryLabel: externalSource ?? venue,
+		listItems: [
+			dateLabel ? { icon: "calendar", text: dateLabel } : null,
+		].filter(Boolean) as OgImageProps["listItems"],
+		listColumns: 1,
+		logoMode: "cover",
+	};
+}
+
+async function mapAward(
+	entry: CollectionEntry<"awards">,
+): Promise<OgImageProps> {
+	const grantor =
+		entry.data.grantingOrganizationName ?? entry.data.grantingOrganizationId;
+	const dateLabel = entry.data.awardDate
+		? formatDate(entry.data.awardDate, true)
+		: undefined;
+
+	return {
+		eyebrow: "Award",
+		title: entry.data.title || entry.id,
+		description: entry.data.description || undefined,
+		badge: isFeaturedOnSite(entry, siteConfig.siteKey) ? "featured" : undefined,
+		badgeIcon: createBadgeIcon(Document2),
+		avatarInitial: (entry.data.title || "A").charAt(0).toUpperCase(),
+		logoImage: await loadOgImageAsset(entry.data.images?.logo, "awards"),
+		categoryLabel: grantor,
+		listItems: [
+			dateLabel ? { icon: "calendar", text: dateLabel } : null,
+		].filter(Boolean) as OgImageProps["listItems"],
+		listColumns: 1,
 		logoMode: "cover",
 	};
 }
@@ -519,6 +605,8 @@ const builders = {
 	events: mapEvent,
 	organizations: mapOrganization,
 	people: mapPerson,
+	press: mapPress,
+	awards: mapAward,
 };
 
 export async function GET(context: APIContext) {
@@ -591,6 +679,35 @@ export async function getStaticPaths() {
 		.filter((entry) => !hasCustomOgImage(entry));
 	for (const entry of peopleEntries) {
 		pushPaths("people", entry.id, await mapPerson(entry));
+	}
+
+	// Press: handles all three variants (announcement, publication,
+	// story) through the same mapper since they share the same hero
+	// shape. External stories with `externalUrl` don't have a local
+	// detail route, so they don't need an OG image either.
+	const pressEntries = (
+		await getCollection("press", ({ data }) =>
+			isDraftVisible(data.draft, data.sites),
+		)
+	)
+		.filter(isVisible)
+		.filter((entry) => entry.data.type !== "story" || !entry.data.externalUrl)
+		.filter((entry) => !hasCustomOgImage(entry));
+	for (const entry of pressEntries) {
+		pushPaths("press", entry.id, await mapPress(entry));
+	}
+
+	// Awards. Detail page at `/press/awards/<id>/` references
+	// `/og/awards/<id>.png` — wire that here.
+	const awardEntries = (
+		await getCollection("awards", ({ data }) =>
+			isDraftVisible(data.draft, data.sites),
+		)
+	)
+		.filter(isVisible)
+		.filter((entry) => !hasCustomOgImage(entry));
+	for (const entry of awardEntries) {
+		pushPaths("awards", entry.id, await mapAward(entry));
 	}
 
 	return paths;
