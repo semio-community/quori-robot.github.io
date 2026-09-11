@@ -7,6 +7,11 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 const STATIC_PAGES: Record<string, OgImageProps> = {
+	press: {
+		title: "Press",
+		description:
+			"Announcements, publications, stories, and awards from across the Quori community.",
+	},
 	home: {
 		title: siteConfig.title,
 		description: siteConfig.description,
@@ -39,11 +44,6 @@ const STATIC_PAGES: Record<string, OgImageProps> = {
 		title: "Get Involved",
 		description:
 			"Join the Semio Community - donate, volunteer, and help advance human-centered robotics and AI",
-	},
-	about: {
-		title: "About",
-		description:
-			"Learn about Semio Community's mission to advance human-centered robotics through open science and collaboration",
 	},
 };
 
