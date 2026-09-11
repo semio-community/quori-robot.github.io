@@ -1,6 +1,9 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import { isDraftVisible } from "@/utils/drafts";
-import { isFeaturedOnSite } from "@semio-community/ecosystem-site-core";
+import {
+	isFeaturedOnSite,
+	toLinkDetail,
+} from "@semio-community/ecosystem-site-core";
 
 type OrganizationEntry = CollectionEntry<"organizations">;
 
@@ -165,7 +168,8 @@ export async function searchOrganizations(query: string): Promise<OrganizationEn
 
 	return partners.filter((partner) => {
 		const summary = partner.data.collaborationSummary?.toLowerCase() ?? "";
-		const website = partner.data.links?.website?.toLowerCase() ?? "";
+		const website =
+			toLinkDetail("website", partner.data.links?.website)?.href.toLowerCase() ?? "";
 
 		return (
 			partner.data.name.toLowerCase().includes(lowerQuery) ||
