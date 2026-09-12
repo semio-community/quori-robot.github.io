@@ -134,20 +134,6 @@ export const menuLinks: MenuLink[] = [
 		],
 	},
 	{
-		path: "/contributors/",
-		title: "Contributors",
-		inHeader: true,
-		// Person and organization detail pages live at their own routes
-		// but conceptually belong to the contributors section (the
-		// `/people` and `/organization`/`/partners` listings redirect here).
-		subroutes: ["/people/", "/organizations/", "/organization/", "/partners/"],
-		sections: [
-			{ kind: "link", title: "People", href: "/contributors/#people" },
-			{ kind: "link", title: "Partners", href: "/contributors/#partners" },
-			{ kind: "link", title: "Sponsors", href: "/contributors/#sponsors" },
-		],
-	},
-	{
 		path: "/press/",
 		title: "Press",
 		inHeader: true,
@@ -173,6 +159,20 @@ export const menuLinks: MenuLink[] = [
 				limit: 3,
 				fields: { title: "title", subtitle: "description" },
 			},
+		],
+	},
+	{
+		path: "/contributors/",
+		title: "Contributors",
+		inHeader: true,
+		// Person and organization detail pages live at their own routes
+		// but conceptually belong to the contributors section (the
+		// `/people` and `/organization`/`/partners` listings redirect here).
+		subroutes: ["/people/", "/organizations/", "/organization/", "/partners/"],
+		sections: [
+			{ kind: "link", title: "People", href: "/contributors/#people" },
+			{ kind: "link", title: "Partners", href: "/contributors/#partners" },
+			{ kind: "link", title: "Sponsors", href: "/contributors/#sponsors" },
 		],
 	},
 	{
