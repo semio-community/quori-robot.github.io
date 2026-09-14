@@ -13,7 +13,6 @@ export default function EventsPage({ children }: { children?: React.ReactNode })
 			title="Events"
 			description="Gather with the Semio Community at conferences, workshops, and training events focused on human-centered robotics and AI."
 			heroIcon={<Calendar className="w-16 h-16 text-accent-two" />}
-			showGlyphField={false}
 			footerSection={footerSection}
 		>
 			{children}

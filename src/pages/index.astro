@@ -19,6 +19,7 @@ import { getAllResearch } from "@/data/research";
 import { getAllSoftware } from "@/data/software";
 import { isDraftVisible } from "@/utils/drafts";
 import { resolveImageLike } from "@/utils/images";
+import { toLinkDetail } from "@semio-community/ecosystem-site-core";
 
 // Load data on the server (Astro)
 const allHardware = await getAllHardware();
@@ -49,7 +50,7 @@ const fundingPartner =
         collaborationSummary: nsfEntry.data.collaborationSummary,
         type: nsfEntry.data.type,
         category: nsfEntry.data.category,
-        website: nsfEntry.data.links?.website,
+        website: toLinkDetail("website", nsfEntry.data.links?.website)?.href,
         logoSrc: resolveImageLike(
           nsfEntry.data.images?.logo ?? nsfEntry.data.images?.logoUrl,
         ),
@@ -93,7 +94,6 @@ const ogImage = "/og/home.png";
   title={pageTitle}
   description={description}
   ogImage={ogImage}
-  showBackground={false}
 >
       <HomePage
         client:load
