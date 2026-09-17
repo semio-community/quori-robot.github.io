@@ -28,7 +28,7 @@ export interface HeroSectionProps {
  * - Supporting intro copy
  * - CTA row with indicator chips
  *
- * This uses the shared HeroHeader container (which renders the glyph field and overlays content).
+ * This uses the shared HeroHeader container (which renders an optional hero image and overlays content).
  * The full-bleed outer wrapper (100vw wide) should be applied by the page layout if needed.
  */
 export default function HeroSection({
