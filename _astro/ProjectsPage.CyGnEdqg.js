@@ -1,0 +1,2 @@
+import{t as e}from"./jsx-runtime.BHuWkyck.js";import{a as t}from"./dist.DlErvFTk.js";import{t as n}from"./ConnectSection.DiI7q6S1.js";var r=e();function i({projectsPayload:e}){return(0,r.jsx)(t,{projectsPayload:e,baseUrl:`/`,footerSection:(0,r.jsx)(n,{})})}export{i as default};
+//# sourceMappingURL=ProjectsPage.CyGnEdqg.js.map
