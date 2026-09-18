@@ -1,2 +1,0 @@
-import{t as e}from"./jsx-runtime.BHuWkyck.js";import{a as t}from"./dist.DFiPaFhc.js";import{t as n}from"./ConnectSection.BNVMsdhR.js";var r=e();function i({projectsPayload:e}){return(0,r.jsx)(t,{projectsPayload:e,baseUrl:`/pr-preview/pr-20/`,footerSection:(0,r.jsx)(n,{})})}export{i as default};
-//# sourceMappingURL=ProjectsPage.f4JQvpPs.js.map

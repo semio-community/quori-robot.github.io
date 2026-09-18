@@ -1,1 +1,0 @@
-import{i as e}from"./dist.DFiPaFhc.js";export{e as EventsSections,e as default};
