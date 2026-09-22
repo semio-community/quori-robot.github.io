@@ -1,0 +1,2 @@
+import{t as e}from"./jsx-runtime.BHuWkyck.js";import{a as t}from"./dist.CmsWMBAo.js";import{t as n}from"./ConnectSection.DBmI8MBK.js";var r=e();function i({projectsPayload:e}){return(0,r.jsx)(t,{projectsPayload:e,baseUrl:`/pr-preview/pr-21/`,footerSection:(0,r.jsx)(n,{})})}export{i as default};
+//# sourceMappingURL=ProjectsPage.zS_wnYa7.js.map
