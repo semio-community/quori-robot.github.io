@@ -19,7 +19,10 @@ import { getAllResearch } from "@/data/research";
 import { getAllSoftware } from "@/data/software";
 import { isDraftVisible } from "@/utils/drafts";
 import { resolveImageLike } from "@/utils/images";
-import { toLinkDetail } from "@semio-community/ecosystem-site-core";
+import {
+  isFeaturedOnSite,
+  toLinkDetail,
+} from "@semio-community/ecosystem-site-core";
 
 // Load data on the server (Astro)
 const allHardware = await getAllHardware();
@@ -73,14 +76,23 @@ const contributorEntries = await Promise.all(
   contributorOrganizationIds.map((id) => getEntry("organizations", id)),
 );
 
+// `featured` is resolved here because `HomePage` hydrates in the
+// browser, which has neither this build's site key nor its clock. The
+// list cards read the flag rather than re-deriving it from `featuring`.
 const contributorOrganizations = contributorEntries.reduce<
-  { id: string; data: CollectionEntry<"organizations">["data"] }[]
+  {
+    id: string;
+    data: CollectionEntry<"organizations">["data"] & { featured: boolean };
+  }[]
 >((acc, entry, idx) => {
   if (!entry || !isDraftVisible(entry.data.draft, entry.data.sites)) return acc;
   acc.push({
     // biome-ignore lint/style/noNonNullAssertion: idx comes from entries enumeration which is bounded by the same array length
     id: contributorOrganizationIds[idx]!,
-    data: entry.data,
+    data: {
+      ...entry.data,
+      featured: isFeaturedOnSite(entry, siteConfig.siteKey),
+    },
   });
   return acc;
 }, []);
