@@ -13,6 +13,7 @@ import { isDraftVisible } from "@/utils/drafts";
 import { resolveLogoAsset } from "@/utils/images";
 import { siteConfig } from "@/site.config";
 import { Resvg } from "@resvg/resvg-js";
+import type { SiteKey } from "@semio-community/ecosystem-content-schema";
 import {
 	STATUS_COLORS,
 	getCategoryLabel,
@@ -61,7 +62,7 @@ const isVisible = <
 	T extends {
 		data: {
 			draft?: boolean;
-			sites?: readonly ("semio-community" | "quori" | "vizij")[];
+			sites?: readonly SiteKey[];
 		};
 	},
 >(
