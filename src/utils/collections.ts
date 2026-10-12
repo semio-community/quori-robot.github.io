@@ -59,6 +59,10 @@ export const {
 	site,
 	loadCollection,
 	loadEntry,
+	// Rank by the same propagated featured state the payload builders
+	// star: an entry featured through an active press item or award
+	// ranks with the featured entries and counts as a featured event.
+	featuredRanking: "propagated",
 	// A study with no listed contributors renders no author line here,
 	// rather than an "Unknown Authors" placeholder.
 	emptyAuthorsLabel: "",
