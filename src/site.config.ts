@@ -123,6 +123,11 @@ export const menuLinks: MenuLink[] = [
 		title: "Events",
 		inHeader: true,
 		sections: [
+			{
+				kind: "link",
+				title: "Quori Beta Program",
+				href: "/events/quori-community-build-workshop-2027/",
+			},
 			{ kind: "link", title: "Featured Events", href: "/events/#featured" },
 			{ kind: "link", title: "Upcoming Events", href: "/events/#upcoming" },
 			{ kind: "link", title: "Past Events", href: "/events/#past" },
