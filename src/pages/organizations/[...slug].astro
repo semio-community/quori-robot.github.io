@@ -3,12 +3,14 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import SiteShell from "@/layouts/SiteShell.astro";
 import RedirectPage from "@/components/util/RedirectPage.astro";
 import MDXContent from "@/components/mdx/MDXContent.astro";
-import { getAllOrganizations } from "@/data/organizations";
-import { getAllHardware } from "@/data/hardware";
-import { getAllSoftware } from "@/data/software";
-import { getPeopleByOrganization } from "@/data/people";
-import { getResearchByOrganization } from "@/data/research";
-import { getEventsByOrganization } from "@/data/events";
+import {
+  getPartnerOrganizations,
+  getAllHardware,
+  getAllSoftware,
+  getPeopleByOrganization,
+  getResearchByOrganization,
+  getEventsByOrganization,
+} from "@/utils/collections";
 import { siteConfig } from "@/site.config";
 import { isDraftVisible } from "@/utils/drafts";
 import { buildFeaturedPropagation } from "@/utils/featured-propagation";
@@ -54,7 +56,7 @@ const [
   allAwards,
 ] = await Promise.all([
   buildFeaturedPropagation(),
-  getAllOrganizations(),
+  getPartnerOrganizations(),
   getResearchByOrganization(entry.id),
   getEventsByOrganization(entry.id),
   getAllHardware(),
