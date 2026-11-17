@@ -1,2 +1,0 @@
-import{t as e}from"./ConnectSection.Cd_svq3a.js";import{a as t}from"./dist.DZd3KTSs.js";import{t as n}from"./jsx-runtime.CAVSUwWZ.js";var r=n();function i({projects:n,content:i}){return(0,r.jsx)(t,{projects:n,content:i,baseUrl:`/pr-preview/pr-29/`,footerSection:(0,r.jsx)(e,{})})}export{i as default};
-//# sourceMappingURL=ProjectsPage.DUI49Joc.js.map
