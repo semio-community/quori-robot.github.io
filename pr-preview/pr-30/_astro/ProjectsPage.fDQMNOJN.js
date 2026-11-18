@@ -1,0 +1,2 @@
+import{t as e}from"./ConnectSection.CTaKDjji.js";import{a as t}from"./dist.DsMZMEhz.js";import{t as n}from"./jsx-runtime.CAVSUwWZ.js";var r=n();function i({projects:n,content:i}){return(0,r.jsx)(t,{projects:n,content:i,baseUrl:`/pr-preview/pr-30/`,footerSection:(0,r.jsx)(e,{})})}export{i as default};
+//# sourceMappingURL=ProjectsPage.fDQMNOJN.js.map
