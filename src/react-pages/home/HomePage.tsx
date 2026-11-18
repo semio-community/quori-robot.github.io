@@ -13,6 +13,7 @@ import {
 	configurator3DModules,
 } from "@/react-pages/platform/sections/configurator3d/spec";
 import { BaseUrlProvider, CallToActionButton } from "@semio-community/ecosystem-site-core";
+import { url } from "@/utils/url";
 import React from "react";
 
 const BASE_URL = import.meta.env.BASE_URL;
@@ -70,6 +71,17 @@ export default function HomePage({
 						<span className="italic">for</span> the HRI community.
 					</div>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<CallToActionButton
+							key="beta-program"
+							href={url("/events/quori-community-build-workshop-2027/")}
+							size="large"
+							variant="primary"
+							ariaLabel="Quori Beta Program call for proposals"
+							className="col-span-1 md:col-span-2"
+						>
+							Quori Beta Program — Proposals due Dec 18
+						</CallToActionButton>
+
 						<CallToActionButton
 							key="mission"
 							href="#mission"
